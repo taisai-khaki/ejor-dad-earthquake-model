@@ -1,0 +1,11 @@
+scenario_id,n,eligible_share_target,number_of_drones,endurance_level,speed_ratio,launch_retrieval_time_class,spatial_pattern,avg_improvement,drone_service_share,truck_distance_reduction_pct,total_truck_waiting_time,total_drone_waiting_time,delayed_rendezvous_events,average_battery_usage_ratio,analysis_method,segment,dominant_reason
+S0042,50,0.75,2,high,1.25,short,clustered,97.13952194656291,0.184,54.08831845774385,22.03351933198129,158.53407082522116,2.9,0.7385253485049265,paired_baseline,best,Synchronization burden dominates
+S0043,50,0.75,1,high,2.0,short,clustered,96.41015936076846,0.16599999999999998,64.64327203518201,18.74624967504521,138.71015092130654,2.5,0.5273791964005279,paired_baseline,best,Synchronization burden dominates
+S0041,50,0.75,2,high,1.25,short,clustered,96.36133148716719,0.16799999999999998,58.84530351742001,16.10895383513013,146.7363573923219,2.8,0.779293358624766,paired_baseline,best,Synchronization burden dominates
+S0029,50,0.25,2,medium,2.0,short,clustered,95.30515279886035,0.21600000000000003,22.99834067323375,23.25400655372237,112.96459341784252,2.5,0.7162062924385364,paired_baseline,best,Synchronization burden dominates
+S0033,50,0.25,1,high,2.0,short,clustered,95.17801420683892,0.238,20.475749354750366,16.601521179619795,112.16065122494953,2.4,0.5938754357886007,paired_baseline,best,Synchronization burden dominates
+S0068,100,0.75,3,medium,2.0,medium,uniform,,0.028999999999999998,75.48831285459391,0.0,59.448442833192814,1.2,0.43539719830740137,paired_baseline,worst,Synchronization burden dominates
+S0069,100,0.75,3,medium,2.0,long,uniform,,0.03,76.36089878090968,1.472880797481293,133.49773305533483,2.8,0.470341728904769,paired_baseline,worst,Synchronization burden dominates
+S0070,100,0.75,3,high,1.25,medium,uniform,,0.03,75.18700144932703,0.0,39.49319354160284,1.2,0.5736416043988365,paired_baseline,worst,Synchronization burden dominates
+S0071,100,0.75,3,high,1.25,long,uniform,,0.03,75.47165765480439,0.0,52.264042077239026,1.0,0.5426973038899576,paired_baseline,worst,Synchronization burden dominates
+S0072,100,0.75,3,high,2.0,short,uniform,,0.028999999999999998,75.0979188484773,0.0,70.78352320744766,1.2,0.32666534018829835,paired_baseline,worst,Synchronization burden dominates

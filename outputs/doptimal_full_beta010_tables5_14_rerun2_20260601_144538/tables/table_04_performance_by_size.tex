@@ -1,0 +1,20 @@
+% tab:by_size
+% Performance by problem size
+\begin{tabular}{rlrrrrrrrr}
+\toprule
+n & method_name & n_runs & feasible_runs & feasibility_rate & avg_cpu_time & objective & reported_runs & improvement_vs_truck_only & reporting_inclusion_rate \\
+\midrule
+15 & nils & 230 & 230 & 1.0000 & 0.2963 & 212.9725 & 230 & 75.5783 & 1.0000 \\
+15 & simple_drone & 230 & 230 & 1.0000 & 0.1199 & 6062.8857 & 230 & -0.2859 & 1.0000 \\
+15 & truck_only & 230 & 230 & 1.0000 & 0.0079 & 6058.6771 & 230 & NaN & 1.0000 \\
+50 & nils & 210 & 210 & 1.0000 & 3.7917 & 14036.3202 & 210 & 88.6508 & 1.0000 \\
+50 & simple_drone & 210 & 200 & 0.9524 & 1.9911 & 123326.9715 & 200 & -0.0534 & 0.9524 \\
+50 & truck_only & 210 & 200 & 0.9524 & 0.0473 & 123313.1788 & 200 & NaN & 0.9524 \\
+75 & nils & 90 & 90 & 1.0000 & 10.7087 & 39808.0647 & 90 & 84.5521 & 1.0000 \\
+75 & simple_drone & 90 & 52 & 0.5778 & 3.8837 & 115324.2471 & 52 & -0.0525 & 0.5778 \\
+75 & truck_only & 90 & 52 & 0.5778 & 0.1399 & 115308.1494 & 52 & NaN & 0.5778 \\
+100 & nils & 190 & 190 & 1.0000 & 35.0065 & 147412.4381 & 190 & 83.7559 & 1.0000 \\
+100 & simple_drone & 190 & 1 & 0.0053 & 4.1343 & 107038.5589 & 1 & 0.0000 & 0.0053 \\
+100 & truck_only & 190 & 1 & 0.0053 & 0.3544 & 107038.5589 & 1 & NaN & 0.0053 \\
+\bottomrule
+\end{tabular}

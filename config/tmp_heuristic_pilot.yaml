@@ -1,0 +1,44 @@
+seed: 2026
+
+generation:
+  num_customers: 50
+  num_trucks: 3
+  num_drones: 3
+  region: dense_urban
+
+base_class_windows:
+  high: [0, 60]
+  medium: [0, 120]
+  low: [0, 240]
+
+milp:
+  enabled: false
+
+heuristics:
+  nils:
+    max_outer_iter: 12
+    max_no_improve: 4
+    time_limit_seconds: 60
+    random_seed: 2026
+
+experiment:
+  output_dir: outputs/heuristic_pilot
+  save_json: true
+  save_csv: true
+  study_reps_per_scenario: 1
+  study_methods:
+    - truck_only
+    - simple_drone
+    - random_feasible
+    - nils
+    - nils_no_local_search
+    - nils_no_perturbation
+    - nils_no_battery_screening
+  study_grid:
+    n: [25, 50, 75]
+    eligible_share: [0.50]
+    endurance: [medium]
+    speed_ratio: [1.50]
+    handling_time: [medium]
+    spatial_pattern: [uniform]
+    drones_available: [2]

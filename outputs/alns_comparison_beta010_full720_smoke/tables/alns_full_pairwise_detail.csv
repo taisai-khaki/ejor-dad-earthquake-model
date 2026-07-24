@@ -1,0 +1,3 @@
+instance_id,scenario_id,n,pair_feasible,objective_for_reporting_nils,objective_for_reporting_feasibility_aware_alns,objective_diff_nils_minus_alns,nils_improvement_vs_alns_pct,cpu_time_seconds_nils,cpu_time_seconds_feasibility_aware_alns,winner
+S0001_R01,S0001,15,True,53.03779646544466,46.70221299137072,6.335583474073935,-13.565917048180513,0.3790974617004394,5.862629890441895,alns
+S0001_R02,S0001,15,True,56.1441439138403,54.8605950804564,1.2835488333839038,-2.339655323646237,0.3269202709197998,5.2047295570373535,alns

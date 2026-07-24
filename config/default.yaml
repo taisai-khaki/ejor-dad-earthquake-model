@@ -1,0 +1,79 @@
+seed: 2026
+project_name: utdrp_dp
+
+generation:
+  instance_class: medium
+  region: dense_urban
+  num_customers: 100
+  num_trucks: 3
+  num_drones: 5
+  coordinate_scale: 20.0
+  priority_share: [0.20, 0.30, 0.50]
+  demand_kg:
+    min: 0.5
+    max: 4.5
+  base_class_windows:
+    high: [0, 60]
+    medium: [0, 120]
+    low: [0, 240]
+  instance_reps_per_size: 20
+
+costs:
+  truck_cost_per_km: 0.80
+  drone_cost_per_km: 0.30
+  truck_energy_cost_per_min: 0.00
+  drone_energy_cost_per_min: 0.00
+  swap_time_s: 60
+  reload_time_s: 60
+
+vehicles:
+  truck:
+    capacity_kg: 500
+    speed_kmph: 35
+  drone:
+    capacity_kg: 5
+    speed_kmph: 65
+    max_battery_wh: 1200
+    curb_weight_kg: 3.0
+    parcel_weight_kg: 2.0
+    power_coeff:
+      c1: 0.0549
+      c2: 0.0024
+      c3: 0.0022
+      c4: 0.0089
+      beta: 1.0
+      rated_power_output: 1.0
+      forward_tilt_angle_rad: 0.2
+
+priority_penalties:
+  high: 100
+  medium: 20
+  low: 1
+
+constraints:
+  t_max_minutes: 480
+  big_m: 10000
+  strict_time_windows: true
+  enforce_subtour_elim: true
+
+milp:
+  enabled: true
+  solver: pulp_cbc
+  time_limit_seconds: 3600
+  mip_gap: 0.001
+  threads: 4
+
+heuristics:
+  nils:
+    max_outer_iter: 25
+    max_no_improve: 5
+    time_limit_seconds: 600
+    random_seed: 2026
+    allow_restarts: true
+
+experiment:
+  output_dir: outputs
+  save_json: true
+  save_csv: true
+  run_small_sizes: [20, 50, 100, 150, 200]
+  run_large_sizes: [100, 150, 200]

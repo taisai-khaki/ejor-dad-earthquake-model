@@ -1,0 +1,31 @@
+﻿seed: 2026
+
+generation:
+  num_customers: 12
+  num_trucks: 2
+  num_drones: 2
+  region: dense_urban
+  instance_reps_per_size: 1
+  sizes: [12]
+
+base_class_windows:
+  high: [0, 60]
+  medium: [0, 120]
+  low: [0, 240]
+
+milp:
+  enabled: true
+  solver: cplex
+  time_limit_seconds: 120
+  mip_gap: 0.001
+
+heuristics:
+  nils:
+    max_outer_iter: 10
+    time_limit_seconds: 60
+
+experiment:
+  output_dir: outputs
+  save_json: true
+  save_csv: true
+

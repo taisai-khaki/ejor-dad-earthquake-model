@@ -1,0 +1,36 @@
+% tab:priority_weight_sensitivity
+% Sensitivity to priority-weight profiles by method
+\begin{tabular}{llrrrrrrr}
+\toprule
+priority_weight_profile & method_name & n_runs & avg_objective & avg_improvement_vs_truck_only & avg_priority_tardiness_cost & avg_waiting_cost & avg_drone_service_share & feasibility_rate \\
+\midrule
+base & nils & 180 & 71873.2674 & 87.3871 & 71668.6491 & 0.0000 & 0.1859 & 1.0000 \\
+base & nils_no_local_search & 180 & 87799.7237 & 71.4554 & 87535.4023 & 0.0000 & 0.2052 & 1.0000 \\
+base & nils_no_perturbation & 180 & 87933.0413 & 82.3334 & 87771.8471 & 0.0000 & 0.1797 & 1.0000 \\
+base & no_unpairing & 180 & 126134.6022 & 83.1127 & 125875.1666 & 95.3551 & 0.1250 & 1.0000 \\
+base & paired_baseline & 180 & 103687.9956 & 75.0926 & 103359.4684 & 138.2846 & 0.1397 & 1.0000 \\
+base & simple_drone & 117 & 82840.7294 & -0.2405 & 82605.5951 & 0.0000 & 0.0000 & 1.0000 \\
+base & truck_only & 117 & 82826.5873 & NaN & 82599.1017 & 0.0000 & 0.0000 & 1.0000 \\
+flat & nils & 180 & 1282.0068 & 69.3946 & 1086.2262 & 0.0000 & 0.1827 & 1.0000 \\
+flat & nils_no_local_search & 180 & 1717.6631 & 53.3952 & 1465.3200 & 0.0000 & 0.1899 & 1.0000 \\
+flat & nils_no_perturbation & 180 & 1548.9490 & 68.1023 & 1394.0009 & 0.0000 & 0.1772 & 1.0000 \\
+flat & no_unpairing & 180 & 2529.6123 & 53.8473 & 2288.8116 & 78.6067 & 0.0761 & 1.0000 \\
+flat & paired_baseline & 180 & 2415.5135 & 41.3777 & 2108.5495 & 131.5035 & 0.1183 & 1.0000 \\
+flat & simple_drone & 130 & 2325.3660 & -0.0781 & 2095.0288 & 0.0000 & 0.0000 & 1.0000 \\
+flat & truck_only & 130 & 2322.1001 & NaN & 2094.3563 & 0.0000 & 0.0000 & 1.0000 \\
+moderate & nils & 180 & 12917.5638 & 84.3932 & 12713.8861 & 0.0000 & 0.1901 & 1.0000 \\
+moderate & nils_no_local_search & 180 & 16791.9046 & 67.8900 & 16531.1631 & 0.0000 & 0.2084 & 1.0000 \\
+moderate & nils_no_perturbation & 180 & 15882.5240 & 79.7631 & 15719.0228 & 0.0000 & 0.1890 & 1.0000 \\
+moderate & no_unpairing & 180 & 28505.0510 & 77.7389 & 28276.9068 & 63.2336 & 0.1110 & 1.0000 \\
+moderate & paired_baseline & 180 & 23706.1657 & 68.4613 & 23411.6364 & 111.3716 & 0.1219 & 1.0000 \\
+moderate & simple_drone & 115 & 17754.4762 & -0.1643 & 17518.5657 & 0.0000 & 0.0000 & 1.0000 \\
+moderate & truck_only & 115 & 17745.0438 & NaN & 17514.0052 & 0.0000 & 0.0000 & 1.0000 \\
+strict & nils & 180 & 106081.0508 & 87.9572 & 105884.0785 & 0.0000 & 0.2090 & 1.0000 \\
+strict & nils_no_local_search & 180 & 136316.8567 & 72.8070 & 136070.1888 & 0.0000 & 0.2299 & 1.0000 \\
+strict & nils_no_perturbation & 180 & 132878.4007 & 80.1174 & 132725.4754 & 0.0000 & 0.2007 & 1.0000 \\
+strict & no_unpairing & 180 & 223906.4895 & 83.5906 & 223670.7657 & 78.5289 & 0.1375 & 1.0000 \\
+strict & paired_baseline & 180 & 187856.2250 & 81.1542 & 187570.9008 & 114.5594 & 0.1385 & 1.0000 \\
+strict & simple_drone & 121 & 166341.5680 & -0.1815 & 166126.1774 & 0.0000 & 0.0000 & 1.0000 \\
+strict & truck_only & 121 & 166330.0003 & NaN & 166122.1005 & 0.0000 & 0.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}

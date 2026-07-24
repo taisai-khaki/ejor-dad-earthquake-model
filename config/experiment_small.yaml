@@ -1,0 +1,42 @@
+seed: 2026
+
+generation:
+  num_customers: 9
+  num_trucks: 3
+  num_drones: 3
+  region: dense_urban
+  instance_reps_per_size: 1
+  sizes: [3, 4, 5, 6, 7, 8, 9]
+
+base_class_windows:
+  high: [0, 60]
+  medium: [0, 120]
+  low: [0, 240]
+
+milp:
+  enabled: true
+  solver: cplex
+  time_limit_seconds: 120
+  mip_gap: 0.001
+
+heuristics:
+  nils:
+    max_outer_iter: 25
+    max_no_improve: 6
+    time_limit_seconds: 60
+    random_seed: 2026
+
+experiment:
+  output_dir: outputs
+  save_json: true
+  save_csv: true
+  run_small_sizes: [3, 4, 5, 6, 7, 8, 9]
+  small_nils_restarts: 12
+  small_nils_seed_stride: 10000
+  small_nils_use_instance_seed: true
+  small_nils_select_feasible_first: true
+  small_strict_candidate_check_cap: 24
+  small_full_feasibility_check_interval: 1
+  small_require_feasible_incumbent: true
+  small_repair_infeasible_candidates: true
+  small_repair_max_steps: 4

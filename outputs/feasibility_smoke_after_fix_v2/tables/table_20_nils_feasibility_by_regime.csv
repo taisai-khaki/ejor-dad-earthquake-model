@@ -1,0 +1,15 @@
+endurance_level,eligible_share_target,n,number_of_drones,priority_weight_profile,battery_slack_ratio,n_runs,feasible_runs,feasibility_rate
+high,0.25,15,1,base,0.1,1,1,1.0
+high,0.25,50,1,moderate,0.1,1,1,1.0
+high,0.25,50,2,base,0.1,1,1,1.0
+high,0.25,50,2,moderate,0.1,1,1,1.0
+high,0.75,15,1,moderate,0.1,1,1,1.0
+high,0.75,50,1,base,0.1,1,1,1.0
+high,0.75,50,2,base,0.1,1,1,1.0
+high,0.75,50,2,moderate,0.1,1,1,1.0
+medium,0.25,15,1,moderate,0.1,1,1,1.0
+medium,0.25,50,1,base,0.1,1,1,1.0
+medium,0.25,50,2,base,0.1,1,1,1.0
+medium,0.75,15,1,moderate,0.1,1,1,1.0
+medium,0.75,50,1,moderate,0.1,1,1,1.0
+medium,0.75,50,2,base,0.1,1,1,1.0

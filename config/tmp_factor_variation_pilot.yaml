@@ -1,0 +1,42 @@
+seed: 2026
+
+generation:
+  num_customers: 50
+  num_trucks: 3
+  num_drones: 2
+  region: dense_urban
+
+base_class_windows:
+  high: [0, 60]
+  medium: [0, 120]
+  low: [0, 240]
+
+milp:
+  enabled: false
+
+heuristics:
+  nils:
+    max_outer_iter: 10
+    max_no_improve: 4
+    time_limit_seconds: 60
+    random_seed: 2026
+
+experiment:
+  output_dir: outputs/factor_variation_pilot
+  save_json: true
+  save_csv: true
+  drone_energy_empty_per_min: 15.0
+  drone_energy_loaded_per_min: 20.0
+  study_reps_per_scenario: 1
+  study_methods:
+    - truck_only
+    - simple_drone
+    - nils
+  study_grid:
+    n: [50]
+    eligible_share: [0.25, 0.75]
+    endurance: [low, medium, high]
+    speed_ratio: [1.25, 2.00]
+    handling_time: [short, long]
+    spatial_pattern: [uniform, clustered]
+    drones_available: [2]

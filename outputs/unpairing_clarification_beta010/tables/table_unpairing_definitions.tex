@@ -1,0 +1,16 @@
+\begin{table}[!htbp]
+\centering
+\caption{Distinction between fixed paired, flexible same-truck, and fully unpaired truck-drone operations}
+\label{tab:unpairing_definitions}
+\begin{tabular}{lrrr}
+\toprule
+Concept & Operational restriction & What is optimized & Numerical proxy \\
+\midrule
+Fixed paired truck-drone & Each drone is assigned to a specific truck; drone sorties remain tied to that truck route. & Route and sortie timing under a fixed truck-drone pairing structure. & paired\_baseline \\
+Flexible same-truck truck-drone & Drone sorties are selected flexibly, but recovery is restricted to the launch truck route or depot; cross-truck recovery is not allowed. & Flexible sortie placement without fully unpaired launch/recovery synchronization. & no\_unpairing \\
+Fully unpaired truck-drone & A drone may launch from one truck-supported location and be recovered by another truck-supported location when feasibility checks allow it. & Joint truck routing, drone sortie assignment, and cross-truck recovery synchronization. & nils \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\parbox{\linewidth}{\footnotesize \emph{Note.} The flexible same-truck policy permits flexible sortie selection but does not permit cross-truck drone recovery. Fully unpaired operations remove that restriction subject to timing, endurance, capacity, and synchronization feasibility.}
+\end{table}

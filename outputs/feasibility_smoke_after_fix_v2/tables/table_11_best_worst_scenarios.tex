@@ -1,0 +1,18 @@
+% tab:best_worst
+% Best/worst scenario characterization
+\begin{tabular}{lrrrlrllrrrrrrrlll}
+\toprule
+scenario_id & n & eligible_share_target & number_of_drones & endurance_level & speed_ratio & launch_retrieval_time_class & spatial_pattern & avg_improvement & drone_service_share & truck_distance_reduction_pct & total_truck_waiting_time & total_drone_waiting_time & delayed_rendezvous_events & average_battery_usage_ratio & analysis_method & segment & dominant_reason \\
+\midrule
+S0011 & 50 & 0.7500 & 2 & medium & 2.0000 & short & uniform & 99.5902 & 0.1800 & 44.8586 & 0.0000 & 197.1321 & 4.0000 & 0.8134 & paired_baseline & best & Synchronization burden dominates \\
+S0003 & 15 & 0.7500 & 1 & medium & 2.0000 & medium & uniform & 95.9240 & 0.2667 & 18.2543 & 41.8016 & 0.0000 & 1.0000 & 0.7895 & paired_baseline & best & Synchronization burden dominates \\
+S0004 & 15 & 0.7500 & 1 & high & 1.2500 & short & uniform & 91.5226 & 0.1333 & -6.5003 & 49.6122 & 30.6985 & 2.0000 & 0.8457 & paired_baseline & best & Synchronization burden dominates \\
+S0012 & 50 & 0.7500 & 2 & high & 1.2500 & medium & uniform & 89.7201 & 0.1200 & 37.9947 & 56.3591 & 117.1618 & 3.0000 & 0.8220 & paired_baseline & best & Synchronization burden dominates \\
+S0013 & 50 & 0.7500 & 2 & high & 2.0000 & short & uniform & 89.5379 & 0.1400 & 48.8023 & 0.0000 & 372.4931 & 4.0000 & 0.5954 & paired_baseline & best & Synchronization burden dominates \\
+S0005 & 50 & 0.2500 & 1 & medium & 2.0000 & short & uniform & 68.7375 & 0.0600 & 41.0809 & 0.0000 & 235.8400 & 3.0000 & 0.8669 & paired_baseline & worst & Synchronization burden dominates \\
+S0008 & 50 & 0.2500 & 1 & high & 1.2500 & medium & uniform & 63.8884 & 0.0000 & 36.1249 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & paired_baseline & worst & Uniform layout limits paired-drone value \\
+S0010 & 50 & 0.7500 & 1 & medium & 1.2500 & short & uniform & 63.7487 & 0.0600 & 39.2332 & 0.0000 & 204.2696 & 2.0000 & 0.7824 & paired_baseline & worst & Synchronization burden dominates \\
+S0002 & 15 & 0.2500 & 1 & high & 2.0000 & short & uniform & 27.2708 & 0.1333 & -2.4289 & 0.0000 & 149.3178 & 2.0000 & 0.4492 & paired_baseline & worst & Synchronization burden dominates \\
+S0001 & 15 & 0.2500 & 1 & medium & 1.2500 & medium & uniform & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & paired_baseline & worst & Uniform layout limits paired-drone value \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,13 @@
+% tab:ablation
+% Algorithmic ablation
+\begin{tabular}{lrrrrr}
+\toprule
+method_name & n_runs & avg_objective & avg_improvement & avg_cpu_time & feasibility_rate \\
+\midrule
+nils & 489 & 8750.1341 & 81.7051 & 2.1210 & 1.0000 \\
+paired_baseline & 480 & 11198.0693 & 66.6572 & 30.3157 & 1.0000 \\
+no_unpairing & 485 & 11366.2947 & 73.7478 & 35.2539 & 1.0000 \\
+nils_no_perturbation & 502 & 10732.1239 & 77.3360 & 1.5660 & 1.0000 \\
+nils_no_local_search & 497 & 26363.0364 & 66.1669 & 1.3398 & 1.0000 \\
+\bottomrule
+\end{tabular}

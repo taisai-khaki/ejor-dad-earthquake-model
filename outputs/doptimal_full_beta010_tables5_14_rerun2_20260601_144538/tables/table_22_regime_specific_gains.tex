@@ -1,0 +1,17 @@
+% tab:regime_specific_gains
+% Regime-specific gains under favorable/harsh/neutral conditions.
+\begin{tabular}{llrrrrrr}
+\toprule
+regime_class & method_name & n_runs & avg_objective & avg_improvement_pct & avg_drone_share & avg_cpu_s & feasibility_rate \\
+\midrule
+favorable & nils & 60 & 4383.9960 & 92.9926 & 0.3748 & 11.9635 & 1.0000 \\
+favorable & no_unpairing & 60 & 19141.6964 & 87.5781 & 0.2477 & 657.3252 & 1.0000 \\
+favorable & paired_baseline & 60 & 15488.0375 & 77.3940 & 0.2834 & 588.0813 & 1.0000 \\
+harsh & nils & 30 & 30691.7081 & 76.6889 & 0.1103 & 12.3228 & 1.0000 \\
+harsh & no_unpairing & 30 & 45152.4186 & 77.1602 & 0.0511 & 233.7392 & 1.0000 \\
+harsh & paired_baseline & 30 & 36148.3015 & 73.9301 & 0.0634 & 146.5400 & 1.0000 \\
+neutral & nils & 630 & 53022.0778 & 80.9494 & 0.1784 & 11.7332 & 1.0000 \\
+neutral & no_unpairing & 630 & 104905.6533 & 72.5738 & 0.1025 & 522.9027 & 1.0000 \\
+neutral & paired_baseline & 630 & 87565.2868 & 64.5473 & 0.1181 & 415.4582 & 1.0000 \\
+\bottomrule
+\end{tabular}

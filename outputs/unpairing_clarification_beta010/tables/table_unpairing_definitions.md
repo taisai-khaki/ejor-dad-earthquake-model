@@ -1,0 +1,7 @@
+# Truck-drone operating concepts
+
+| Concept | Operational restriction | What is optimized | Numerical proxy |
+| --- | --- | --- | --- |
+| Fixed paired truck-drone | Each drone is assigned to a specific truck; drone sorties remain tied to that truck route. | Route and sortie timing under a fixed truck-drone pairing structure. | paired_baseline |
+| Flexible same-truck truck-drone | Drone sorties are selected flexibly, but recovery is restricted to the launch truck route or depot; cross-truck recovery is not allowed. | Flexible sortie placement without fully unpaired launch/recovery synchronization. | no_unpairing |
+| Fully unpaired truck-drone | A drone may launch from one truck-supported location and be recovered by another truck-supported location when feasibility checks allow it. | Joint truck routing, drone sortie assignment, and cross-truck recovery synchronization. | nils |

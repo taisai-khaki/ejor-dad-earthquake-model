@@ -1,0 +1,11 @@
+scenario_id,n,eligible_share_target,number_of_drones,endurance_level,speed_ratio,launch_retrieval_time_class,spatial_pattern,avg_improvement,drone_service_share,truck_distance_reduction_pct,total_truck_waiting_time,total_drone_waiting_time,delayed_rendezvous_events,average_battery_usage_ratio,analysis_method,segment,dominant_reason
+S0023,15,0.75,1,high,2.0,long,uniform,96.96594196687265,0.34,23.425069307491874,46.841582587154626,48.209673986577755,2.6,0.6716315067214598,paired_baseline,best,Synchronization burden dominates
+S0042,50,0.75,2,high,1.25,short,clustered,95.5940106255133,0.132,64.48530726297447,10.671784126872332,168.93758776147743,2.5,0.7183811524982789,paired_baseline,best,Synchronization burden dominates
+S0028,50,0.25,1,medium,1.25,medium,clustered,95.43983462874026,0.09666666666666668,21.569006341300707,7.351979558981466,149.17212092481063,2.1666666666666665,0.8740413545592198,paired_baseline,best,Synchronization burden dominates
+S0033,50,0.25,1,high,2.0,short,clustered,95.3426640521367,0.23777777777777778,20.18799947366537,14.70372387916832,114.23071154433998,2.3333333333333335,0.589343149142382,paired_baseline,best,Synchronization burden dominates
+S0029,50,0.25,2,medium,2.0,short,clustered,95.22262266598068,0.22,23.538678861011224,18.893578692069642,141.29400396366987,2.7142857142857144,0.7093448726129019,paired_baseline,best,Synchronization burden dominates
+S0008,15,0.25,1,high,1.25,short,uniform,-24.601597842959965,0.13333333333333333,5.873750835524675,10.322461866922303,84.21935921378603,1.5555555555555556,0.6577929826749173,paired_baseline,worst,Synchronization burden dominates
+S0017,15,0.75,1,medium,1.25,long,uniform,-24.84385206473101,0.13333333333333333,6.550053886594267,3.9392508491257607,105.68805323021633,2.3333333333333335,0.8032692015610899,paired_baseline,worst,Synchronization burden dominates
+S0054,100,0.25,3,low,2.0,medium,uniform,,0.12,49.7862249598439,33.62018419339638,428.9196815914892,6.0,0.856213834318576,paired_baseline,worst,Synchronization burden dominates
+S0056,100,0.25,3,low,2.0,long,uniform,,0.0,48.423357602324295,0.0,0.0,0.0,0.0,paired_baseline,worst,Speed compensates low endurance
+S0060,100,0.25,3,high,1.25,short,uniform,,0.1,52.06019924632211,0.0,501.7234621684459,6.0,0.7519247790344755,paired_baseline,worst,Synchronization burden dominates

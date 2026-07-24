@@ -1,0 +1,64 @@
+seed: 2026
+
+generation:
+  num_customers: 50
+  num_trucks: 3
+  num_drones: 2
+  region: dense_urban
+  instance_reps_per_size: 1
+  sizes: [15, 50]
+
+base_class_windows:
+  high: [0, 60]
+  medium: [0, 120]
+  low: [0, 240]
+
+milp:
+  enabled: false
+  solver: cplex
+  time_limit_seconds: 60
+  mip_gap: 0.001
+  threads: 1
+
+heuristics:
+  nils:
+    max_outer_iter: 12
+    max_no_improve: 4
+    time_limit_seconds: 25
+    random_seed: 2026
+
+experiment:
+  output_dir: outputs/feasibility_smoke_after_fix_v2
+  save_json: true
+  save_csv: true
+  study_methods:
+    - truck_only
+    - simple_drone
+    - paired_baseline
+    - no_unpairing
+    - nils
+    - nils_no_local_search
+    - nils_no_perturbation
+  study_design: d_optimal
+  study_d_optimal_points: 8
+  study_d_optimal_restarts: 3
+  study_reps_per_scenario: 1
+  study_feasibility_policy: feasible_only
+  study_force_feasible_outputs: true
+  study_output_repair_max_steps: 10
+  study_instance_regen_max_attempts: 120
+
+  study_grid:
+    n: [15, 50]
+    eligible_share: [0.25, 0.75]
+    endurance: [medium, high]
+    speed_ratio: [1.25, 2.0]
+    handling_time: [short, medium]
+    spatial_pattern: [uniform]
+    drones_available: [1, 2]
+    priority_weight_profile: [moderate, base]
+    battery_slack_ratio: [0.10]
+
+  study_conditional_n_by_drones:
+    1: [15, 50]
+    2: [50]

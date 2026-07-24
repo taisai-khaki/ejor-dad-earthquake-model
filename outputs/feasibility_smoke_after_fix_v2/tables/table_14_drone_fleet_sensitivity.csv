@@ -1,0 +1,3 @@
+number_of_drones,n_runs,number_of_trucks,avg_objective,avg_improvement_pct,drone_share,avg_cpu_s,feasibility_rate,high_priority_tardiness,drone_to_truck_ratio
+1,8,3.0,6183.10304239234,67.95285768615983,0.1725,1.929090529680252,1.0,89.04524792853428,0.33
+2,6,3.0,8532.540166601071,90.81585324265534,0.17,4.029003302256267,1.0,89.91780740863855,0.67

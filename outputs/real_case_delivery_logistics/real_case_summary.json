@@ -1,0 +1,20 @@
+{
+  "source": "C:\\Users\\L03128674\\Downloads\\Delivery_Logistics.csv",
+  "sample_size": 80,
+  "sample_rule": "20 per delivery_mode",
+  "delivery_mode_counts_sample": {
+    "same day": 20,
+    "two day": 20,
+    "express": 20,
+    "standard": 20
+  },
+  "priority_counts": {
+    "high": 40,
+    "medium": 20,
+    "low": 20
+  },
+  "light_package_share_le_5kg": 0.075,
+  "truck_capacity_each_kg": 5000.0,
+  "distance_scale": 0.1,
+  "results_csv": "C:\\Users\\L03128674\\projects\\utdrp_priority_sensitive_unpaired_truck_drone\\outputs\\real_case_delivery_logistics\\real_case_results.csv"
+}

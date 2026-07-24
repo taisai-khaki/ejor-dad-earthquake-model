@@ -1,0 +1,245 @@
+{
+  "name": "S0019_R04",
+  "seed": 1902030,
+  "region": "dense_urban",
+  "constants": {
+    "swap_time_s": 30.0,
+    "reload_time_s": 30.0,
+    "max_shift_minutes": 480.0,
+    "big_m": 10000.0
+  },
+  "priority_penalties": {
+    "high": 200.0,
+    "medium": 40.0,
+    "low": 1.0
+  },
+  "customers": [
+    {
+      "node_id": 1,
+      "x": 9.059375913114504,
+      "y": 10.14898974286744,
+      "demand_kg": 3.67717361106699,
+      "priority": "high",
+      "lb": 0.0,
+      "ub": 59.97231499460282,
+      "service_time_min": 1.3604304614588087
+    },
+    {
+      "node_id": 2,
+      "x": 9.302883156783407,
+      "y": 9.729976732324902,
+      "demand_kg": 0.6388334132159232,
+      "priority": "high",
+      "lb": 0.09783006316229075,
+      "ub": 60.14612593235956,
+      "service_time_min": 1.2459998183831196
+    },
+    {
+      "node_id": 3,
+      "x": 9.391414103462042,
+      "y": 8.28269305424727,
+      "demand_kg": 1.1563401360085126,
+      "priority": "high",
+      "lb": 0.1401969476668692,
+      "ub": 59.99427579145951,
+      "service_time_min": 0.5707282793381746
+    },
+    {
+      "node_id": 4,
+      "x": 10.083521789407346,
+      "y": 8.31431038679549,
+      "demand_kg": 0.7328590657275269,
+      "priority": "medium",
+      "lb": 0.0,
+      "ub": 120.06396210714429,
+      "service_time_min": 1.1003374633578242
+    },
+    {
+      "node_id": 5,
+      "x": 7.217780457574456,
+      "y": 10.717529790688996,
+      "demand_kg": 2.5068300280110374,
+      "priority": "medium",
+      "lb": 0.0,
+      "ub": 120.09366788012765,
+      "service_time_min": 1.3783100878406387
+    },
+    {
+      "node_id": 6,
+      "x": 10.342984009876941,
+      "y": 8.423537053193918,
+      "demand_kg": 1.5242415640596154,
+      "priority": "low",
+      "lb": 0.0,
+      "ub": 239.98804369226247,
+      "service_time_min": 0.6795403241055166
+    },
+    {
+      "node_id": 7,
+      "x": 11.559448956291364,
+      "y": 8.459819126946005,
+      "demand_kg": 0.8267639130240534,
+      "priority": "medium",
+      "lb": 0.0,
+      "ub": 120.32142666143993,
+      "service_time_min": 0.7084944828104531
+    },
+    {
+      "node_id": 8,
+      "x": 10.44069633886215,
+      "y": 10.26299607448773,
+      "demand_kg": 2.145906820009518,
+      "priority": "low",
+      "lb": 0.07505853331165983,
+      "ub": 240.01771759241336,
+      "service_time_min": 1.1182307925493262
+    },
+    {
+      "node_id": 9,
+      "x": 10.377529000692661,
+      "y": 8.799480188934561,
+      "demand_kg": 1.7666671389767066,
+      "priority": "low",
+      "lb": 0.2106600318535371,
+      "ub": 239.65263073836545,
+      "service_time_min": 1.301630102841856
+    },
+    {
+      "node_id": 10,
+      "x": 10.701373033279173,
+      "y": 8.704386737571197,
+      "demand_kg": 1.33733912714834,
+      "priority": "high",
+      "lb": 0.15001421903590823,
+      "ub": 59.9795469165619,
+      "service_time_min": 1.156526671495488
+    },
+    {
+      "node_id": 11,
+      "x": 8.325463256423278,
+      "y": 9.02228609592964,
+      "demand_kg": 4.463853560701338,
+      "priority": "low",
+      "lb": 0.0,
+      "ub": 239.8575714476989,
+      "service_time_min": 1.1553718189737818
+    },
+    {
+      "node_id": 12,
+      "x": 13.34534496245736,
+      "y": 9.267076598887275,
+      "demand_kg": 1.733225341888582,
+      "priority": "low",
+      "lb": 0.048299332431169385,
+      "ub": 239.90944413626582,
+      "service_time_min": 0.9538286096982482
+    },
+    {
+      "node_id": 13,
+      "x": 6.8326639661941915,
+      "y": 9.80522174602708,
+      "demand_kg": 2.1031064818632172,
+      "priority": "low",
+      "lb": 0.0531523372980155,
+      "ub": 240.01790102468203,
+      "service_time_min": 0.7462372005340553
+    },
+    {
+      "node_id": 14,
+      "x": 8.601818206136436,
+      "y": 13.591789139260205,
+      "demand_kg": 2.806576733204592,
+      "priority": "medium",
+      "lb": 0.20595513101746907,
+      "ub": 120.12629691116341,
+      "service_time_min": 0.614812887567898
+    },
+    {
+      "node_id": 15,
+      "x": 9.093055962344426,
+      "y": 12.859967407827796,
+      "demand_kg": 2.174975818305891,
+      "priority": "low",
+      "lb": 0.0,
+      "ub": 240.12613827580017,
+      "service_time_min": 1.0521008128082656
+    }
+  ],
+  "trucks": [
+    {
+      "truck_id": 1,
+      "capacity_kg": 500.0,
+      "speed_kmph": 35.0,
+      "cost_per_km": 0.8,
+      "energy_cost_per_min": 0.0
+    },
+    {
+      "truck_id": 2,
+      "capacity_kg": 500.0,
+      "speed_kmph": 35.0,
+      "cost_per_km": 0.8,
+      "energy_cost_per_min": 0.0
+    },
+    {
+      "truck_id": 3,
+      "capacity_kg": 500.0,
+      "speed_kmph": 35.0,
+      "cost_per_km": 0.8,
+      "energy_cost_per_min": 0.0
+    }
+  ],
+  "drones": [
+    {
+      "drone_id": 1,
+      "capacity_kg": 5.0,
+      "speed_kmph": 70.0,
+      "max_battery_wh": 1200.0,
+      "energy_per_min_when_empty": 15.0,
+      "energy_per_min_when_loaded": 20.0,
+      "cost_per_km": 0.3,
+      "energy_cost_per_min": 0.0,
+      "curb_weight_kg": 3.0,
+      "parcel_weight_kg": 2.0
+    }
+  ],
+  "metadata": {
+    "coordinate_scale": 20.0,
+    "instance_class": "medium",
+    "priority_share": [
+      0.2,
+      0.3,
+      0.5
+    ],
+    "generation": {
+      "num_customers": 15,
+      "num_trucks": 3,
+      "num_drones": 1,
+      "region": "dense_urban",
+      "seed_offset": 1902030
+    },
+    "drone_eligible_customers": [
+      1,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "eligible_share_target": 0.75,
+    "eligible_share_realized": 0.7333333333333333,
+    "scenario_id": "S0019",
+    "spatial_pattern": "clustered",
+    "endurance_level": "medium",
+    "speed_ratio": 2.0,
+    "handling_time_class": "short",
+    "drones_available": 1,
+    "priority_weight_profile": "strict",
+    "battery_slack_ratio": 0.1,
+    "regen_attempt": 0
+  }
+}

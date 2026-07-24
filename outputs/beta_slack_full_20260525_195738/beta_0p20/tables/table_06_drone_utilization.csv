@@ -1,0 +1,3 @@
+method_name,drone_service_share,avg_launches,avg_retrievals,avg_drone_distance,avg_truck_distance_saved_pct,avg_truck_waiting,avg_drone_waiting,feasibility_rate
+nils,0.18080578512396694,1.2685950413223142,1.2685950413223142,54.69095849854252,30.18086065567701,0.0,0.0,0.6722222222222223
+truck_only,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.6708333333333333

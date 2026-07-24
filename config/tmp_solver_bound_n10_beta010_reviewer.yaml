@@ -1,0 +1,48 @@
+seed: 2026
+
+generation:
+  num_customers: 10
+  num_trucks: 3
+  num_drones: 3
+  region: dense_urban
+  instance_reps_per_size: 1
+  sizes: [10]
+
+base_class_windows:
+  high: [0, 60]
+  medium: [0, 120]
+  low: [0, 240]
+
+milp:
+  enabled: true
+  solver: pulp_cbc
+  time_limit_seconds: 120
+  mip_gap: 0.001
+  threads: 1
+
+heuristics:
+  nils:
+    max_outer_iter: 80
+    max_no_improve: 18
+    time_limit_seconds: 45
+    random_seed: 2026
+
+experiment:
+  output_dir: outputs/solver_bound_n10_beta010_reviewer
+  save_json: true
+  save_csv: true
+  run_small_sizes: [10]
+  instance_reps_per_size: 1
+  small_battery_slack_ratio: 0.10
+  small_nils_restarts: 20
+  small_nils_seed_stride: 10000
+  small_nils_use_instance_seed: true
+  small_nils_select_feasible_first: true
+  small_strict_candidate_check_cap: 0
+  small_full_feasibility_check_interval: 1
+  small_require_feasible_incumbent: true
+  small_repair_infeasible_candidates: true
+  small_repair_max_steps: 8
+  small_exact_watchdog_enabled: true
+  small_exact_wall_timeout_seconds: 180
+  small_exact_heartbeat_seconds: 15

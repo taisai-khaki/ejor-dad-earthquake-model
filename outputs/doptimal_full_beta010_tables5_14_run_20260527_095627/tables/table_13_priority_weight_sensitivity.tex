@@ -1,0 +1,32 @@
+% tab:priority_weight_sensitivity
+% Sensitivity to priority-weight profiles by method
+\begin{tabular}{llrrrrrrr}
+\toprule
+priority_weight_profile & method_name & n_runs & avg_objective & avg_improvement_vs_truck_only & avg_priority_tardiness_cost & avg_waiting_cost & avg_drone_service_share & feasibility_rate \\
+\midrule
+base & nils & 121 & 12750.7264 & 87.2144 & 12584.1867 & 0.0000 & 0.2047 & 1.0000 \\
+base & nils_no_local_search & 120 & 33170.1709 & 71.4515 & 32927.7795 & 0.0000 & 0.2327 & 1.0000 \\
+base & nils_no_perturbation & 122 & 13946.2562 & 82.3334 & 13794.3233 & 0.0000 & 0.1982 & 1.0000 \\
+base & no_unpairing & 118 & 14804.6701 & 82.4023 & 14543.4565 & 96.5249 & 0.1726 & 1.0000 \\
+base & paired_baseline & 119 & 16532.5741 & 77.2977 & 16214.9728 & 140.2887 & 0.1734 & 1.0000 \\
+base & truck_only & 117 & 82826.5873 & NaN & 82599.1017 & 0.0000 & 0.0000 & 1.0000 \\
+flat & nils & 132 & 290.8502 & 69.6556 & 125.6774 & 0.0000 & 0.1782 & 1.0000 \\
+flat & nils_no_local_search & 135 & 888.2260 & 53.3676 & 650.4360 & 0.0000 & 0.1934 & 1.0000 \\
+flat & nils_no_perturbation & 134 & 323.9617 & 68.1023 & 179.4587 & 0.0000 & 0.1761 & 1.0000 \\
+flat & no_unpairing & 128 & 493.4619 & 53.4326 & 248.1932 & 79.2385 & 0.0988 & 1.0000 \\
+flat & paired_baseline & 126 & 542.5208 & 41.3085 & 227.6314 & 135.9774 & 0.1450 & 1.0000 \\
+flat & truck_only & 130 & 2322.1001 & NaN & 2094.3563 & 0.0000 & 0.0000 & 1.0000 \\
+moderate & nils & 120 & 2663.4198 & 84.2195 & 2498.1706 & 0.0000 & 0.2023 & 1.0000 \\
+moderate & nils_no_local_search & 120 & 8481.8795 & 68.5208 & 8235.5044 & 0.0000 & 0.2299 & 1.0000 \\
+moderate & nils_no_perturbation & 121 & 2852.3310 & 79.7631 & 2697.8058 & 0.0000 & 0.2015 & 1.0000 \\
+moderate & no_unpairing & 118 & 4285.7629 & 77.0341 & 4025.4928 & 86.1889 & 0.1492 & 1.0000 \\
+moderate & paired_baseline & 119 & 4065.1256 & 69.7972 & 3740.2420 & 145.9093 & 0.1642 & 1.0000 \\
+moderate & truck_only & 115 & 17745.0438 & NaN & 17514.0052 & 0.0000 & 0.0000 & 1.0000 \\
+strict & nils & 116 & 20499.7851 & 87.2824 & 20340.1872 & 0.0000 & 0.2233 & 1.0000 \\
+strict & nils_no_local_search & 122 & 65444.8566 & 72.8387 & 65222.6407 & 0.0000 & 0.2608 & 1.0000 \\
+strict & nils_no_perturbation & 125 & 26380.3200 & 80.1174 & 26243.7281 & 0.0000 & 0.2174 & 1.0000 \\
+strict & no_unpairing & 121 & 26419.9896 & 83.6157 & 26176.1133 & 92.8711 & 0.1871 & 1.0000 \\
+strict & paired_baseline & 116 & 24617.1500 & 80.4217 & 24328.8597 & 121.9835 & 0.1767 & 1.0000 \\
+strict & truck_only & 121 & 166330.0003 & NaN & 166122.1005 & 0.0000 & 0.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,15 @@
+\begin{table}
+\caption{Head-to-head comparison of NILS and feasibility-aware ALNS on matched instances}
+\label{tab:alns_head_to_head}
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+size & n_pairs & avg_nils_objective & avg_alns_objective & avg_nils_improvement_vs_alns_pct & median_nils_improvement_vs_alns_pct & nils_wins & alns_wins & avg_nils_cpu_s & avg_alns_cpu_s \\
+\midrule
+All & 24 & 38800.340 & 54774.445 & 29.368 & 32.936 & 18 & 6 & 15.034 & 9.418 \\
+15 & 8 & 87.855 & 1669.363 & 27.420 & 10.884 & 5 & 3 & 0.392 & 5.980 \\
+50 & 7 & 20737.293 & 44657.625 & 53.633 & 62.192 & 7 & 0 & 3.866 & 10.834 \\
+75 & 3 & 13380.304 & 25827.442 & 50.922 & 39.169 & 3 & 0 & 10.834 & 10.711 \\
+100 & 6 & 124200.558 & 151857.681 & -7.122 & 8.871 & 3 & 3 & 49.686 & 11.705 \\
+\bottomrule
+\end{tabular}
+\end{table}

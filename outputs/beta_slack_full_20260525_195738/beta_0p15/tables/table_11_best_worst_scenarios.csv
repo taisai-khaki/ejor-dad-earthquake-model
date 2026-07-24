@@ -1,0 +1,11 @@
+scenario_id,n,eligible_share_target,number_of_drones,endurance_level,speed_ratio,launch_retrieval_time_class,spatial_pattern,avg_improvement,drone_service_share,truck_distance_reduction_pct,total_truck_waiting_time,total_drone_waiting_time,delayed_rendezvous_events,average_battery_usage_ratio,analysis_method,segment,dominant_reason
+S0041,50,0.75,2,high,1.25,short,clustered,99.80019303796618,0.388,50.502481420646156,0.0,0.0,0.0,0.806033732399745,nils,best,High eligibility + clustered geometry
+S0043,50,0.75,1,high,2.0,short,clustered,99.40748180400168,0.378,54.96458451202541,0.0,0.0,0.0,0.7612414860643972,nils,best,High eligibility + clustered geometry
+S0042,50,0.75,2,high,1.25,short,clustered,99.32385402423299,0.34500000000000003,48.29842379851433,0.0,0.0,0.0,0.8028926250762715,nils,best,High eligibility + clustered geometry
+S0023,15,0.75,1,high,2.0,long,uniform,98.6912379473583,0.36296296296296293,32.69882074992822,0.0,0.0,0.0,0.7151316643869038,nils,best,Mixed structural effects
+S0053,75,0.75,3,high,2.0,short,uniform,97.49185026624158,0.29333333333333333,57.809877955102515,0.0,0.0,0.0,0.8367845491969473,nils,best,Mixed structural effects
+S0006,15,0.25,1,medium,2.0,long,uniform,42.65901538652636,0.18666666666666668,27.14254580549441,0.0,0.0,0.0,0.6327425933642674,nils,worst,Uniform layout limits paired-drone value
+S0008,15,0.25,1,high,1.25,short,uniform,31.775353895959647,0.15333333333333335,19.89943556108845,0.0,0.0,0.0,0.6187245293185661,nils,worst,Uniform layout limits paired-drone value
+S0054,100,0.25,3,low,2.0,medium,uniform,,0.11,46.39061435910005,0.0,0.0,0.0,0.7460237572566492,nils,worst,Speed compensates low endurance
+S0060,100,0.25,3,high,1.25,short,uniform,,0.11,51.25152078445889,0.0,0.0,0.0,0.8303794358756175,nils,worst,Uniform layout limits paired-drone value
+S0065,100,0.75,3,low,2.0,short,uniform,,0.17,51.03739465702681,0.0,0.0,0.0,0.8357250207129464,nils,worst,Speed compensates low endurance

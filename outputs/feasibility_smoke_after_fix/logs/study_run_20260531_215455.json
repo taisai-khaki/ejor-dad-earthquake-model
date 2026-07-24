@@ -1,0 +1,7 @@
+{
+  "run_id": "2026-05-31T21:54:55",
+  "command": "run-heuristic-study",
+  "status": "failure",
+  "runtime_seconds": 629.9041844999883,
+  "error": "Unable to generate preprocessing-feasible instance after 80 attempts for S0016_R01"
+}

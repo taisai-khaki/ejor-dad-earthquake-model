@@ -1,0 +1,18 @@
+% tab:best_worst
+% Best/worst scenario characterization
+\begin{tabular}{lrrrlrllrrrrrrrlll}
+\toprule
+scenario_id & n & eligible_share_target & number_of_drones & endurance_level & speed_ratio & launch_retrieval_time_class & spatial_pattern & avg_improvement & drone_service_share & truck_distance_reduction_pct & total_truck_waiting_time & total_drone_waiting_time & delayed_rendezvous_events & average_battery_usage_ratio & analysis_method & segment & dominant_reason \\
+\midrule
+S0041 & 50 & 0.7500 & 2 & high & 1.2500 & short & clustered & 99.7635 & 0.3560 & 47.7055 & 0.0000 & 0.0000 & 0.0000 & 0.7534 & nils & best & High eligibility + clustered geometry \\
+S0042 & 50 & 0.7500 & 2 & high & 1.2500 & short & clustered & 99.5752 & 0.3300 & 46.7030 & 0.0000 & 0.0000 & 0.0000 & 0.7646 & nils & best & High eligibility + clustered geometry \\
+S0043 & 50 & 0.7500 & 1 & high & 2.0000 & short & clustered & 98.9243 & 0.3360 & 57.9662 & 0.0000 & 0.0000 & 0.0000 & 0.7294 & nils & best & High eligibility + clustered geometry \\
+S0023 & 15 & 0.7500 & 1 & high & 2.0000 & long & uniform & 98.6625 & 0.3481 & 31.1581 & 0.0000 & 0.0000 & 0.0000 & 0.6961 & nils & best & Mixed structural effects \\
+S0053 & 75 & 0.7500 & 3 & high & 2.0000 & short & uniform & 97.2195 & 0.2756 & 57.5725 & 0.0000 & 0.0000 & 0.0000 & 0.7790 & nils & best & Mixed structural effects \\
+S0006 & 15 & 0.2500 & 1 & medium & 2.0000 & long & uniform & 40.7887 & 0.1600 & 20.1262 & 0.0000 & 0.0000 & 0.0000 & 0.5872 & nils & worst & Uniform layout limits paired-drone value \\
+S0008 & 15 & 0.2500 & 1 & high & 1.2500 & short & uniform & 31.9744 & 0.1267 & 18.6655 & 0.0000 & 0.0000 & 0.0000 & 0.5318 & nils & worst & Uniform layout limits paired-drone value \\
+S0054 & 100 & 0.2500 & 3 & low & 2.0000 & medium & uniform & NaN & 0.1100 & 46.3906 & 0.0000 & 0.0000 & 0.0000 & 0.7426 & nils & worst & Speed compensates low endurance \\
+S0060 & 100 & 0.2500 & 3 & high & 1.2500 & short & uniform & NaN & 0.1500 & 53.9235 & 0.0000 & 0.0000 & 0.0000 & 0.7694 & nils & worst & Uniform layout limits paired-drone value \\
+S0065 & 100 & 0.7500 & 3 & low & 2.0000 & short & uniform & NaN & 0.1100 & 48.3778 & 0.0000 & 0.0000 & 0.0000 & 0.7934 & nils & worst & Speed compensates low endurance \\
+\bottomrule
+\end{tabular}

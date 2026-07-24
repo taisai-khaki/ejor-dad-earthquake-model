@@ -1,0 +1,30 @@
+seed: 2026
+
+generation:
+  num_customers: 20
+  num_trucks: 3
+  num_drones: 5
+  region: dense_urban
+  instance_reps_per_size: 1
+  sizes: [20]
+
+base_class_windows:
+  high: [0, 60]
+  medium: [0, 120]
+  low: [0, 240]
+
+milp:
+  enabled: true
+  solver: pulp_cbc
+  time_limit_seconds: 60
+  mip_gap: 0.001
+
+heuristics:
+  nils:
+    max_outer_iter: 5
+    time_limit_seconds: 60
+
+experiment:
+  output_dir: outputs
+  save_json: true
+  save_csv: true

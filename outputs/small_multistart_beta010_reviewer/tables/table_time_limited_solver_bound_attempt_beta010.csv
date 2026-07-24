@@ -1,0 +1,2 @@
+size,seed,exact_status,exact_obj,exact_best_bound,exact_solver_gap,runtime_exact,heur_obj,runtime_heuristic,nils_restarts,nils_vs_exact_pct,dominance_check_passed,paper_usable_bound,diagnostic_note
+10,12027,2,19.75131543139566,19.75131543139566,0.0,112.83055400848389,11.010063870448269,0.8880088329315186,20,-44.25655390553256,False,False,"not usable: NILS incumbent is lower than reported exact objective, indicating objective/model mismatch"

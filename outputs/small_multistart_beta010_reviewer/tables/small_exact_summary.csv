@@ -1,0 +1,8 @@
+instance,method,exact_obj,heur_obj,seed,size,feasible_exact,feasible_heur,comparison_valid_for_gap,gap_exact_minus_heur,gap_pct_vs_exact_raw,gap_pct_vs_exact_feasible_only,runtime_exact,runtime_heuristic,exact_available,exact_status,exact_solver_gap,exact_best_bound,exact_incumbent_objective,nils_restarts,nils_feasible_starts,nils_selected_feasible,heur_drone_served_customers,heur_drone_arcs,heur_reload_events,heur_battery_swaps,heur_nonempty_drone_routes,exact_drone_served_customers,exact_drone_arcs,exact_reload_events,exact_battery_swaps,exact_nonempty_drone_routes
+small_3_01,exact_unavailable,,11.33815818857164,5027,3,False,True,False,,,,0.0,0.5520777702331543,False,unavailable,,,,50,50,True,3,4,0,0,1,,,,,
+small_4_01,exact_unavailable,,11.319586162854002,6027,4,False,True,False,,,,0.0,0.5486509799957275,False,unavailable,,,,50,50,True,4,5,0,0,1,,,,,
+small_5_01,exact_unavailable,,10.239552333741106,7027,5,False,True,False,,,,0.0,0.6072502136230469,False,unavailable,,,,50,50,True,5,6,0,0,1,,,,,
+small_6_01,exact_unavailable,,10.694370517260792,8027,6,False,True,False,,,,0.0,0.6810076236724854,False,unavailable,,,,50,50,True,6,7,0,0,1,,,,,
+small_7_01,exact_unavailable,,11.46625265425416,9027,7,False,True,False,,,,0.0,0.8685212135314941,False,unavailable,,,,50,50,True,7,8,0,0,1,,,,,
+small_8_01,exact_unavailable,,12.74886984274702,10027,8,False,True,False,,,,0.0,0.6637821197509766,False,unavailable,,,,50,50,True,8,9,0,0,1,,,,,
+small_9_01,exact_unavailable,,11.921405921525054,11027,9,False,True,False,,,,0.0,0.8462057113647461,False,unavailable,,,,50,50,True,9,10,0,0,1,,,,,

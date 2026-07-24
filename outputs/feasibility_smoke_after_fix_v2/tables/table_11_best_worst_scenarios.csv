@@ -1,0 +1,11 @@
+scenario_id,n,eligible_share_target,number_of_drones,endurance_level,speed_ratio,launch_retrieval_time_class,spatial_pattern,avg_improvement,drone_service_share,truck_distance_reduction_pct,total_truck_waiting_time,total_drone_waiting_time,delayed_rendezvous_events,average_battery_usage_ratio,analysis_method,segment,dominant_reason
+S0011,50,0.75,2,medium,2.0,short,uniform,99.59024726378345,0.18,44.85857061305463,0.0,197.1320796344663,4.0,0.8134356299211742,paired_baseline,best,Synchronization burden dominates
+S0003,15,0.75,1,medium,2.0,medium,uniform,95.92396309554904,0.26666666666666666,18.254313308746447,41.80157248759685,0.0,1.0,0.789513134397661,paired_baseline,best,Synchronization burden dominates
+S0004,15,0.75,1,high,1.25,short,uniform,91.52261117360395,0.13333333333333333,-6.5003168873490305,49.61221528254018,30.6984804515605,2.0,0.8457458397000884,paired_baseline,best,Synchronization burden dominates
+S0012,50,0.75,2,high,1.25,medium,uniform,89.7201193346267,0.12,37.99469081961236,56.359068527563466,117.16180877891854,3.0,0.8220221327070301,paired_baseline,best,Synchronization burden dominates
+S0013,50,0.75,2,high,2.0,short,uniform,89.5379203887354,0.14,48.80230731119015,0.0,372.49314007355036,4.0,0.5954340094931293,paired_baseline,best,Synchronization burden dominates
+S0005,50,0.25,1,medium,2.0,short,uniform,68.73750490749093,0.06,41.08093508858474,0.0,235.84002990198806,3.0,0.8669207739912753,paired_baseline,worst,Synchronization burden dominates
+S0008,50,0.25,1,high,1.25,medium,uniform,63.88838839806291,0.0,36.12492298179624,0.0,0.0,0.0,0.0,paired_baseline,worst,Uniform layout limits paired-drone value
+S0010,50,0.75,1,medium,1.25,short,uniform,63.748734842718704,0.06,39.23319987517433,0.0,204.26960490462858,2.0,0.7823653596981909,paired_baseline,worst,Synchronization burden dominates
+S0002,15,0.25,1,high,2.0,short,uniform,27.270751592128253,0.13333333333333333,-2.428929961800486,0.0,149.31779437604501,2.0,0.4491585382398469,paired_baseline,worst,Synchronization burden dominates
+S0001,15,0.25,1,medium,1.25,medium,uniform,0.0,0.0,0.0,0.0,0.0,0.0,0.0,paired_baseline,worst,Uniform layout limits paired-drone value

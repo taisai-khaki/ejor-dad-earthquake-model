@@ -1,0 +1,35 @@
+seed: 2026
+
+generation:
+  num_customers: 25
+  num_trucks: 2
+  num_drones: 2
+  region: dense_urban
+
+base_class_windows:
+  high: [0, 60]
+  medium: [0, 120]
+  low: [0, 240]
+
+milp:
+  enabled: false
+
+heuristics:
+  nils:
+    max_outer_iter: 8
+    max_no_improve: 3
+    time_limit_seconds: 45
+    random_seed: 2026
+
+experiment:
+  output_dir: outputs/heuristic_smoke
+  study_reps_per_scenario: 1
+  study_max_scenarios: 1
+  study_grid:
+    n: [25]
+    eligible_share: [0.5]
+    endurance: [medium]
+    speed_ratio: [1.5]
+    handling_time: [medium]
+    spatial_pattern: [uniform]
+    drones_available: [2]

@@ -1,0 +1,16 @@
+% tab:priority_weight_sensitivity
+% Sensitivity to priority-weight profiles by method
+\begin{tabular}{llrrrrrrr}
+\toprule
+priority_weight_profile & method_name & n_runs & avg_objective & avg_improvement_vs_truck_only & avg_priority_tardiness_cost & avg_waiting_cost & avg_drone_service_share & feasibility_rate \\
+\midrule
+base & nils & 120 & 13562.3022 & 86.5602 & 13396.1153 & 0.0000 & 0.1964 & 1.0000 \\
+base & truck_only & 117 & 82826.5873 & NaN & 82599.1017 & 0.0000 & 0.0000 & 1.0000 \\
+flat & nils & 129 & 316.0963 & 67.9112 & 149.1566 & 0.0000 & 0.1564 & 1.0000 \\
+flat & truck_only & 130 & 2322.1001 & NaN & 2094.3563 & 0.0000 & 0.0000 & 1.0000 \\
+moderate & nils & 118 & 2948.2703 & 82.4563 & 2780.2619 & 0.0000 & 0.1682 & 1.0000 \\
+moderate & truck_only & 115 & 17745.0438 & NaN & 17514.0052 & 0.0000 & 0.0000 & 1.0000 \\
+strict & nils & 117 & 21773.0719 & 87.0677 & 21610.3562 & 0.0000 & 0.2044 & 1.0000 \\
+strict & truck_only & 121 & 166330.0003 & NaN & 166122.1005 & 0.0000 & 0.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}

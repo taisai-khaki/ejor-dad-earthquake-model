@@ -1,0 +1,48 @@
+﻿seed: 2026
+
+generation:
+  num_customers: 50
+  num_trucks: 3
+  num_drones: 3
+  region: dense_urban
+  instance_reps_per_size: 20
+
+milp:
+  enabled: false
+  solver: pulp_cbc
+
+heuristics:
+  nils:
+    max_outer_iter: 30
+    max_no_improve: 8
+    time_limit_seconds: 180
+    random_seed: 2026
+
+experiment:
+  output_dir: outputs
+  save_json: true
+  save_csv: true
+  drone_energy_empty_per_min: 15.0
+  drone_energy_loaded_per_min: 20.0
+  study_reps_per_scenario: 1`n  study_max_scenarios: 1
+  # For quick pilot runs, set a small cap such as 5 or 10.
+  # study_max_scenarios: 10
+  study_methods:
+    - truck_only
+    - simple_drone
+    - random_feasible
+    - paired_baseline
+    - no_unpairing
+    - nils
+    - nils_no_local_search
+    - nils_no_perturbation
+    - nils_no_battery_screening
+  study_grid:
+    n: [25, 50, 75, 100, 150]
+    eligible_share: [0.25, 0.50, 0.75]
+    endurance: [low, medium, high]
+    speed_ratio: [1.25, 1.50, 2.00]
+    handling_time: [short, medium, long]
+    spatial_pattern: [uniform, clustered]
+    drones_available: [1, 2, 3]
+

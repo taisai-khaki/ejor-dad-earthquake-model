@@ -1,0 +1,2 @@
+battery_slack_ratio,n_runs,avg_objective,avg_improvement_pct,drone_share,battery_rejections,avg_cpu_s,feasible_runs_pct,avg_drone_distance
+0.1,720,48038.47221368041,81.97436121752831,0.19191666666666668,768.2944444444445,11.776974936657481,1.0,87.19147489942948

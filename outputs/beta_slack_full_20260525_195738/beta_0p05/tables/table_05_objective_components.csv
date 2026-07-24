@@ -1,0 +1,3 @@
+method_name,truck_travel_cost,drone_travel_cost,waiting_sync_cost,priority_tardiness_cost,objective_reported,total_truck_waiting_time,total_drone_waiting_time,delayed_rendezvous_events,component_sum,truck_cost_share_pct,drone_cost_share_pct,waiting_cost_share_pct,priority_tardiness_share_pct,feasibility_rate
+nils,144.40182336254063,19.035974825202647,0.0,8319.516147254524,8482.953945442267,0.0,0.0,0.0,8482.953945442267,1.702258721328141,0.22440266618953322,0.0,98.07333861248233,0.6847222222222222
+truck_only,223.49450287034497,0.0,0.0,66358.68730205116,66582.1818049215,0.0,0.0,0.0,66582.1818049215,0.33566713617940513,0.0,0.0,99.66433286382059,0.6708333333333333

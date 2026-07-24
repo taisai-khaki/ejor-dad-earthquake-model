@@ -1,0 +1,2 @@
+comparison,n_pairs,mean_nils_improvement_pct,median_nils_improvement_pct,test,statistic,p_value,effect_size,effect_name
+M5 NILS vs M8 Feasibility-aware ALNS,24,29.367623729908388,32.935698230018566,wilcoxon,59.0,0.007920503616333008,-0.6066666666666667,rank_biserial

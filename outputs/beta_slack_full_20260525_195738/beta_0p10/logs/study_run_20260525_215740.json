@@ -1,0 +1,7 @@
+{
+  "run_id": "2026-05-25T21:57:40",
+  "command": "run-heuristic-study",
+  "status": "failure",
+  "runtime_seconds": 552.2976793000707,
+  "error": "[Errno 22] Invalid argument"
+}

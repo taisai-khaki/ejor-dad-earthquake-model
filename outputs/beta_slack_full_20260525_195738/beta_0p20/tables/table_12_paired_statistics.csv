@@ -1,0 +1,2 @@
+method,paired_test,test_statistic,p_value,effect_size,effect_size_name,n_pairs,mean_improvement_pct,median_improvement_pct,ci_low_pct,ci_high_pct,min_improvement_pct,max_improvement_pct
+nils,wilcoxon,0.0,4.3092972809371276e-77,1.0,rank_biserial,463,80.66534354604083,90.0329704930091,78.5696650972955,82.62166717655397,0.0,99.97969652469733

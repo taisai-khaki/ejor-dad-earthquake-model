@@ -1,0 +1,22 @@
+% tab:priority_weight_sensitivity
+% Sensitivity to priority-weight profiles by method
+\begin{tabular}{llrrrrrrr}
+\toprule
+priority_weight_profile & method_name & n_runs & avg_objective & avg_improvement_vs_truck_only & avg_priority_tardiness_cost & avg_waiting_cost & avg_drone_service_share & feasibility_rate \\
+\midrule
+base & nils & 7 & 12674.5671 & 79.9913 & 12444.8399 & 0.0000 & 0.1667 & 1.0000 \\
+base & nils_no_local_search & 7 & 42211.3498 & 62.6157 & 41888.1304 & 0.0000 & 0.1952 & 1.0000 \\
+base & nils_no_perturbation & 7 & 14210.4899 & 78.7349 & 13986.2271 & 0.0000 & 0.1476 & 1.0000 \\
+base & no_unpairing & 7 & 15260.3931 & 77.2234 & 14939.6269 & 99.6255 & 0.0990 & 1.0000 \\
+base & paired_baseline & 7 & 14307.5066 & 75.9186 & 13875.5020 & 199.2917 & 0.1362 & 1.0000 \\
+base & simple_drone & 7 & 90541.1319 & -0.0574 & 90192.3624 & 0.0000 & 0.0000 & 1.0000 \\
+base & truck_only & 7 & 90465.0159 & NaN & 90117.6175 & 0.0000 & 0.0000 & 1.0000 \\
+moderate & nils & 7 & 1705.4422 & 75.5112 & 1511.8354 & 0.0000 & 0.1762 & 1.0000 \\
+moderate & nils_no_local_search & 7 & 4334.6058 & 59.0595 & 4085.6395 & 0.0000 & 0.1771 & 1.0000 \\
+moderate & nils_no_perturbation & 7 & 2011.3705 & 72.6801 & 1822.8456 & 0.0000 & 0.1762 & 1.0000 \\
+moderate & no_unpairing & 7 & 2603.6227 & 70.6952 & 2307.5497 & 103.9402 & 0.1419 & 1.0000 \\
+moderate & paired_baseline & 7 & 2875.1122 & 68.5907 & 2561.0301 & 110.8252 & 0.1086 & 1.0000 \\
+moderate & simple_drone & 7 & 13862.9478 & 0.0000 & 13590.6242 & 0.0000 & 0.0000 & 1.0000 \\
+moderate & truck_only & 7 & 13862.9478 & NaN & 13590.6242 & 0.0000 & 0.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}

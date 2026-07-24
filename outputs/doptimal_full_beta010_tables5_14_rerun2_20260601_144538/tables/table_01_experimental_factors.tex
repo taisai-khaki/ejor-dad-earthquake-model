@@ -1,0 +1,18 @@
+% tab:factors
+% Experimental factors and levels
+\begin{tabular}{llll}
+\toprule
+Factor & Symbol & Levels & Operational interpretation \\
+\midrule
+Problem size & n & [15, 50, 75, 100] & Number of customers \\
+Eligible share & p_e & [0.25, 0.75] & Share eligible for drone service \\
+Endurance & E & ['low', 'medium', 'high'] & Battery-capacity level \\
+Speed ratio & v_D / v_T & [1.25, 2.0] & Drone speed relative to truck \\
+Handling time & tau & ['short', 'medium', 'long'] & Launch/retrieval burden class \\
+Spatial pattern & spatial & ['uniform', 'clustered'] & Customer spatial distribution \\
+Drones available & |D| & [1, 2, 3] & Available drone fleet size \\
+Battery-slack threshold & beta_slack & [0.1] & Minimum residual battery ratio for admissible drone assignment \\
+Priority-weight profile & (pi_H, pi_M, pi_L) & ['flat', 'moderate', 'base', 'strict'] & Tardiness weights by priority class \\
+Feasibility policy & - & feasible_only & How infeasible runs are handled in reported objectives \\
+\bottomrule
+\end{tabular}

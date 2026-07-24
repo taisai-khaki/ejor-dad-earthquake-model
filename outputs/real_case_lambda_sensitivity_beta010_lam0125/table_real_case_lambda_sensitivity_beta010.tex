@@ -1,0 +1,13 @@
+\begin{tabular}{rlrrrrrrrrrr}
+\toprule
+lambda_distance_scale & method & feasible & objective & improvement_vs_truck_only_pct & runtime_seconds & drone_served_customers & drone_served_high & drone_served_medium & drone_served_low & waiting_sync_cost & drone_service_share_pct \\
+\midrule
+0.12 & truck_only & True & 619498.80 & -- & 20.25 & 0 & 0 & 0 & 0 & 0.00 & 0.00 \\
+0.12 & simple_drone & True & 574550.63 & 7.26 & 20.44 & 6 & 3 & 1 & 2 & 0.00 & 7.50 \\
+0.12 & paired_baseline & True & 495327.06 & 20.04 & 24.65 & 6 & 3 & 1 & 2 & 328.59 & 7.50 \\
+0.12 & no_unpairing & True & 483988.36 & 21.87 & 71.15 & 8 & 3 & 2 & 3 & 45.02 & 10.00 \\
+0.12 & nils & True & 440727.10 & 28.86 & 23.60 & 8 & 3 & 1 & 4 & 0.00 & 10.00 \\
+0.12 & nils_no_local_search & True & 493824.91 & 20.29 & 2.70 & 8 & 3 & 1 & 4 & 0.00 & 10.00 \\
+0.12 & nils_no_perturbation & True & 485154.42 & 21.69 & 2.08 & 8 & 3 & 1 & 4 & 0.00 & 10.00 \\
+\bottomrule
+\end{tabular}

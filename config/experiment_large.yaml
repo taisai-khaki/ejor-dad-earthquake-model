@@ -1,0 +1,25 @@
+seed: 2026
+
+generation:
+  num_customers: 150
+  num_trucks: 3
+  num_drones: 5
+  region: dense_urban
+  instance_reps_per_size: 6
+  sizes: [100, 150, 200]
+
+heuristics:
+  nils:
+    max_outer_iter: 30
+    time_limit_seconds: 600
+
+sensitivity:
+  priority_share: [0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45]
+  drones: [2, 3, 4, 5, 6, 7, 8, 10, 12]
+  swap_time_s: [30, 60, 90, 120, 180, 300]
+  class1_ub: [30, 45, 60, 75, 90, 120]
+
+experiment:
+  output_dir: outputs
+  save_json: true
+  save_csv: true

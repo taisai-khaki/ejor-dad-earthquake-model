@@ -1,0 +1,8 @@
+lambda_distance_scale,method,feasible,objective,improvement_vs_truck_only_pct,runtime_seconds,drone_served_customers,drone_served_high,drone_served_medium,drone_served_low,waiting_sync_cost,drone_service_share_pct
+0.15,truck_only,False,2102476.722124996,,20.258384704589844,0,0,0,0,0.0,0.0
+0.15,simple_drone,False,2102476.722124996,0.0,20.49729347229004,0,0,0,0,0.0,0.0
+0.15,paired_baseline,False,2102476.722124996,0.0,3.687269926071167,0,0,0,0,0.0,0.0
+0.15,no_unpairing,False,2102476.722124996,0.0,3.6932458877563477,0,0,0,0,0.0,0.0
+0.15,nils,False,2102476.722124996,0.0,3.604825258255005,0,0,0,0,0.0,0.0
+0.15,nils_no_local_search,False,2102476.722124996,0.0,3.636066436767578,0,0,0,0,0.0,0.0
+0.15,nils_no_perturbation,False,2102476.722124996,0.0,3.6521170139312744,0,0,0,0,0.0,0.0

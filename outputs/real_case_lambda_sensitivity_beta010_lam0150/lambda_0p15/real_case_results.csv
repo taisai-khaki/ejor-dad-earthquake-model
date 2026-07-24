@@ -1,0 +1,8 @@
+lambda_distance_scale,method,status,feasible,objective,runtime_seconds,truck_cost,drone_cost,waiting_sync_cost,priority_tardiness_cost,drone_served_customers,drone_service_share,drone_arcs,reload_events,battery_swaps,nonempty_drone_routes,served_high,served_medium,served_low,drone_served_high,drone_served_medium,drone_served_low,improvement_vs_truck_only_pct
+0.15,truck_only,baseline_truck_only_ortools,False,2102476.722124996,20.258384704589844,1680.9902149436818,0.0,0.0,2100795.7319100522,0,0.0,0,0,0,0,40,20,20,0,0,0,
+0.15,simple_drone,baseline_simple_drone_ortools,False,2102476.722124996,20.49729347229004,1680.9902149436818,0.0,0.0,2100795.7319100522,0,0.0,0,0,0,0,40,20,20,0,0,0,0.0
+0.15,paired_baseline,baseline_paired,False,2102476.722124996,3.687269926071167,1680.9902149436818,0.0,0.0,2100795.7319100522,0,0.0,0,0,0,0,40,20,20,0,0,0,0.0
+0.15,no_unpairing,baseline_no_unpairing,False,2102476.722124996,3.6932458877563477,1680.9902149436818,0.0,0.0,2100795.7319100522,0,0.0,0,0,0,0,40,20,20,0,0,0,0.0
+0.15,nils,nils_infeasible_initialization,False,2102476.722124996,3.604825258255005,1680.9902149436818,0.0,0.0,2100795.7319100522,0,0.0,0,0,0,0,40,20,20,0,0,0,0.0
+0.15,nils_no_local_search,ablation_no_local_search,False,2102476.722124996,3.636066436767578,1680.9902149436818,0.0,0.0,2100795.7319100522,0,0.0,0,0,0,0,40,20,20,0,0,0,0.0
+0.15,nils_no_perturbation,ablation_no_perturbation,False,2102476.722124996,3.6521170139312744,1680.9902149436818,0.0,0.0,2100795.7319100522,0,0.0,0,0,0,0,40,20,20,0,0,0,0.0

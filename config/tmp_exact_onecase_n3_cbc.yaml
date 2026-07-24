@@ -1,0 +1,40 @@
+﻿seed: 2026
+
+generation:
+  num_customers: 3
+  num_trucks: 1
+  num_drones: 1
+  region: dense_urban
+  instance_reps_per_size: 1
+  sizes: [3]
+  priority_share: [0.34, 0.33, 0.33]
+
+base_class_windows:
+  high: [0, 600]
+  medium: [0, 600]
+  low: [0, 600]
+
+constraints:
+  t_max_minutes: 1200
+  big_m: 100000
+  strict_time_windows: false
+  enforce_subtour_elim: false
+
+milp:
+  enabled: true
+  solver: pulp_cbc
+  time_limit_seconds: 300
+  mip_gap: 0.0
+  threads: 1
+
+heuristics:
+  nils:
+    max_outer_iter: 5
+    max_no_improve: 2
+    time_limit_seconds: 30
+
+experiment:
+  output_dir: outputs/small_exact_onecase_cbc_n3
+  save_json: true
+  save_csv: true
+  run_small_sizes: [3]

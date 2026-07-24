@@ -1,0 +1,11 @@
+% tab:alns_comparison
+% Comparison with feasibility-aware ALNS
+\begin{tabular}{lrrrrrrrrl}
+\toprule
+method_name & n_runs & avg_objective & std_objective & avg_relative_objective_index & avg_improvement_pct & avg_drone_share & avg_cpu_s & feasibility_rate & method_label \\
+\midrule
+truck_only & 18 & 87233.3630 & 125959.9958 & 100.0000 & NaN & 0.0000 & 0.0369 & 1.0000 & M1 Truck-only \\
+nils & 24 & 38800.3396 & 70553.2060 & 14.6146 & 85.3854 & 0.2646 & 15.0342 & 1.0000 & M5 NILS \\
+feasibility_aware_alns & 24 & 54774.4455 & 86058.7637 & 28.3434 & 71.6566 & 0.1336 & 9.4184 & 1.0000 & M8 Feasibility-aware ALNS \\
+\bottomrule
+\end{tabular}
