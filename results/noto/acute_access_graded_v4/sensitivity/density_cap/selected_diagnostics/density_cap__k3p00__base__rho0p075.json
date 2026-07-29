@@ -1,0 +1,23 @@
+{
+  "scenario_id": "density_cap__k3p00__base",
+  "rho": 0.075,
+  "selected_y": [
+    0.25,
+    1.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "diagnostic_objective": 1150.2363796617517,
+  "actual_tv_movement": 0.07499999999999997,
+  "max_density_ratio": 3.0000000000000484,
+  "density_cap_binding": true,
+  "widespread_nominal_mass": 0.05000000000000002,
+  "widespread_worst_case_mass": 0.12298151859101564,
+  "widespread_mass_shift": 0.0729815185910156,
+  "widespread_max_density_ratio": 3.0000000000000013,
+  "widespread_saturated_state_count": 30,
+  "widespread_state_count": 32,
+  "checkpoint_key": "density_cap__k3p00__base__rho0p075",
+  "updated_at_epoch": 1785302957.6527576
+}

@@ -1,0 +1,11 @@
+{
+  "method": "lexicographic epsilon-constrained robust optimization",
+  "primary_requirement": "robust objective <= (1+epsilon) times discretized robust optimum",
+  "secondary_objective": "maximize normalized corridor criticality coverage",
+  "constraints": [
+    "minimum active retrofits",
+    "minimum northern branch coverage",
+    "maximum single-corridor spending share"
+  ],
+  "warning": "scenario thresholds are policy diagnostics and require practitioner validation before prescriptive use"
+}

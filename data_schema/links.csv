@@ -1,0 +1,2 @@
+link_id,tail,head,failure_probability,retrofit_cost,travel_time
+road_001,c0,z1,0.12,100,20

@@ -1,0 +1,16 @@
+﻿__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+*.egg-info/
+build/
+dist/
+
+# External data, checkpoints, logs, and machine-specific artifacts
+data_work/
+tmp/
+*.pid
+*.log
+*.Rhistory
+.env
+.env.*

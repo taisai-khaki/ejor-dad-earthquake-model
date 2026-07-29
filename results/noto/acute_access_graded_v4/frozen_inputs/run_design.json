@@ -1,0 +1,56 @@
+{
+  "experiment_version": "noto-practical-resilience-v4",
+  "mode": "full",
+  "grid_levels": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "rho_values": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25
+  ],
+  "ambiguity_set": "support-preserving capped total variation",
+  "density_cap": 2.0,
+  "residual_failure_ratio": 0.1,
+  "failure_delay_reduction": 0.5,
+  "retrofit_budget_scale": 1.0,
+  "time_sensitive_fraction": 0.25,
+  "immediate_loss_fraction": 0.0,
+  "capacity_throughput_per_bed": 1.0,
+  "response_threshold_minutes": null,
+  "graded_response": true,
+  "graded_response_knots": [
+    [
+      0.0,
+      1.0
+    ],
+    [
+      30.0,
+      1.0
+    ],
+    [
+      60.0,
+      0.75
+    ],
+    [
+      120.0,
+      0.25
+    ],
+    [
+      180.0,
+      0.0
+    ]
+  ],
+  "outcome_definition": "graded timely-access credit for time-sensitive post-damage demand",
+  "failure_probability_formula": "phi_ij(y) = floor_ij + (Phi_ij - floor_ij) * (1 - y_ij)",
+  "conditional_delay_formula": "penalty_ij(y) = base_penalty_ij * (1 - gamma_ij * y_ij)",
+  "solution_method": "exhaustive finite-grid fixed-y evaluation; each candidate uses Algorithm 1",
+  "workers": 4
+}

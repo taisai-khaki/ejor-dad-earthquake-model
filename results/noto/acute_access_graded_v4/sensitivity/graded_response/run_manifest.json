@@ -1,0 +1,115 @@
+{
+  "version": "noto-joint-sensitivity-v2",
+  "base_output_dir": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4",
+  "base_run_design_sha256": "083a9e4c7ca1579248e74fd58b547c91ca027ee25acac13eb384542b7f58cda5",
+  "model_scope": "128-state correlated road-facility regime model with graded timely-access response",
+  "road_grid": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "budget_feasible_candidate_count": 996,
+  "density_cap_scenarios": [],
+  "requested_blocks": [
+    "graded_response"
+  ],
+  "response_scenarios": [
+    {
+      "response_profile": "lower_timely_credit",
+      "density_cap": 2.0,
+      "rho_values": [
+        0.1,
+        0.25
+      ],
+      "knots": [
+        [
+          0.0,
+          1.0
+        ],
+        [
+          30.0,
+          1.0
+        ],
+        [
+          60.0,
+          0.7
+        ],
+        [
+          120.0,
+          0.2
+        ],
+        [
+          180.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "response_profile": "base",
+      "density_cap": 2.0,
+      "rho_values": [
+        0.1,
+        0.25
+      ],
+      "knots": [
+        [
+          0.0,
+          1.0
+        ],
+        [
+          30.0,
+          1.0
+        ],
+        [
+          60.0,
+          0.75
+        ],
+        [
+          120.0,
+          0.25
+        ],
+        [
+          180.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "response_profile": "higher_timely_credit",
+      "density_cap": 2.0,
+      "rho_values": [
+        0.1,
+        0.25
+      ],
+      "knots": [
+        [
+          0.0,
+          1.0
+        ],
+        [
+          30.0,
+          1.0
+        ],
+        [
+          60.0,
+          0.9
+        ],
+        [
+          120.0,
+          0.4
+        ],
+        [
+          180.0,
+          0.0
+        ]
+      ]
+    }
+  ],
+  "fixed_y_epsilon": 1e-05,
+  "fixed_y_max_iterations": 240,
+  "checkpointing": "one atomic JSON checkpoint per scenario-radius-policy",
+  "base_results": "Frozen kappa=2, base-response full-grid rows are reused for comparisons only.",
+  "specification_sha256": "b2022693c98074d1adb7eb1f7152f608ed8149fda0de6402e446b678a77b8287"
+}

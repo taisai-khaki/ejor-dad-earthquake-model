@@ -1,0 +1,161 @@
+{
+  "generated_utc": "2026-07-28T15:01:41.357610+00:00",
+  "generator": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\examples\\noto_publication_maps.py",
+  "inputs": [
+    {
+      "path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\prepared\\noto_zones.csv",
+      "sha256": "6a8cb36940f26637f1deb853fba60baae6352738a7e4b9c4e1bae9a1101f2b74"
+    },
+    {
+      "path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\prepared\\noto_centers.csv",
+      "sha256": "02a87d2d15b166dc920135897f8622d4adf5c390f934693deaed08011f1ce48a"
+    },
+    {
+      "path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\prepared\\noto_corridors.csv",
+      "sha256": "aa5aff6d7772b9541238067b9187096bf0f98d7699eb73a2012a8a859a771c1b"
+    },
+    {
+      "path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\raw\\mlit_roads_extracted\\240125data\\json\\intercity_travel_time.geojson",
+      "sha256": "19ef3b1c67238e1a63954cb4559c57d403ea329a16342bc08376f9dc9e53fd64"
+    },
+    {
+      "path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\raw\\mlit_roads_extracted\\240125data\\json\\ETC2.0_speed_data.geojson",
+      "sha256": "be19bb90393b0ebc3dd51205051f63b5b8337d54854c5306319f37d44dc7c4f9"
+    },
+    {
+      "path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\raw\\mlit_roads_extracted\\240125data\\json\\emergency_restored_section.geojson",
+      "sha256": "7d497d8ea9cda02de72c0b2de3b2aee9883d205ed43da96173c4773b078ce91a"
+    },
+    {
+      "path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\mechanism_full_grid_v1\\tables\\table_noto_mechanism_ablation_full_grid.csv",
+      "sha256": "b33f4356415e5573a1d42fa5e877d44fb20efc235e0939a808c376fca5a98f90"
+    },
+    {
+      "path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\examples\\noto_publication_maps.py",
+      "sha256": "8a9acb011f1a3714007dc83b31bcea219c49c961a836d58d59b30df65b79aeb2"
+    }
+  ],
+  "policy_rows": {
+    "0.0": {
+      "y": [
+        0.25,
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "z": [
+        0.0,
+        0.0,
+        0.384685084023737,
+        0.0,
+        0.0
+      ],
+      "w": [
+        0.0,
+        0.0,
+        0.0,
+        536.347974322398,
+        0.0,
+        96.982025677602
+      ],
+      "objective": 1074.3696827675963
+    },
+    "0.25": {
+      "y": [
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        0.25
+      ],
+      "z": [
+        0.0,
+        0.0,
+        0.38468508402373874,
+        0.0,
+        0.0
+      ],
+      "w": [
+        0.0,
+        0.0,
+        0.0,
+        274.4583333934124,
+        261.8896409289727,
+        96.98202567761494
+      ],
+      "objective": 1219.5996345723133
+    }
+  },
+  "hazard_regimes": {
+    "normal": {
+      "probability": 0.7,
+      "failed_centers": [],
+      "link_multipliers": [
+        0.75,
+        0.75,
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "north": {
+      "probability": 0.15,
+      "failed_centers": [
+        "center_17204",
+        "center_17205"
+      ],
+      "link_multipliers": [
+        0.9,
+        1.2,
+        1.7,
+        1.4,
+        1.7
+      ]
+    },
+    "central": {
+      "probability": 0.1,
+      "failed_centers": [
+        "center_17461",
+        "center_17463"
+      ],
+      "link_multipliers": [
+        1.0,
+        1.5,
+        1.5,
+        1.5,
+        1.4
+      ]
+    },
+    "widespread": {
+      "probability": 0.05,
+      "failed_centers": [
+        "center_17202",
+        "center_17204",
+        "center_17205"
+      ],
+      "link_multipliers": [
+        1.8,
+        1.8,
+        1.8,
+        1.8,
+        1.8
+      ]
+    }
+  },
+  "outputs": [
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_01_study_area.png",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_01_study_area.pdf",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_01_study_area.svg",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_02_policy_comparison.png",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_02_policy_comparison.pdf",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_02_policy_comparison.svg",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_03_hazard_regimes.png",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_03_hazard_regimes.pdf",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_03_hazard_regimes.svg",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_04_model_workflow.png",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_04_model_workflow.pdf",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\fig_noto_04_model_workflow.svg",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\figures\\maps\\map_captions.md"
+  ]
+}

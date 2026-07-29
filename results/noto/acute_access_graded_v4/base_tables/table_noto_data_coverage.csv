@@ -1,0 +1,9 @@
+model_variable,status,construction
+P_rl,observed,2022 municipality population
+q_rl,observed proxy,full destroyed dwellings / pre-event households
+L,observed,MLIT intercity road geometries
+tau,observed,MLIT January disruption and June recovery travel times
+Phi_ij,constructed from observations,delay ratio and restoration-point score
+w_k^0,mixed,observed beds times declared throughput and operational shares
+"C_rl,C_ij,lambda_k",scenario-calibrated,normalized costs with sensitivity required
+"B_Z,B_Y,B_X",scenario-calibrated,declared fractions of sector cost/capacity totals

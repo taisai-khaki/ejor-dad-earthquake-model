@@ -1,0 +1,22 @@
+{
+  "experiment_id": "noto-correlated-facility-full-v1",
+  "frozen_specification_hash": "3ca74e7ffc77e1715d64e4cb72c65661019573793dff3f8303b7a79f35d7e58f",
+  "run_design_hash": "083a9e4c7ca1579248e74fd58b547c91ca027ee25acac13eb384542b7f58cda5",
+  "state_manifest_hash": "3cb6f7bf11e252051ceaf0fbf6e067ab5e0c2f264588fad0b4b0366386d1c8cb",
+  "grid_manifest_hash": "d69ae176e74940943d551f6b2b4742527a594f37580d27a22a38f536088849c5",
+  "state_count": 128,
+  "budget_feasible_grid_count": 996,
+  "code_commit": null,
+  "working_tree_dirty": null,
+  "python": "3.14.3",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+  "numpy": "2.4.3",
+  "pandas": "2.3.3",
+  "scipy": "1.17.1",
+  "solver": "scipy.optimize.linprog method=highs",
+  "fixed_y_epsilon": 1e-05,
+  "fixed_y_max_iterations": 240,
+  "road_tie_tolerance": "max(1e-8,1e-10*objective)",
+  "capacity_tie_tolerance": "max(1e-6,1e-5*objective)"
+}

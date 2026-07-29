@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ejor-dad-nepal"
+version = "0.1.0"
+description = "Distributionally robust defender-attacker-defender earthquake mitigation model with Nepal validation adapters."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "matplotlib",
+    "networkx",
+    "numpy",
+    "openpyxl",
+    "pandas",
+    "scipy",
+]
+
+[project.optional-dependencies]
+geo = [
+    "geopandas",
+    "osmnx",
+    "rasterio",
+    "shapely",
+]
+test = [
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

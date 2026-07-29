@@ -1,0 +1,29 @@
+{
+  "generated_at_utc": "2026-07-26T12:01:22.600774+00:00",
+  "python_version": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.3",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1"
+  },
+  "input_sha256": {
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\run_design.json": "083a9e4c7ca1579248e74fd58b547c91ca027ee25acac13eb384542b7f58cda5",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\prepared\\noto_centers.csv": "02a87d2d15b166dc920135897f8622d4adf5c390f934693deaed08011f1ce48a",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\prepared\\noto_corridors.csv": "aa5aff6d7772b9541238067b9187096bf0f98d7699eb73a2012a8a859a771c1b",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\prepared\\noto_zones.csv": "6a8cb36940f26637f1deb853fba60baae6352738a7e4b9c4e1bae9a1101f2b74"
+  },
+  "source_sha256": {
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\examples\\noto_access_experiment.py": "a6ee9b311962e48a9127ed71d9d8166bbfdf948e94cd4ce71f06aef49b22a001",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\examples\\noto_certified_postprocess.py": "eff30057daabc6a10cd0333315873a4918e33f81f931e5b0753dc931e6bb7762",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\examples\\noto_practical_resilience_experiment.py": "61ca2faebf78b106db62fa7a7d528945535e8b50f955a50295f0d354422d70a0",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\src\\ejor_dad\\certification.py": "a4b696ea1a1aaddc676bd251321357d44641f05e802c1626e05a64ed2839edd8",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\src\\ejor_dad\\channels.py": "2c7f7a0722fd54e2bbbcc3f2b1df74e2dc260051ed9f596485ce29741c2f05a6",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\src\\ejor_dad\\fixed_y.py": "e46073ffe4a67d236285f854936acf8557b12eabdb760c9e9b1f6e5aebceea5d",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\src\\ejor_dad\\model.py": "5d8b6cb6b493c4c1f0c835875dfe3427f0a37b806641f227bfedf9a92b14cecd",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\src\\ejor_dad\\recourse.py": "8ab58cf1087b51a56cf5f51c0542d69fceffd50ecfeb6c56f7eff43ba6b32f3c",
+    "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\src\\ejor_dad\\tv.py": "ca92a81fe450b73ff647434541990de4272aab6bf4e636bcf6d86ae85923a0e4"
+  },
+  "certificate_version": "noto-continuous-certificate-v2",
+  "certificate_method": "budget-intersecting grid cells evaluated at monotonic upper corners"
+}

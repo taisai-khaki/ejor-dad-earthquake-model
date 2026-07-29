@@ -1,0 +1,762 @@
+﻿% Final replacement for Sections 3--5 of the DR-DAD manuscript.
+% This is a manuscript fragment: input it after the paper preamble.
+% Required packages: amsmath, amssymb, booktabs, graphicx, algorithm,
+% algpseudocode, and threeparttable (only if the host manuscript uses it).
+%
+% Reporting scope:
+% - Noto 2024 is the primary empirical case.
+% - Turkey 2023 and Nepal 2015 are supplementary cross-case checks.
+% - Five-link policies are optimal only over the declared finite grid.
+% - The outcome is modeled loss / people without timely access, not deaths.
+
+\section{Model formulation}
+\label{sec:model}
+
+\subsection{Sets, decisions, and modeled outcome}
+\label{sec:notation}
+
+Let \(\mathcal R\) be the set of demand zones, \(\mathcal K\) the set of
+emergency-response centers, and \(\mathcal L\) the set of candidate road
+links. A zone index \(r\) may represent the composite index \(rl\) used in
+the original geographic notation. A road-failure state \(s\in\mathcal S\)
+is identified by the subset \(F(s)\subseteq\mathcal L\) of failed candidate
+links. The primary empirical analysis uses the complete no-tail state space,
+so \(\lvert\mathcal S\rvert=2^{\lvert\mathcal L\rvert}\). A reduced state
+space with a residual tail state is used only in computational diagnostics;
+it is not used to identify the primary empirical policy.
+
+The first-stage decisions are building-renovation fractions
+\(z_r\in[0,1]\), road-retrofit fractions \(y_\ell\in[0,1]\), and additional
+response capacity \(w_k\geq0\). Their feasible set is
+\begin{align}
+\mathcal X
+  =\bigg\{(z,w,y):\;&
+     \sum_{r\in\mathcal R} C_r^Z z_r \leq B_Z,\quad
+     \sum_{k\in\mathcal K} C_k^X w_k \leq B_X,\quad
+     \sum_{\ell\in\mathcal L} C_\ell^Y y_\ell \leq B_Y,
+     \nonumber\\[-2mm]
+   &0\leq z_r\leq1,\quad w_k\geq0,\quad 0\leq y_\ell\leq1
+   \bigg\}.
+\label{eq:feasible-set}
+\end{align}
+Here \(C_r^Z\), \(C_\ell^Y\), and \(C_k^X\) are renovation, road-retrofit,
+and capacity-expansion cost coefficients, respectively; \(B_Z\), \(B_Y\),
+and \(B_X\) are sector-specific budgets.
+
+For zone \(r\), let \(P_r\) be population and \(q_r\) the severe-damage or
+collapse proxy. The baseline at-risk population is
+\begin{equation}
+  A_r=P_rq_r,
+  \qquad
+  D(z)=\sum_{r\in\mathcal R} A_r(1-z_r).
+\label{eq:at-risk-population}
+\end{equation}
+The framework intentionally models a specified acute-response component of
+this population rather than treating \(D(z)\) as a forecast of fatalities.
+Let \(\eta_r\in[0,1]\) be the fraction requiring time-sensitive response and
+\(\delta_r\in[0,1]\) the fraction assigned to immediate modeled loss, with
+\(\eta_r+\delta_r\leq1\). After renovation, time-sensitive demand and
+immediate modeled loss are
+\begin{equation}
+  d_r(z)=\eta_r A_r(1-z_r),
+  \qquad
+  \iota_r(z)=\delta_r A_r(1-z_r).
+\label{eq:modeled-demand}
+\end{equation}
+The remaining part of \(A_r(1-z_r)\) is outside the modeled acute-response
+outcome and is not interpreted as either a survivor or a death.
+
+After a road-failure state is observed, the responder dispatches
+\(x_{kr}^s\geq0\) units from center \(k\) to zone \(r\). Let
+\(g_{kr}^s(y)\in[0,1]\) be the response benefit per dispatched unit. The
+primary Noto specification uses a timely-access indicator,
+\begin{equation}
+ g_{kr}^s(y)=\mathbf{1}\{\tau_{kr}^s(y)\leq T\},
+\label{eq:timely-access}
+\end{equation}
+where \(T\) is a declared response-time threshold. A calibrated continuous
+response function can be substituted for \eqref{eq:timely-access}; doing so
+changes the outcome definition and requires an independently justified
+calibration. The statewise recourse problem is
+\begin{align}
+ Q_s(z,w;y)=\max_{x^s\geq0}\quad&
+     \sum_{k\in\mathcal K}\sum_{r\in\mathcal R}
+       g_{kr}^s(y)x_{kr}^s \label{eq:recourse-primal}\\
+ \text{s.t.}\quad&
+     \sum_{r\in\mathcal R}x_{kr}^s\leq w_k^0+w_k,
+       &&k\in\mathcal K, \nonumber\\
+ &   \sum_{k\in\mathcal K}x_{kr}^s\leq d_r(z),
+       &&r\in\mathcal R. \nonumber
+\end{align}
+Thus \(Q_s\) is the maximum number of time-sensitive people receiving
+timely access under the scenario interpretation. The modeled state loss is
+\begin{equation}
+ \gamma_s(z,w;y)
+   =\sum_{r\in\mathcal R}\left[d_r(z)+\iota_r(z)\right]-Q_s(z,w;y).
+\label{eq:state-loss}
+\end{equation}
+It is nonnegative under \eqref{eq:recourse-primal}. Lower objective values
+therefore indicate fewer modeled losses, not a calibrated prediction of
+observed mortality.
+
+\subsection{Road reliability, conditional performance, and nominal states}
+\label{sec:road-model}
+
+For link \(\ell\), let \(\Phi_\ell\) be the baseline failure probability and
+\(\underline\Phi_\ell\) a residual failure floor satisfying
+\(0\leq\underline\Phi_\ell\leq\Phi_\ell\leq1\). Road retrofit follows
+\begin{equation}
+ \phi_\ell(y_\ell)
+   =\underline\Phi_\ell+
+       \left(\Phi_\ell-\underline\Phi_\ell\right)(1-y_\ell)
+   =\Phi_\ell-\left(\Phi_\ell-\underline\Phi_\ell\right)y_\ell.
+\label{eq:residual-reliability}
+\end{equation}
+The residual floor distinguishes strengthening from complete replacement:
+full retrofit reduces, but need not eliminate, modeled failure risk. The
+zero-floor case is retained as a limiting engineering assumption only when
+it is substantively justified.
+
+Road retrofit also affects conditional access after a failure. Let
+\(\overline\tau_{kr}\) be the intact-route travel time and let
+\(\Delta\tau_{kr,\ell}\geq0\) be the observed or constructed disruption
+penalty attributable to failed link \(\ell\) on the route from \(k\) to
+\(r\). Let \(\alpha_\ell\in[0,1]\) denote the fraction by which retrofit
+reduces that penalty. We use
+\begin{equation}
+ \tau_{kr}^s(y)
+ =\overline\tau_{kr}+
+   \sum_{\ell\in F(s)}
+      \Delta\tau_{kr,\ell}(1-\alpha_\ell y_\ell).
+\label{eq:conditional-delay}
+\end{equation}
+Equation \eqref{eq:conditional-delay} makes the physical mechanism explicit:
+road retrofit affects both the likelihood of each failure state and the
+severity of disrupted access conditional on that state. It is an aggregated
+corridor representation, not a dynamic traffic-assignment or rerouting
+model.
+
+Conditional on \(y\), link failures are modeled as independent for scenario
+generation. Hence the nominal probability of state \(s\) is
+\begin{equation}
+ \pi_s(y)=
+   \prod_{\ell\in F(s)}\phi_\ell(y_\ell)
+   \prod_{\ell\in\mathcal L\setminus F(s)}
+       \left[1-\phi_\ell(y_\ell)\right].
+\label{eq:nominal-probability}
+\end{equation}
+Independence is a transparent scenario assumption, not a claim that
+earthquake-induced road failures are empirically independent. Dependence is
+stress-tested through the ambiguity set and, in a supplementary sensitivity,
+through moment restrictions.
+
+\subsection{Capped decision-dependent ambiguity}
+\label{sec:capped-tv}
+
+For a fixed retrofit vector \(y\), nature selects a distribution \(p\) in
+the capped total-variation set
+\begin{equation}
+\begin{split}
+ \mathcal P_{\kappa,\rho}(y)=\bigg\{p\in\mathbb R_+^{\lvert\mathcal S\rvert}:
+ &\ \sum_{s\in\mathcal S}p_s=1,\quad
+ \frac{1}{2}\sum_{s\in\mathcal S}\lvert p_s-\pi_s(y)\rvert\leq\rho,
+ \\[-1mm]
+ &\ p_s\leq\kappa\pi_s(y),\quad s\in\mathcal S\bigg\},
+ \qquad \kappa\geq1.
+\end{split}
+\label{eq:capped-tv}
+\end{equation}
+The density cap repairs the physical inconsistency of unrestricted
+total-variation ambiguity: when \(\pi_s(y)=0\), it forces \(p_s=0\), so
+nature cannot assign mass to a state that the nominal model declares
+impossible. For any event \(T\subseteq\mathcal S\),
+\begin{equation}
+ p(T)-\pi(T)
+ \leq
+ \min\left\{\rho,\;(\kappa-1)\pi(T),\;1-\pi(T)\right\}.
+\label{eq:rare-state-bound}
+\end{equation}
+Thus a rare nominal event cannot receive arbitrary probability merely because
+the total-variation radius is positive.
+
+When residual floors in \eqref{eq:residual-reliability} are strictly positive,
+all modeled no-tail states generally have positive nominal mass. In that
+case \eqref{eq:capped-tv} is more precisely a bounded likelihood-ratio
+restriction than a literal state-elimination rule. Literal support
+preservation is obtained in the zero-floor limit. Both interpretations are
+useful: residual floors encode imperfect engineering performance, while the
+cap prevents implausibly large probability amplification.
+
+For nonnegative state losses, the robust expectation obeys
+\begin{equation}
+\begin{split}
+\sum_s\pi_s(y)\gamma_s
+&\leq
+ \max_{p\in\mathcal P_{\kappa,\rho}(y)}
+     \sum_s p_s\gamma_s\\
+&\leq
+ \min\left\{
+   \sum_s\pi_s(y)\gamma_s+
+       \rho\left(\max_s\gamma_s-\min_s\gamma_s\right),\
+   \kappa\sum_s\pi_s(y)\gamma_s
+ \right\}.
+\end{split}
+\label{eq:ambiguity-premium-bound}
+\end{equation}
+Equation \eqref{eq:ambiguity-premium-bound} is used as an audit check, not
+as a replacement for solving the adversarial linear program.
+
+\paragraph{Optional moment-aware sensitivity.}
+The primary specification is \eqref{eq:capped-tv}. To test whether the
+total-variation ball permits implausible changes in marginal failure rates
+or failure dependence, we also consider an optional intersection
+\(\mathcal P_{\kappa,\rho}^{\mathrm{mom}}(y)\). Let
+\(f_{\ell s}=\mathbf{1}\{\ell\in F(s)\}\),
+\(\mu_\ell(y)=\sum_s\pi_s(y)f_{\ell s}\), and
+\(N_s=\sum_\ell f_{\ell s}\). The sensitivity adds linear, fixed-\(y\)
+bands such as
+\begin{align}
+\left\lvert\sum_s p_s f_{\ell s}-\mu_\ell(y)\right\rvert
+ &\leq a_1+r_1\mu_\ell(y), &&\ell\in\mathcal L, \label{eq:moment-marginal}\\
+\left\lvert\sum_s p_sN_s-\sum_s\pi_s(y)N_s\right\rvert
+ &\leq\varepsilon_\mu, \label{eq:moment-mean}\\
+\left\lvert\sum_s p_s
+  \left[N_s-\sum_t\pi_t(y)N_t\right]^2-M_2(y)\right\rvert
+ &\leq\varepsilon_2(y), \label{eq:moment-second}
+\end{align}
+where \(M_2(y)\) is the nominal fixed-center second moment. Analogous bands
+can be imposed on \(f_{\ell s}f_{\ell' s}\). These constraints are linear in
+\(p\) for fixed \(y\), so they retain the exact fixed-policy oracle. Their
+tolerances are scenario parameters unless supported by a hazard ensemble;
+they are not estimated moments in the present cases.
+
+\subsection{DR-DAD problem and interpretation}
+\label{sec:dad-problem}
+
+The decision-dependent distributionally robust disaster-risk-reduction
+problem is
+\begin{equation}
+ \min_{(z,w,y)\in\mathcal X}
+ \quad V_\rho(z,w,y)
+ :=
+ \max_{p\in\mathcal P_{\kappa,\rho}(y)}
+ \sum_{s\in\mathcal S}p_s\gamma_s(z,w;y).
+\label{eq:dr-dad}
+\end{equation}
+The decision-dependent feature has two channels. First, \(y\) changes
+\(\pi(y)\) and therefore the ambiguity set in \eqref{eq:capped-tv}. Second,
+\(y\) changes conditional travel times through \eqref{eq:conditional-delay}.
+The latter channel was absent from the earlier static implementation and is
+essential for interpreting road hardening as an access intervention rather
+than only a probability adjustment.
+
+The framework is designed to identify a defensible policy under declared
+hazard, engineering, capacity, and ambiguity assumptions. It does not claim
+that observed post-earthquake damage alone identifies \(\Phi_\ell\),
+\(\underline\Phi_\ell\), \(\alpha_\ell\), costs, budgets, capacity
+operability, \(\rho\), or \(\kappa\); those inputs are reported separately
+as constructed or scenario-calibrated quantities.
+
+
+\section{Solution methodology}
+\label{sec:solution}
+
+\subsection{Exact fixed-road evaluation}
+\label{sec:fixed-y}
+
+For a fixed road plan \(y\), the nominal probabilities, conditional travel
+times, and ambiguity set are fixed. Define
+\begin{equation}
+ \Theta_\rho(y)
+ =
+ \min_{(z,w):(z,w,y)\in\mathcal X}
+ \max_{p\in\mathcal P_{\kappa,\rho}(y)}
+ \sum_s p_s\gamma_s(z,w;y).
+\label{eq:fixed-y-value}
+\end{equation}
+This problem is solved by finite cut generation. The dual of the
+state-\(s\) recourse problem \eqref{eq:recourse-primal} is
+\begin{align}
+ Q_s(z,w;y)
+ =\min_{a^s,b^s\geq0}\quad&
+   \sum_{k\in\mathcal K}(w_k^0+w_k)a_k^s+
+   \sum_{r\in\mathcal R}d_r(z)b_r^s \label{eq:recourse-dual}\\
+ \text{s.t.}\quad&
+   a_k^s+b_r^s\geq g_{kr}^s(y),
+      &&k\in\mathcal K,\ r\in\mathcal R. \nonumber
+\end{align}
+Each dual extreme point \(c=(a^s,b^s)\) yields the valid affine loss cut
+\begin{equation}
+ \theta_s\geq
+ H_{s,c}(z,w;y)
+ :=
+ \sum_r[d_r(z)+\iota_r(z)]
+ -\sum_k(w_k^0+w_k)a_k^s-\sum_r d_r(z)b_r^s .
+\label{eq:recourse-cut}
+\end{equation}
+The master problem contains all currently generated cuts
+\(\theta_s\geq H_{s,c}\), the feasible set \eqref{eq:feasible-set}, and the
+finite linear adversarial problem over \(p\). If a newly evaluated statewise
+dispatch violates its current loss approximation, its dual extreme point is
+added. Otherwise, the capped-TV adversary is solved exactly as a linear
+program. The optional moment restrictions
+\eqref{eq:moment-marginal}--\eqref{eq:moment-second} add only linear rows to
+that fixed-\(y\) adversarial problem.
+
+\begin{algorithm}[t]
+\caption{Fixed-road oracle for \(\Theta_\rho(y)\)}
+\label{alg:fixed-y}
+\begin{algorithmic}[1]
+\Require Feasible \(y\), tolerance \(\epsilon_{\mathrm{in}}\)
+\State Construct \(\pi(y)\), \(\tau^s(y)\), \(g^s(y)\), and
+       \(\mathcal P_{\kappa,\rho}(y)\)
+\State Initialize each state cut set \(\mathcal C_s\) with a feasible
+       recourse dual point
+\Repeat
+  \State Solve the master problem in \((z,w,\theta,p)\) using
+         \(\{\theta_s\geq H_{s,c}:c\in\mathcal C_s\}\)
+  \ForAll{\(s\in\mathcal S\)}
+    \State Solve \eqref{eq:recourse-primal} at the candidate \((z,w,y)\)
+    \If{the state loss violates \(\theta_s\) by more than
+        \(\epsilon_{\mathrm{in}}\)}
+      \State Add the associated dual cut \eqref{eq:recourse-cut} to
+             \(\mathcal C_s\)
+    \EndIf
+  \EndFor
+\Until{no recourse cut is violated}
+\State Return the fixed-\(y\) objective, \((z,w)\), state losses, and
+       worst-case distribution
+\end{algorithmic}
+\end{algorithm}
+
+Because there are finitely many states and the recourse dual is polyhedral,
+Algorithm~\ref{alg:fixed-y} is an exact fixed-policy evaluation method up
+to the stated numerical tolerance. All reported policies are accompanied by
+probability-sum, nonnegativity, budget, and inner-gap checks.
+
+\subsection{Exhaustive search over an implementable road grid}
+\label{sec:grid-search}
+
+The final empirical solver is exhaustive enumeration over a predeclared,
+implementable grid rather than an unsupported continuous global claim. For
+the five-corridor case we use
+\begin{equation}
+ \mathcal G
+ =
+ \left\{0,0.25,0.50,0.75,1\right\}^{\lvert\mathcal L\rvert}
+ \cap
+ \left\{y:\sum_{\ell\in\mathcal L}C_\ell^Yy_\ell\leq B_Y\right\}.
+\label{eq:road-grid}
+\end{equation}
+Every \(y\in\mathcal G\) is evaluated by Algorithm~\ref{alg:fixed-y}; the
+selected solution
+\begin{equation}
+  \widehat y_\rho\in\arg\min_{y\in\mathcal G}\Theta_\rho(y)
+\label{eq:grid-policy}
+\end{equation}
+is therefore globally best over \(\mathcal G\), but not certified as
+globally optimal on the continuous box \([0,1]^{\lvert\mathcal L\rvert}\).
+This distinction is retained in all tables and claims.
+
+We report policy adaptation using complete plans, not only road vectors.
+Let \((\widehat z_0,\widehat w_0,\widehat y_0)\) be the policy selected at
+\(\rho=0\), and let
+\((\widehat z_\rho,\widehat w_\rho,\widehat y_\rho)\) be the policy selected
+at radius \(\rho\). The value of adapting the complete plan is
+\begin{equation}
+ \Delta_\rho^{\mathrm{all}}
+ =
+ V_\rho(\widehat z_0,\widehat w_0,\widehat y_0)
+ -
+ V_\rho(\widehat z_\rho,\widehat w_\rho,\widehat y_\rho).
+\label{eq:complete-adaptation}
+\end{equation}
+This is evaluated with the whole \(\rho=0\) plan fixed in the first term; it
+does not re-optimize \(z\) or \(w\). A zero
+\(\Delta_\rho^{\mathrm{all}}\) means that ambiguity changes evaluation but
+provides no value from changing the selected complete grid policy. For
+policy identification, we also report the number of near-optimal road
+portfolios
+\begin{equation}
+ N_\varepsilon(\rho)
+ =
+ \left\lvert
+   \left\{y\in\mathcal G:
+   \frac{\Theta_\rho(y)-\min_{\tilde y\in\mathcal G}
+   \Theta_\rho(\tilde y)}
+   {\min_{\tilde y\in\mathcal G}\Theta_\rho(\tilde y)}
+   \leq\varepsilon
+   \right\}
+ \right\rvert .
+\label{eq:near-optimal-count}
+\end{equation}
+Large values of \(N_\varepsilon(\rho)\) identify a flat discrete policy
+landscape rather than a meaningful ambiguity-induced policy switch.
+
+\subsection{Continuous spatial branch-and-bound: restricted diagnostic}
+\label{sec:sbb}
+
+The former continuous spatial branch-and-bound (SBB) formulation is retained
+only as a static probability-only diagnostic. In that restricted model,
+\(y\) enters \(\pi_s(y)\) but not \(\gamma_s\), so product-tree variables and
+McCormick envelopes can relax the multilinear state probabilities. A
+nonnegative lower bound is imposed explicitly:
+\begin{equation}
+ LB(\mathcal B)\leftarrow\max\{0,LB_{\mathrm{LP}}(\mathcal B)\}.
+\label{eq:valid-lb}
+\end{equation}
+The final model \eqref{eq:conditional-delay} has decision-dependent
+conditional travel times; the current SBB relaxation deliberately rejects
+that model rather than returning a bound that omits its physical channel.
+Likewise, it is not used for the optional moment-aware ambiguity extension.
+
+The five-link static root relaxation is too weak for a continuous empirical
+certificate: its valid lower bound is zero. A corner-bound ablation reduced
+the number of LP variables but did not improve this lower bound. We
+therefore do not report a five-link continuous SBB optimum, do not use it to
+claim that road policies are globally optimal in the continuous model, and
+do not present corner bounds as an exact replacement for the multilinear
+probability graph. Small nested static instances are useful code
+verification tests only when their incumbent-bound gap closes.
+
+\begin{table}[t]
+\centering
+\caption{Static SBB root-relaxation diagnostic.}
+\label{tab:sbb-root-diagnostic}
+\small
+\begin{tabular}{llrrr}
+\toprule
+Candidate links & Relaxation diagnostic & Raw root LB & Valid root LB & LP variables\\
+\midrule
+2 & Product tree & \(-60{,}684.736\) & 0 & 38\\
+3 & Product tree & \(-141{,}342.025\) & 0 & 63\\
+4 & Product tree & \(-172{,}760.166\) & 0 & 120\\
+5 & Product tree & \(-184{,}026.202\) & 0 & 249\\
+5 & Corner-bound ablation & \(-184{,}026.202\) & 0 & 121\\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\footnotesize\textit{Notes.} These are static probability-only diagnostics.
+They are not lower bounds for the final conditional-performance model in
+\eqref{eq:conditional-delay}. The valid nonnegative lower bound is
+uninformative for the five-link continuous problem.
+\end{table}
+
+\subsection{Restart-safe execution and audit trail}
+\label{sec:computational-audit}
+
+The enumeration writes an atomic checkpoint after each completed road
+portfolio. Each record contains the grid index, \(y\), the fixed-\(y\)
+solution, objective, numerical checks, and a timestamp. On restart, the
+driver validates the checkpoint and skips completed portfolios; a detached
+worker and append-only progress log allow monitoring without keeping the
+interactive application open. Thus an application interruption does not
+invalidate completed fixed-policy evaluations. Source manifests, parameter
+files, run identifiers, and result tables are retained with the computation
+to make the reported grid certificate auditable.
+
+
+\section{Empirical implementation and results}
+\label{sec:results}
+
+\subsection{Case-study role and data-to-model mapping}
+\label{sec:empirical-data}
+
+The 2024 Noto Peninsula earthquake is the primary empirical implementation
+because public sources provide an unusually direct record of the access
+mechanism: municipality population and households, post-event dwelling
+damage, official intercity corridor restoration information and travel-time
+observations, and pre-event hospital beds. This combination supports a
+transparent calibration of exposure, damaged dwellings, baseline access, and
+observed access disruption. It does not identify all behavioral or
+engineering parameters in \eqref{eq:dr-dad}.
+
+\begin{table}[t]
+\centering
+\caption{Noto source layers and status in the DR-DAD implementation.}
+\label{tab:noto-data-status}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{3.1cm}p{4.2cm}p{2.9cm}p{5.0cm}}
+\toprule
+Model layer & Public source & Status & Use and limitation\\
+\midrule
+Population and households &
+Ishikawa Prefecture Statistics (2022) &
+Observed &
+\(P_r\); household denominator used in the damage proxy.\\
+Dwelling damage &
+Ishikawa damage report No.~162 (1 October 2024) &
+Observed &
+Fully destroyed dwellings; used to construct \(q_r\), not person-level
+casualties.\\
+Corridor geometry, disruption, and recovery &
+MLIT Noto road-restoration GIS and travel-time records &
+Observed &
+Candidate corridors, intact and disrupted route times, and
+\(\Delta\tau_{kr,\ell}\).\\
+Hospital beds &
+MHLW FY2023 Hospital Function Report &
+Observed &
+Anchors \(w_k^0\); operational share and throughput conversion remain
+scenario-calibrated.\\
+Failure probabilities, residual floors, and delay-reduction factors &
+Road delay ratios, restoration evidence, and declared engineering settings &
+Constructed / scenario-calibrated &
+\(\Phi_\ell,\underline\Phi_\ell,\alpha_\ell\); not repeated-event failure
+frequencies or measured retrofit effects.\\
+Costs, budgets, \(\eta,\delta,\rho,\kappa\) &
+Declared scenario design and sensitivity analysis &
+Scenario-calibrated &
+Cost coefficients, sector budgets, modeled response fraction, and
+ambiguity controls; not observed data.\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The five demand zones are Nanao, Wajima, Suzu, Anamizu, and Noto. Kanazawa
+is retained as an external high-capacity center, yielding six modeled
+centers. The five candidate corridors are Kanazawa--Nanao,
+Nanao--Anamizu, Anamizu--Wajima, Anamizu--Noto, and Anamizu--Suzu. Their
+complete no-tail state space has \(2^5=32\) states.
+
+For each municipality, the severe-damage proxy is
+\begin{equation}
+ q_r=\frac{\text{fully destroyed dwellings in }r}
+             {\text{pre-event households in }r}.
+\label{eq:noto-damage-proxy}
+\end{equation}
+This assumes the same average household size in destroyed and non-destroyed
+households. The five zones contain 106,022 residents and have
+\(D(0)=12{,}108.462\) baseline at-risk persons under
+\eqref{eq:noto-damage-proxy}. The estimated damage fractions are 0.0250,
+0.2375, 0.3226, 0.1208, and 0.0390 in the municipality order above.
+
+The observed recovered and disrupted corridor travel times define disruption
+penalties of 5, 70, 50, 30, and 40 minutes, respectively. Baseline failure
+scores \(\Phi_\ell=(0.1350,0.4650,0.5438,0.3157,0.3759)\) are constructed
+from observed delay ratios and restoration evidence; they are scenario
+generators, not observed probabilities. The primary acute-access setting
+uses \(\eta_r=0.25\), \(\delta_r=0\), a 60-minute timely-access threshold,
+\(\underline\Phi_\ell=0.10\Phi_\ell\), \(\alpha_\ell=0.50\), and
+\(\kappa=2\). The sector costs, budgets, capacity operational shares, and
+throughput conversion are fixed before optimization and reported with the
+replication files. Their role is comparative policy analysis, not
+engineering cost estimation.
+
+\subsection{Primary Noto results}
+\label{sec:noto-results}
+
+For each ambiguity endpoint \(\rho\in\{0,0.25\}\), the analysis scans all
+\(5^5=3{,}125\) road-grid vectors in \eqref{eq:road-grid}; 996 satisfy the
+road budget and are evaluated by the exact fixed-road oracle. Table
+\ref{tab:noto-policy-results} compares the no-investment, optimized
+no-road, and coordinated all-sector plans. Integrated mitigation reduces
+modeled loss substantially relative to no investment. Road retrofitting also
+has material incremental value after renovation and capacity are optimized:
+96.858 modeled-loss units at \(\rho=0\) and 143.308 at \(\rho=0.25\).
+
+\begin{table}[t]
+\centering
+\caption{Primary Noto policy comparison under capped TV ambiguity.}
+\label{tab:noto-policy-results}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+& \multicolumn{2}{c}{Worst-case modeled loss} &
+\multicolumn{2}{c}{Reduction versus no investment}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Policy & \(\rho=0\) & \(\rho=0.25\) & \(\rho=0\) & \(\rho=0.25\)\\
+\midrule
+No investment & 2{,}405.818 & 2{,}463.028 & 0.000 & 0.000\\
+Renovation + capacity, \(y=0\) & 1{,}394.045 & 1{,}451.254
+  & 1{,}011.774 & 1{,}011.774\\
+All sectors & 1{,}297.187 & 1{,}307.946
+  & 1{,}108.632 & 1{,}155.081\\
+\midrule
+Road value versus optimized no-road plan & 96.858 & 143.308 & -- & --\\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\footnotesize\textit{Notes.} Lower is better. The outcome is modeled
+time-sensitive people without timely access under the declared scenario;
+it is not an estimate of earthquake deaths. Each all-sector row is
+globally best over the declared five-level road grid.
+\end{table}
+
+At both endpoints, the selected road vector is
+\begin{equation}
+ \widehat y=(0,1,0.5,1,0),
+\label{eq:noto-road-policy}
+\end{equation}
+in the corridor order stated above. The selected renovation plan is also
+unchanged: it renovates 0.2769 of the Wajima zone and no other zone on the
+declared grid/continuous renovation layer. Capacity has multiple
+evaluation-equivalent allocations at \(\rho=0.25\). Consequently, a
+different reported capacity vector at that endpoint is a zero-value tie,
+not evidence of a substantively different capacity policy.
+
+\subsection{What ambiguity changes, and what it does not}
+\label{sec:noto-ambiguity}
+
+Table~\ref{tab:noto-ambiguity} separates the ambiguity premium from policy
+adaptation. At \(\rho=0.25\), ambiguity raises the value of the selected
+plan by 10.759 modeled-loss units (0.823\% of the robust value), while the
+complete-policy adjustment value in \eqref{eq:complete-adaptation} is zero.
+The ambiguity set moves only 0.0499 probability mass despite the nominal
+radius of 0.25 because the density cap restricts profitable transfers. The
+observed premium is below the state-range audit bound in
+\eqref{eq:ambiguity-premium-bound}.
+
+\begin{table}[t]
+\centering
+\caption{Ambiguity and policy-identification diagnostics for the primary Noto grid.}
+\label{tab:noto-ambiguity}
+\small
+\begin{tabular}{lrr}
+\toprule
+Diagnostic & \(\rho=0\) & \(\rho=0.25\)\\
+\midrule
+Selected-plan nominal value & 1{,}297.187 & 1{,}297.187\\
+Selected-plan robust value & 1{,}297.187 & 1{,}307.946\\
+Ambiguity premium & 0.000 & 10.759\\
+Ambiguity premium as percent of robust value & 0.000\% & 0.823\%\\
+Positive probability mass moved by nature & 0.0000 & 0.0499\\
+TV state-range upper bound on premium & 0.000 & 11.415\\
+\(\Delta_\rho^{\mathrm{all}}\) from \eqref{eq:complete-adaptation} & 0.000 & 0.000\\
+Near-optimal portfolios within 0.01\% & 12 & 6\\
+Near-optimal portfolios within 0.05\% & 47 & 19\\
+Near-optimal portfolios within 0.10\% & 78 & 47\\
+Near-optimal portfolios within 0.50\% & 93 & 93\\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\footnotesize\textit{Notes.} Near-optimal counts are road portfolios;
+for each portfolio, renovation and capacity are optimized by the fixed-road
+oracle. Counts diagnose a flat discrete landscape and should not be
+interpreted as distinct equally implementable policies without additional
+operational screening.
+\end{table}
+
+The primary result is therefore deliberately narrow. Capped
+decision-dependent ambiguity changes the worst-case evaluation and identifies
+the amount of ambiguity premium, but it does not change the value-relevant
+selected road or renovation plan in this Noto configuration. This is not a
+failure of the solver: the conclusion follows from exhaustive grid
+enumeration and complete-policy evaluation. Conversely, it would be
+incorrect to claim that ambiguity changes the optimal policy solely because
+an alternative tied capacity allocation is returned.
+
+The common loss floor explains part of this stability. After renovation,
+the selected plan has modeled loss exposure of 2,648.672 units, of which
+1,286.428 units remain a state-common floor. That floor represents 99.17\%
+of the robust objective at \(\rho=0\) and 98.35\% at \(\rho=0.25\).
+Uncertainty therefore affects a comparatively small access-sensitive
+component. The near-optimal counts in Table~\ref{tab:noto-ambiguity} show
+that the policy landscape is also partly flat. These diagnostics are more
+informative for practitioners than forcing a policy switch by selecting
+ambiguity parameters ex post.
+
+\subsection{Supplementary cross-case checks}
+\label{sec:cross-case}
+
+Turkey and Nepal are used to assess transferability of the empirical
+workflow, not to claim that each dataset validates every model component.
+The Turkey 2023 instance combines public Zenodo building-damage data,
+HOTOSM/HDX destroyed-building and health-facility layers, WorldPop
+population, and OpenStreetMap roads. Its road-failure scores, costs,
+capacities, budgets, and ambiguity parameters are constructed or
+scenario-calibrated. It is a static probability-only cross-check and hence
+does not validate the Noto conditional-performance channel in
+\eqref{eq:conditional-delay}.
+
+The Nepal 2015 data use the public DrivenData Richter's Predictor building
+damage labels. They provide real building-damage observations but anonymize
+the geography, preventing a direct building-to-OSM road linkage. The Nepal
+analysis is consequently an exposure/access stress test with constructed
+corridors and a damage-rate proxy, not a geographically complete validation
+of road failure.
+
+\begin{table}[t]
+\centering
+\caption{Supplementary exact-grid cross-case checks at \(\rho=0.10\).}
+\label{tab:cross-case-results}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{2.2cm}rrrrp{4.7cm}}
+\toprule
+Case & Feasible grid portfolios & Best robust value & No-investment value &
+Road value versus optimized no-road plan & Exact-grid finding\\
+\midrule
+Turkey 2023 &
+347 & 106{,}451.774 & 222{,}162.759 & 138.163 &
+The same \(y=(0,1,0,1,0.75)\) is selected over
+\(\rho\in\{0,0.05,\ldots,0.25\}\); \(\Delta_\rho^{\mathrm{all}}=0\).\\
+Nepal 2015 access stress test &
+983 & 195{,}234.523 & 237{,}371.955 & 6{,}897.940 &
+The same \(y=(0,1,1,0,0)\) is selected over
+\(\rho\in\{0,0.05,\ldots,0.25\}\); \(\Delta_\rho^{\mathrm{all}}=0\).\\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\footnotesize\textit{Notes.} Values are modeled-loss units and are
+comparable only within a case. In both cases every feasible five-level road
+portfolio is evaluated exactly by Algorithm~\ref{alg:fixed-y}; the result is
+not a continuous-\(y\) certificate.
+\end{table}
+
+The three cases show that the workflow can produce nonzero road-sector value
+without requiring that ambiguity change the selected long-lived road plan.
+This is a practically useful outcome: under the declared assumptions, the
+selected plan is a no-regret choice across the tested ambiguity radii. It
+does not imply a universal rule such as \emph{always harden the cheapest
+link} or \emph{always design for the worst state}. The selected portfolios
+depend on observed exposure, access bottlenecks, route penalties, residual
+risk, capacity, budgets, and the stated uncertainty envelope.
+
+\subsection{Sensitivity, solution scope, and limitations}
+\label{sec:results-limitations}
+
+The capped-TV specification is varied over \(\rho\), and the density cap,
+residual floor, road budget, cost coefficients, response threshold, and
+moment-band tolerances are suitable sensitivity dimensions. They should be
+declared before interpreting policy changes. The optional moment-aware
+extension in \eqref{eq:moment-marginal}--\eqref{eq:moment-second} is useful
+when the analyst has a defensible hazard ensemble or wishes to bound changes
+in link marginals and dependence explicitly. In the present scarcity
+sensitivity it can alter a short-run capacity allocation while the
+long-lived road and renovation selections remain stable; its tolerances are
+therefore reported as scenario sensitivity, not as calibrated uncertainty
+truth.
+
+The following scope statements apply to all reported results:
+\begin{enumerate}
+ \item The observed data calibrate population, a damage proxy, facility
+       locations or beds, and road/access layers where available. They do
+       not validate the entire optimization model or establish causal
+       retrofit effects.
+ \item \(\Phi_\ell\), \(\underline\Phi_\ell\), \(\alpha_\ell\), costs,
+       budgets, capacity operational shares, \(\rho\), \(\kappa\), and
+       moment tolerances are constructed or scenario-calibrated. They must
+       not be described as directly observed.
+ \item The five-link policies are exhaustive-grid optima. They are not
+       continuous global optima, and the weak five-link SBB lower bound in
+       Table~\ref{tab:sbb-root-diagnostic} cannot support such a claim.
+ \item The outcome is a declared modeled acute-access loss. It is not a
+       validated forecast of deaths, a clinical survival model, or an
+       estimate of the causal impact of a specific retrofit project.
+ \item Policy stability is an empirical finding conditional on the declared
+       grid and parameters. A policy switch should be claimed only after a
+       complete-plan evaluation gives
+       \(\Delta_\rho^{\mathrm{all}}>0\) and the switch survives an adequate
+       grid-resolution or continuous verification check.
+\end{enumerate}
+
+Accordingly, the empirical contribution is a reproducible, auditable
+decision-analysis workflow: it combines observed damage and access evidence
+with transparent scenario assumptions, quantifies the incremental value of
+coordinated mitigation, and distinguishes a robust evaluation effect from a
+decision-changing ambiguity effect. This distinction allows practitioners to
+use stable policies as no-regret plans while identifying exactly which
+assumptions would need better data or a finer decision grid before claiming
+that uncertainty changes the recommended investment.

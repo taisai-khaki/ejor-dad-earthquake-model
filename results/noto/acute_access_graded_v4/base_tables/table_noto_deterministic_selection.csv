@@ -1,0 +1,7 @@
+rho,selected_y_json,numerical_minimum,selected_replay_objective,selected_minus_numerical_minimum,tie_tolerance,tied_policy_count,tie_break_rule
+0.0,"[0.25, 1.0, 1.0, 0.0, 0.0]",911.5332829583576,911.5332829583576,0.0,9.115332829583577e-08,1,lexicographically smallest y among objective ties
+0.05,"[0.25, 1.0, 1.0, 0.0, 0.0]",927.7081811182107,927.7081811182109,1.1368683772161603e-13,9.277081811182107e-08,1,lexicographically smallest y among objective ties
+0.1,"[0.25, 1.0, 1.0, 0.0, 0.0]",937.1267551597514,937.1267551597514,0.0,9.371267551597515e-08,1,lexicographically smallest y among objective ties
+0.15,"[0.25, 1.0, 1.0, 0.0, 0.0]",939.4972657134642,939.4972657134642,0.0,9.394972657134642e-08,1,lexicographically smallest y among objective ties
+0.2,"[0.25, 1.0, 1.0, 0.0, 0.0]",941.4908148781016,941.4908148781016,0.0,9.414908148781016e-08,1,lexicographically smallest y among objective ties
+0.25,"[0.25, 1.0, 1.0, 0.0, 0.0]",941.5807118957248,941.5807118957248,0.0,9.415807118957248e-08,1,lexicographically smallest y among objective ties

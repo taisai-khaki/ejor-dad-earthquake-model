@@ -1,0 +1,23 @@
+{
+  "experiment_version": "noto-stage2-joint-full-grid-v2-supplied-spec",
+  "rhos": [
+    0.0,
+    0.075,
+    0.1,
+    0.125,
+    0.25
+  ],
+  "relative_tolerances": [
+    0.001,
+    0.005
+  ],
+  "absolute_tolerance": 1e-05,
+  "base_service_floor": 0.08,
+  "maximum_service_floor": 1.0,
+  "service_resolution": 0.0001,
+  "expected_bisection_steps": 14,
+  "stage1_source": "correlated_facility_full_v1 full 996-policy M4 grid",
+  "checkpointing": "one atomic JSON per radius-tolerance-admissible policy",
+  "workers": 8,
+  "started": 1785213953.0166852
+}

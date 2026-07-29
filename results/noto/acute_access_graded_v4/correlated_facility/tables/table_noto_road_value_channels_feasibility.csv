@@ -1,0 +1,4 @@
+﻿rho,anchor_y,status,blocking_state,interpretation
+0.00,"[0,0,0,0,0]",operationally_infeasible,north__fail__corr_nanao_anamizu,"Theta(pi(0),g(0)) undefined over operational feasible set"
+0.10,"[0,0,0,0,0]",operationally_infeasible,north__fail__corr_nanao_anamizu,"Theta(pi(0),g(0)) undefined over operational feasible set"
+0.25,"[0,0,0,0,0]",operationally_infeasible,north__fail__corr_nanao_anamizu,"Theta(pi(0),g(0)) undefined over operational feasible set"
