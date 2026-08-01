@@ -23,7 +23,7 @@ from ejor_dad.model import (
     Zone,
 )
 from ejor_dad.moments import build_failure_moment_system, moment_bound_diagnostics
-from ejor_dad.recourse import solve_recourse
+from ejor_dad.recourse import solve_capability, solve_recourse
 from ejor_dad.sbb import (
     initialize_recourse_cuts,
     root_node,
@@ -786,20 +786,21 @@ def test_hard_protected_population_requirement_enters_fixed_y_master() -> None:
     assert protected >= 25.0 - 1e-7
 
 
-def test_minimum_zone_service_is_enforced_in_recourse() -> None:
+def test_loss_recourse_is_floor_free_and_capability_is_separate() -> None:
     instance = small_instance()
     instance.minimum_zone_service_fraction = np.array([0.10])
-    result = solve_recourse(instance, instance.states[0], [0.0], [0.0], y=[0.0])
-    timely_service = float((result.survival * result.dispatch).sum(axis=0)[0])
+    state = instance.states[0]
+    result = solve_recourse(instance, state, [0.0], [0.0], y=[0.0])
     demand = float(instance.demand_after_renovation([0.0])[0])
-    assert timely_service >= 0.10 * demand - 1e-7
-    primal_value = result.survivors
     dual_value = (
         result.alpha @ instance.capacity_after_investment([0.0])
         + result.beta @ instance.demand_after_renovation([0.0])
-        - result.gamma @ (instance.zone_service_fractions * instance.demand_after_renovation([0.0]))
     )
-    assert primal_value == pytest.approx(dual_value, abs=1e-7)
+    assert result.survivors == pytest.approx(dual_value, abs=1e-7)
+    capability = solve_capability(instance, state, [0.0], [0.0], y=[0.0])
+    assert capability.feasible
+    timely_service = float((capability.survival * capability.dispatch).sum(axis=0)[0])
+    assert timely_service >= 0.10 * demand - 1e-7
 
 
 def test_hazard_regime_mixture_creates_positive_road_correlation() -> None:
@@ -821,6 +822,8 @@ def test_hazard_regime_mixture_creates_positive_road_correlation() -> None:
     covariance = probabilities @ (failure_a * failure_b) - (probabilities @ failure_a) * (probabilities @ failure_b)
     assert covariance > 0.0
     assert probabilities.sum() == pytest.approx(1.0)
+    assert probabilities @ failure_a == pytest.approx(links[0].failure_probability(0.0), abs=1e-10)
+    assert probabilities @ failure_b == pytest.approx(links[1].failure_probability(0.0), abs=1e-10)
 
 
 def test_failed_facility_removes_existing_and_added_capacity() -> None:

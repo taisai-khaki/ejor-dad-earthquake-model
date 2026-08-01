@@ -107,7 +107,7 @@ def source_token(rho):
 
 
 def load_stage1_records(output_dir, rho):
-    source = output_dir / "correlated_facility_full_v1" / "checkpoints"
+    source = output_dir / "correlated_facility_separated_capability_marginal_v1" / "checkpoints"
     records = []
     for path in source.glob(f"*{source_token(rho)}*.json"):
         records.append(json.loads(path.read_text(encoding="utf-8")))
@@ -160,7 +160,7 @@ def choose_stage2(records):
 def main(output_dir: Path, workers: int) -> None:
     design = json.loads((output_dir / "run_design.json").read_text())
     args = validation.args_from(design, output_dir)
-    root = output_dir / "operational_stage2_joint_v2"
+    root = output_dir / "operational_stage2_joint_separated_capability_marginal_v1"
     (root / "tables").mkdir(parents=True, exist_ok=True)
     cache = CheckpointStore(root / "checkpoints")
     expected_steps = math.ceil(
@@ -182,7 +182,7 @@ def main(output_dir: Path, workers: int) -> None:
                 "service_resolution": SERVICE_RESOLUTION,
                 "expected_bisection_steps": expected_steps,
                 "stage1_source": (
-                    "correlated_facility_full_v1 full 996-policy M4 grid"
+                    "correlated_facility_separated_capability_marginal_v1 full 996-policy M4 grid"
                 ),
                 "checkpointing": (
                     "one atomic JSON per radius-tolerance-admissible policy"

@@ -12,7 +12,7 @@ GRID=np.array([0,.25,.5,.75,1.0]);RHOS=[0,.1,.25]
 def evaluate(instance,y):
  r=evaluate_fixed_y(instance,y,epsilon=1e-5,max_iterations=300,enforce_retrofit_budget=False);return {'objective':r.objective,'y':r.y.tolist(),'z':r.z.tolist(),'w':r.w.tolist()}
 def main(out,workers):
- root=out/'correlated_facility_full_v1';d=json.loads((out/'run_design.json').read_text());args=validation.args_from(d,out);summary=pd.read_csv(root/'tables/table_noto_correlated_facility.csv');cache=CheckpointStore(root/'certificate_checkpoints');rows=[]
+ root=out/'correlated_facility_separated_capability_marginal_v1';d=json.loads((out/'run_design.json').read_text());args=validation.args_from(d,out);summary=pd.read_csv(root/'tables/table_noto_correlated_facility.csv');cache=CheckpointStore(root/'certificate_checkpoints');rows=[]
  for rho in RHOS:
   instance=validation.build(rho,args);validate_upper_corner_certificate_instance(instance);cells=budget_intersecting_grid_cells(instance.retrofit_costs,instance.budget_retrofit,GRID);grid_payloads=[]
   for path in (root/'checkpoints').glob(f'*rho{rho:.2f}_*.json'):

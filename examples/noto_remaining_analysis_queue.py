@@ -108,7 +108,7 @@ def main(
     queue_root.mkdir(parents=True, exist_ok=True)
     queue_status = queue_root / "queue_status.json"
     mechanism_status = (
-        output_dir / "mechanism_full_grid_v1" / "status.json"
+        output_dir / "mechanism_separated_capability_marginal_v1" / "status.json"
     )
 
     while True:

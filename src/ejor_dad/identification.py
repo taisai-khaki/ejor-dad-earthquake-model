@@ -6,7 +6,7 @@ from typing import Sequence
 import numpy as np
 from scipy.optimize import linprog
 
-from ejor_dad.fixed_y import RecourseCut, aggregate_cut, evaluate_fixed_y, evaluate_plan_losses
+from ejor_dad.fixed_y import RecourseCut, _append_capability_constraints, _design_basis_states, _road_signature, _state_signature, aggregate_cut, evaluate_fixed_y, evaluate_plan_losses
 from ejor_dad.model import DADInstance
 from ejor_dad.moments import build_failure_moment_system
 from ejor_dad.states import nominal_probabilities
@@ -47,7 +47,7 @@ def _range_endpoint(instance, baseline, threshold, center_index, maximize, toler
     nominal = nominal_probabilities(instance.links, instance.states, baseline.y, instance.hazard_regimes)
     moment_system = build_failure_moment_system(instance, nominal)
     for iteration in range(1, max_iterations + 1):
-        z, w = _solve_range_master(instance, cuts, threshold, center_index, maximize)
+        z, w = _solve_range_master(instance, cuts, threshold, center_index, maximize, baseline.y)
         losses, _, recourse = evaluate_plan_losses(instance, z, w, y=baseline.y)
         worst_case = worst_case_tv_distribution(
             nominal, losses, instance.ambiguity_radius, maximize=True,
@@ -61,15 +61,19 @@ def _range_endpoint(instance, baseline, threshold, center_index, maximize, toler
             distribution=worst_case.distribution,
             alphas=np.vstack([result.alpha for result in recourse]),
             betas=np.vstack([result.beta for result in recourse]),
-            gammas=np.vstack([result.gamma for result in recourse]),
+            road_signature=_road_signature(baseline.y),
+            state_signature=_state_signature(instance),
         ))
     raise RuntimeError("Capacity-range separation did not converge.")
 
 
-def _solve_range_master(instance, cuts, threshold, center_index, maximize):
+def _solve_range_master(instance, cuts, threshold, center_index, maximize, y):
     num_zones = len(instance.zones)
     num_centers = len(instance.centers)
-    num_vars = num_zones + num_centers
+    block_size = num_centers * num_zones
+    h_start = num_zones + num_centers
+    num_design_states = len(_design_basis_states(instance))
+    num_vars = h_start + num_design_states * block_size
     objective = np.zeros(num_vars)
     objective[num_zones + center_index] = -1.0 if maximize else 1.0
     rows = []
@@ -84,20 +88,21 @@ def _solve_range_master(instance, cuts, threshold, center_index, maximize):
         rows.append(protected)
         rhs.append(-instance.minimum_protected_population)
     capacity = np.zeros(num_vars)
-    capacity[num_zones:] = instance.capacity_costs
+    capacity[num_zones:h_start] = instance.capacity_costs
     rows.append(capacity)
     rhs.append(instance.budget_capacity)
+    _append_capability_constraints(instance, y, num_vars, h_start, rows, rhs)
     for cut in cuts:
         constant, z_coefficients, w_coefficients = aggregate_cut(instance, cut)
         row = np.zeros(num_vars)
         row[:num_zones] = z_coefficients
-        row[num_zones:] = w_coefficients
+        row[num_zones:h_start] = w_coefficients
         rows.append(row)
         rhs.append(threshold - constant)
     upper = [instance.budget_capacity / cost if cost > 0 else None for cost in instance.capacity_costs]
     solution = linprog(
         c=objective, A_ub=np.vstack(rows), b_ub=np.asarray(rhs),
-        bounds=[(0.0, 1.0)] * num_zones + [(0.0, bound) for bound in upper], method="highs",
+        bounds=[(0.0, 1.0)] * num_zones + [(0.0, bound) for bound in upper] + [(0.0, None)] * (num_design_states * block_size), method="highs",
     )
     if not solution.success:
         raise RuntimeError(f"Capacity-range master failed: {solution.message}")

@@ -18,7 +18,8 @@ class RecourseCut:
     distribution: np.ndarray
     alphas: np.ndarray
     betas: np.ndarray
-    gammas: np.ndarray
+    road_signature: tuple[float, ...] | None = None
+    state_signature: tuple[str, ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -94,6 +95,7 @@ def evaluate_fixed_y(
     z0 = np.zeros(len(instance.zones), dtype=float) if initial_z is None else np.asarray(initial_z, dtype=float)
     w0 = np.zeros(len(instance.centers), dtype=float) if initial_w is None else np.asarray(initial_w, dtype=float)
     cuts: list[RecourseCut] = list(initial_cuts or ())
+    _validate_initial_cuts(instance, cuts, y_vec, nominal, moment_system)
     if not cuts:
         recourse_at_start = solve_recourse_states(instance, z0, w0, y=y_vec)
         cuts.append(
@@ -101,12 +103,13 @@ def evaluate_fixed_y(
                 distribution=nominal,
                 alphas=np.vstack([result.alpha for result in recourse_at_start]),
                 betas=np.vstack([result.beta for result in recourse_at_start]),
-                gammas=np.vstack([result.gamma for result in recourse_at_start]),
+                road_signature=_road_signature(y_vec),
+                state_signature=_state_signature(instance),
             )
         )
     latest_result: FixedYResult | None = None
     for iteration in range(1, max_iterations + 1):
-        z_hat, w_hat, eta = solve_master(instance, cuts)
+        z_hat, w_hat, eta = solve_master(instance, cuts, y_vec)
         recourse = solve_recourse_states(instance, z_hat, w_hat, y=y_vec)
         survivors = np.array([result.survivors for result in recourse], dtype=float)
         losses = instance.loss_after_response(z_hat, survivors)
@@ -124,7 +127,6 @@ def evaluate_fixed_y(
         objective = tv_result.value
         alphas = np.vstack([result.alpha for result in recourse])
         betas = np.vstack([result.beta for result in recourse])
-        gammas = np.vstack([result.gamma for result in recourse])
         latest_result = FixedYResult(
             objective=objective,
             lower_bound=float(eta),
@@ -140,7 +142,13 @@ def evaluate_fixed_y(
         )
         if objective - eta <= epsilon:
             return latest_result
-        cuts.append(RecourseCut(distribution=tv_result.distribution, alphas=alphas, betas=betas, gammas=gammas))
+        cuts.append(RecourseCut(
+            distribution=tv_result.distribution,
+            alphas=alphas,
+            betas=betas,
+            road_signature=_road_signature(y_vec),
+            state_signature=_state_signature(instance),
+        ))
     if latest_result is None:
         raise RuntimeError("Fixed-y evaluation failed before the first iteration.")
     final_gap = latest_result.objective - latest_result.lower_bound
@@ -215,10 +223,68 @@ def evaluate_fixed_plan(
         state_survivors=survivors,
     )
 
-def solve_master(instance: DADInstance, cuts: Sequence[RecourseCut]) -> tuple[np.ndarray, np.ndarray, float]:
+def _road_signature(y: Sequence[float]) -> tuple[float, ...]:
+    return tuple(np.asarray(y, dtype=float).round(12).tolist())
+
+
+def _state_signature(instance: DADInstance) -> tuple[str, ...]:
+    return tuple(state.id for state in instance.states)
+
+
+def _design_basis_states(instance: DADInstance) -> list:
+    states = []
+    for state in instance.states:
+        service = instance.service_fractions_for_state(state)
+        if state.is_tail and np.any(service > 1e-12):
+            raise ValueError("Positive service floors cannot be imposed on a residual tail state.")
+        if not state.is_tail and np.any(service > 1e-12):
+            states.append(state)
+    return states
+
+
+def _append_capability_constraints(
+    instance: DADInstance,
+    y: Sequence[float],
+    num_vars: int,
+    h_start: int,
+    rows: list[np.ndarray],
+    rhs: list[float],
+) -> None:
     num_zones = len(instance.zones)
     num_centers = len(instance.centers)
-    eta_index = num_zones + num_centers
+    block_size = num_centers * num_zones
+    base_demand = np.asarray(instance.base_demands, dtype=float)
+    for state_index, state in enumerate(_design_basis_states(instance)):
+        block_start = h_start + state_index * block_size
+        availability = instance.facility_availability(state)
+        survival = instance.survival_matrix(state, y=y)
+        service = instance.service_fractions_for_state(state)
+        for center_index in range(num_centers):
+            row = np.zeros(num_vars)
+            row[block_start + center_index * num_zones:block_start + (center_index + 1) * num_zones] = 1.0
+            row[num_zones + center_index] = -availability[center_index]
+            rows.append(row)
+            rhs.append(availability[center_index] * instance.existing_capacities[center_index])
+        for zone_index in range(num_zones):
+            row = np.zeros(num_vars)
+            row[block_start + zone_index:block_start + block_size:num_zones] = 1.0
+            row[zone_index] = base_demand[zone_index]
+            rows.append(row)
+            rhs.append(base_demand[zone_index])
+            row = np.zeros(num_vars)
+            row[block_start + zone_index:block_start + block_size:num_zones] = -survival[:, zone_index]
+            row[zone_index] = service[zone_index] * base_demand[zone_index]
+            rows.append(row)
+            rhs.append(-service[zone_index] * base_demand[zone_index])
+
+
+def solve_master(instance: DADInstance, cuts: Sequence[RecourseCut], y: Sequence[float]) -> tuple[np.ndarray, np.ndarray, float]:
+    num_zones = len(instance.zones)
+    num_centers = len(instance.centers)
+    block_size = num_centers * num_zones
+    h_start = num_zones + num_centers
+    num_design_states = len(_design_basis_states(instance))
+    eta_index = h_start + num_design_states * block_size
     num_vars = eta_index + 1
     c = np.zeros(num_vars)
     c[eta_index] = 1.0
@@ -234,35 +300,30 @@ def solve_master(instance: DADInstance, cuts: Sequence[RecourseCut]) -> tuple[np
         rows.append(protected_row)
         rhs.append(-instance.minimum_protected_population)
     capacity_row = np.zeros(num_vars)
-    capacity_row[num_zones:eta_index] = instance.capacity_costs
+    capacity_row[num_zones:h_start] = instance.capacity_costs
     rows.append(capacity_row)
     rhs.append(instance.budget_capacity)
+    _append_capability_constraints(instance, y, num_vars, h_start, rows, rhs)
     for cut in cuts:
         constant, z_coefficients, w_coefficients = aggregate_cut(instance, cut)
         row = np.zeros(num_vars)
         row[:num_zones] = z_coefficients
-        row[num_zones:eta_index] = w_coefficients
+        row[num_zones:h_start] = w_coefficients
         row[eta_index] = -1.0
         rows.append(row)
         rhs.append(-constant)
-    w_upper = [
-        instance.budget_capacity / cost if cost > 0 else None
-        for cost in instance.capacity_costs
-    ]
-    bounds = [(0.0, 1.0)] * num_zones + [(0.0, upper) for upper in w_upper] + [(0.0, instance.d_max)]
-    solution = linprog(
-        c=c,
-        A_ub=np.vstack(rows),
-        b_ub=np.asarray(rhs, dtype=float),
-        bounds=bounds,
-        method="highs",
+    w_upper = [instance.budget_capacity / cost if cost > 0 else None for cost in instance.capacity_costs]
+    bounds = (
+        [(0.0, 1.0)] * num_zones
+        + [(0.0, upper) for upper in w_upper]
+        + [(0.0, None)] * (num_design_states * block_size)
+        + [(0.0, instance.d_max)]
     )
+    solution = linprog(c=c, A_ub=np.vstack(rows), b_ub=np.asarray(rhs, dtype=float), bounds=bounds, method="highs")
     if not solution.success:
         raise RuntimeError(f"Fixed-y master LP failed: {solution.message}")
-    z = solution.x[:num_zones]
-    w = solution.x[num_zones:eta_index]
-    eta = float(solution.x[eta_index])
-    return z, w, eta
+    return solution.x[:num_zones], solution.x[num_zones:h_start], float(solution.x[eta_index])
+
 
 def aggregate_cut(instance: DADInstance, cut: RecourseCut) -> tuple[float, np.ndarray, np.ndarray]:
     base = instance.base_demands
@@ -271,9 +332,7 @@ def aggregate_cut(instance: DADInstance, cut: RecourseCut) -> tuple[float, np.nd
     probabilities = np.asarray(cut.distribution, dtype=float)
     alphas = np.asarray(cut.alphas, dtype=float)
     betas = np.asarray(cut.betas, dtype=float)
-    gammas = np.asarray(cut.gammas, dtype=float)
-    service_fractions = np.vstack([instance.service_fractions_for_state(state) for state in instance.states])
-    one_minus_beta = 1.0 - betas + service_fractions * gammas
+    one_minus_beta = 1.0 - betas
     loss_exposure_coefficients = immediate[np.newaxis, :] + one_minus_beta * base[np.newaxis, :]
     availability = np.vstack([instance.facility_availability(state) for state in instance.states])
     constant_by_state = loss_exposure_coefficients.sum(axis=1) - np.sum(alphas * availability * existing[np.newaxis, :], axis=1)
@@ -283,6 +342,42 @@ def aggregate_cut(instance: DADInstance, cut: RecourseCut) -> tuple[float, np.nd
     z_coefficients = probabilities @ z_by_state
     w_coefficients = probabilities @ w_by_state
     return constant, z_coefficients, w_coefficients
+
+
+def _validate_initial_cuts(
+    instance: DADInstance,
+    cuts: Sequence[RecourseCut],
+    y: np.ndarray,
+    nominal: np.ndarray,
+    moment_system,
+    tolerance: float = 1e-7,
+) -> None:
+    expected_states = _state_signature(instance)
+    expected_road = _road_signature(y)
+    for cut in cuts:
+        distribution = np.asarray(cut.distribution, dtype=float)
+        alphas = np.asarray(cut.alphas, dtype=float)
+        betas = np.asarray(cut.betas, dtype=float)
+        if distribution.shape != (len(instance.states),):
+            raise ValueError("Initial cut distribution has the wrong state dimension.")
+        if alphas.shape != (len(instance.states), len(instance.centers)) or betas.shape != (len(instance.states), len(instance.zones)):
+            raise ValueError("Initial cut dual arrays have incompatible shapes.")
+        if cut.road_signature is not None and tuple(cut.road_signature) != expected_road:
+            raise ValueError("Initial cut was generated for a different road vector.")
+        if cut.state_signature is not None and tuple(cut.state_signature) != expected_states:
+            raise ValueError("Initial cut was generated for a different state support.")
+        if np.any(distribution < -tolerance) or abs(float(distribution.sum()) - 1.0) > tolerance:
+            raise ValueError("Initial cut distribution is not a probability distribution.")
+        if 0.5 * float(np.abs(distribution - nominal).sum()) > instance.ambiguity_radius + tolerance:
+            raise ValueError("Initial cut distribution violates the TV ambiguity radius.")
+        if instance.ambiguity_density_cap is not None and np.any(distribution > instance.ambiguity_density_cap * nominal + tolerance):
+            raise ValueError("Initial cut distribution violates the density cap.")
+        if moment_system.bounds and np.any(moment_system.inequality_matrix @ distribution > moment_system.inequality_rhs + tolerance):
+            raise ValueError("Initial cut distribution violates the moment envelope.")
+        for state_index, state in enumerate(instance.states):
+            survival = instance.survival_matrix(state, y=y)
+            if np.any(alphas[state_index, :, None] + betas[state_index, None, :] < survival - tolerance):
+                raise ValueError("Initial cut dual variables are infeasible for the current road vector.")
 
 
 def solve_recourse_states(
@@ -296,13 +391,8 @@ def solve_recourse_states(
     results: list[RecourseResult] = []
     for state in instance.states:
         availability = instance.facility_availability(state)
-        service_requirement = instance.service_fractions_for_state(state)
         if state.is_tail:
-            key = (
-                True,
-                availability.tobytes(),
-                service_requirement.tobytes(),
-            )
+            key = (True, availability.tobytes())
         else:
             survival = instance.survival_matrix(state, y=y)
             key = (
@@ -310,7 +400,6 @@ def solve_recourse_states(
                 survival.shape,
                 survival.tobytes(),
                 availability.tobytes(),
-                service_requirement.tobytes(),
             )
         result = cache.get(key)
         if result is None:

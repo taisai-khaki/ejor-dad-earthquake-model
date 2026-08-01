@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 import numpy as np,pandas as pd
-root=Path('data_work/noto/acute_access_graded_v4/correlated_facility_full_v1');summary=pd.read_csv(root/'tables/table_noto_correlated_facility.csv');ident=[];top=[]
+root=Path('data_work/noto/acute_access_graded_v4/correlated_facility_separated_capability_marginal_v1');summary=pd.read_csv(root/'tables/table_noto_correlated_facility.csv');ident=[];top=[]
 for rho in summary.rho:
  payloads=[]
  for path in (root/'checkpoints').glob(f'*rho{rho:.2f}_*.json'):

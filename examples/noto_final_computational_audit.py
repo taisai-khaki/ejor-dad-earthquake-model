@@ -74,7 +74,7 @@ def repository_revision(repo: Path) -> dict:
 def selected_rows(output_dir: Path) -> pd.DataFrame:
     path = (
         output_dir
-        / "mechanism_full_grid_v1"
+        / "mechanism_separated_capability_marginal_v1"
         / "tables"
         / "table_noto_mechanism_ablation_full_grid.csv"
     )
@@ -133,17 +133,15 @@ def probability_audit(base, model_specs, table):
     return rows, max_sum_error, minimum_probability
 
 
-def primal_dual_value(instance, state, z, w, alpha, beta, gamma):
+def primal_dual_value(instance, state, z, w, alpha, beta):
     demand = instance.demand_after_renovation(z)
     capacity = (
         instance.capacity_after_investment(w)
         * instance.facility_availability(state)
     )
-    service = instance.service_fractions_for_state(state)
     return float(
         capacity @ alpha
         + demand @ beta
-        - (service * demand) @ gamma
     )
 
 
@@ -173,7 +171,7 @@ def numerical_replay(output_dir, args, table):
                 stored_w,
                 y=y,
             )
-            alpha, beta, gamma = solve_recourse_dual(
+            alpha, beta = solve_recourse_dual(
                 instance,
                 state,
                 stored_z,
@@ -188,7 +186,6 @@ def numerical_replay(output_dir, args, table):
                 stored_w,
                 alpha,
                 beta,
-                gamma,
             )
             state_maximum = max(
                 state_maximum,
@@ -229,12 +226,12 @@ def numerical_replay(output_dir, args, table):
 
 def experiment_runtime_and_checkpoints(output_dir: Path):
     definitions = (
-        ("mechanism_full_grid", "mechanism_full_grid_v1"),
+        ("mechanism_full_grid", "mechanism_separated_capability_marginal_v1"),
         (
             "selected_sensitivity_full_grid",
             "selected_sensitivity_full_grid_v1",
         ),
-        ("stage2_joint_full_grid", "operational_stage2_joint_v2"),
+        ("stage2_joint_full_grid", "operational_stage2_joint_separated_capability_marginal_v1"),
     )
     rows = []
     for name, directory in definitions:

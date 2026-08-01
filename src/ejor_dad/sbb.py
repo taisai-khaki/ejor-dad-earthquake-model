@@ -143,6 +143,11 @@ def solve_global_sbb(
     incumbent as a high-quality warm start for larger heuristic searches.
     """
     validate_probability_relaxation(probability_relaxation)
+    if np.any(instance.zone_service_fractions > 1e-12):
+        raise NotImplementedError(
+            "Continuous SBB does not include the separate design-basis capability block; "
+            "use fixed-y enumeration for service-constrained instances."
+        )
     if instance.hazard_regimes is not None:
         raise NotImplementedError("Continuous SBB does not yet include spatial hazard-regime mixtures; use exact fixed-y enumeration.")
     if instance.has_retrofit_performance_effects:

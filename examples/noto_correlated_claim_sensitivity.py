@@ -53,7 +53,7 @@ def main(out,workers):
   futures={pool.submit(solve,i,y):(n,p,r,l) for n,p,r,l,y,i in jobs}
   for f in as_completed(futures):
    n,p,r,l=futures[f];rows.append({'setting':n,'parameters_json':json.dumps(p,sort_keys=True),'rho':r,'policy':l,'objective':f.result()})
- frame=pd.DataFrame(rows);wide=frame.pivot(index=['setting','parameters_json','rho'],columns='policy',values='objective').reset_index();wide['D_A_minus_B']=wide.A-wide.B;wide['preferred']=np.where(wide.D_A_minus_B<0,'A','B');wide['near_tie_0p01_percent']=np.abs(wide.D_A_minus_B)/np.minimum(wide.A,wide.B)<=.0001;wide.to_csv(out/'correlated_facility_full_v1/tables/table_noto_claim_critical_sensitivity.csv',index=False);print(wide.sort_values(['setting','rho']).to_string(index=False))
+ frame=pd.DataFrame(rows);wide=frame.pivot(index=['setting','parameters_json','rho'],columns='policy',values='objective').reset_index();wide['D_A_minus_B']=wide.A-wide.B;wide['preferred']=np.where(wide.D_A_minus_B<0,'A','B');wide['near_tie_0p01_percent']=np.abs(wide.D_A_minus_B)/np.minimum(wide.A,wide.B)<=.0001;wide.to_csv(out/'correlated_facility_separated_capability_marginal_v1/tables/table_noto_claim_critical_sensitivity.csv',index=False);print(wide.sort_values(['setting','rho']).to_string(index=False))
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--output-dir',required=True);p.add_argument('--workers',type=int,default=8);a=p.parse_args();main(Path(a.output_dir),a.workers)
 
