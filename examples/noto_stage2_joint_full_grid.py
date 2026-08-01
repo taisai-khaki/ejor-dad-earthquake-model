@@ -19,7 +19,7 @@ import noto_practical_resilience_experiment as practical
 from ejor_dad.checkpoint import CheckpointStore, atomic_write_text
 from ejor_dad.fixed_y import evaluate_fixed_y
 
-VERSION = "noto-stage2-joint-separated-capability-marginal-v1"
+VERSION = "noto-stage2-joint-separated-capability-marginal-v2"
 RHOS = (0.0, 0.075, 0.10, 0.125, 0.25)
 RELATIVE_TOLERANCES = (0.001, 0.005)
 ABSOLUTE_TOLERANCE = 1e-5
@@ -107,7 +107,7 @@ def source_token(rho):
 
 
 def load_stage1_records(output_dir, rho):
-    source = output_dir / "correlated_facility_separated_capability_marginal_v1" / "checkpoints"
+    source = output_dir / "correlated_facility_separated_capability_marginal_v2" / "checkpoints"
     records = []
     for path in source.glob(f"*{source_token(rho)}*.json"):
         records.append(json.loads(path.read_text(encoding="utf-8")))
@@ -160,7 +160,7 @@ def choose_stage2(records):
 def main(output_dir: Path, workers: int) -> None:
     design = json.loads((output_dir / "run_design.json").read_text())
     args = validation.args_from(design, output_dir)
-    root = output_dir / "operational_stage2_joint_separated_capability_marginal_v1"
+    root = output_dir / "operational_stage2_joint_separated_capability_marginal_v2"
     (root / "tables").mkdir(parents=True, exist_ok=True)
     cache = CheckpointStore(root / "checkpoints")
     expected_steps = math.ceil(
@@ -182,7 +182,7 @@ def main(output_dir: Path, workers: int) -> None:
                 "service_resolution": SERVICE_RESOLUTION,
                 "expected_bisection_steps": expected_steps,
                 "stage1_source": (
-                    "correlated_facility_separated_capability_marginal_v1 full 996-policy M4 grid"
+                    "correlated_facility_separated_capability_marginal_v2 full 996-policy M4 grid"
                 ),
                 "checkpointing": (
                     "one atomic JSON per radius-tolerance-admissible policy"

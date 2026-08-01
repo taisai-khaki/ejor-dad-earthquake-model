@@ -1,6 +1,6 @@
 ﻿$ErrorActionPreference = 'Stop'
 $Project = 'C:\Users\L03128674\projects\ejor_dad_nepal'
-$Root = Join-Path $Project 'data_work\noto\acute_access_graded_v4\correlated_facility_separated_capability_marginal_v1'
+$Root = Join-Path $Project 'data_work\noto\acute_access_graded_v4\correlated_facility_separated_capability_marginal_v2'
 $DensePid = [int](Get-Content (Join-Path $Root 'dense_launcher_pid.txt'))
 $Log = Join-Path $Root 'logs\remaining_validation_queue.log'
 while (Get-Process -Id $DensePid -ErrorAction SilentlyContinue) {

@@ -24,7 +24,7 @@ MLIT = NOTO_ROOT / "raw" / "mlit_roads_extracted" / "240125data" / "json"
 RESULTS = (
     NOTO_ROOT
     / "acute_access_graded_v4"
-    / "mechanism_separated_capability_marginal_v1"
+    / "mechanism_separated_capability_marginal_v2"
     / "tables"
     / "table_noto_mechanism_ablation_full_grid.csv"
 )
