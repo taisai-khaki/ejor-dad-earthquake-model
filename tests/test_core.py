@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import numpy as np
 import pytest
 from scipy.optimize import linprog
@@ -803,6 +805,57 @@ def test_loss_recourse_is_floor_free_and_capability_is_separate() -> None:
     assert timely_service >= 0.10 * demand - 1e-7
 
 
+def test_capability_master_uses_post_renovation_demand() -> None:
+    instance = small_instance()
+    instance.states = [instance.states[0]]
+    instance.critical_service_state_ids = {instance.states[0].id}
+    instance.minimum_zone_service_fraction = np.array([0.50])
+    instance.minimum_protected_population = 25.0
+    instance.budget_renovation = instance.renovation_costs[0]
+
+    result = evaluate_fixed_y(instance, [0.0], epsilon=1e-8)
+
+    assert result.z[0] >= 0.50 - 1e-7
+    capability = solve_capability(
+        instance,
+        instance.states[0],
+        result.z,
+        result.w,
+        y=result.y,
+    )
+    assert capability.feasible
+
+
+def test_initial_cuts_validate_radius_road_and_state_support() -> None:
+    instance = small_instance()
+    baseline = evaluate_fixed_y(instance, [0.0], epsilon=1e-8)
+    larger_radius = replace(instance, ambiguity_radius=0.2)
+    reused = evaluate_fixed_y(
+        larger_radius,
+        [0.0],
+        epsilon=1e-8,
+        initial_cuts=baseline.cuts,
+    )
+    assert reused.objective >= 0.0
+
+    with pytest.raises(ValueError, match="different road vector"):
+        evaluate_fixed_y(
+            instance,
+            [0.5],
+            epsilon=1e-8,
+            initial_cuts=baseline.cuts,
+        )
+
+    reordered = replace(instance, states=list(reversed(instance.states)))
+    with pytest.raises(ValueError, match="different state support"):
+        evaluate_fixed_y(
+            reordered,
+            [0.0],
+            epsilon=1e-8,
+            initial_cuts=baseline.cuts,
+        )
+
+
 def test_hazard_regime_mixture_creates_positive_road_correlation() -> None:
     from ejor_dad.model import HazardRegime
     from ejor_dad.states import generate_regime_failure_states
@@ -824,6 +877,34 @@ def test_hazard_regime_mixture_creates_positive_road_correlation() -> None:
     assert probabilities.sum() == pytest.approx(1.0)
     assert probabilities @ failure_a == pytest.approx(links[0].failure_probability(0.0), abs=1e-10)
     assert probabilities @ failure_b == pytest.approx(links[1].failure_probability(0.0), abs=1e-10)
+    full_retrofit = nominal_probabilities(links, states, [1.0, 1.0], regimes)
+    low_mass = full_retrofit[
+        np.array([state.hazard_regime_id == "low" for state in states])
+    ].sum()
+    high_mass = full_retrofit[
+        np.array([state.hazard_regime_id == "high" for state in states])
+    ].sum()
+    low_failure_a = full_retrofit[
+        np.array(
+            [
+                state.hazard_regime_id == "low" and "a" in state.failed_links
+                for state in states
+            ]
+        )
+    ].sum() / low_mass
+    high_failure_a = full_retrofit[
+        np.array(
+            [
+                state.hazard_regime_id == "high" and "a" in state.failed_links
+                for state in states
+            ]
+        )
+    ].sum() / high_mass
+    assert low_failure_a != pytest.approx(high_failure_a)
+    assert full_retrofit @ failure_a == pytest.approx(
+        links[0].failure_probability(1.0),
+        abs=1e-10,
+    )
 
 
 def test_failed_facility_removes_existing_and_added_capacity() -> None:

@@ -273,7 +273,7 @@ def _append_capability_constraints(
             rhs.append(base_demand[zone_index])
             row = np.zeros(num_vars)
             row[block_start + zone_index:block_start + block_size:num_zones] = -survival[:, zone_index]
-            row[zone_index] = service[zone_index] * base_demand[zone_index]
+            row[zone_index] = -service[zone_index] * base_demand[zone_index]
             rows.append(row)
             rhs.append(-service[zone_index] * base_demand[zone_index])
 

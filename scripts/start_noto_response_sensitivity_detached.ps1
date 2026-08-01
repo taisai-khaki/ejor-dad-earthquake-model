@@ -8,7 +8,7 @@ param(
 $ErrorActionPreference = "Stop"
 $Repo = Split-Path -Parent $PSScriptRoot
 $Runner = Join-Path $PSScriptRoot "run_noto_response_sensitivity_resumable.ps1"
-$SensitivityDir = Join-Path $Repo ("data_work\noto\" + $OutputName + "\joint_response_sensitivity_v2")
+$SensitivityDir = Join-Path $Repo ("data_work\noto\" + $OutputName + "\joint_response_separated_capability_marginal_v1")
 $PidPath = Join-Path $SensitivityDir "launcher_pid.txt"
 New-Item -ItemType Directory -Force -Path $SensitivityDir | Out-Null
 

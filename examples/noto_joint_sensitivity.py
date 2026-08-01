@@ -27,7 +27,7 @@ from ejor_dad.checkpoint import CheckpointStore, atomic_write_dataframe, atomic_
 from ejor_dad.fixed_y import evaluate_fixed_y
 
 
-VERSION = "noto-joint-sensitivity-v2"
+VERSION = "noto-joint-sensitivity-separated-capability-marginal-v1"
 GRID_LEVELS = (0.0, 0.25, 0.50, 0.75, 1.0)
 DENSITY_CAPS = (1.5, 3.0)
 DENSITY_CAP_RHOS = (0.075, 0.10, 0.125, 0.25)
@@ -53,7 +53,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         default=None,
-        help="Sensitivity output directory; defaults to joint_sensitivity_v1 below the base output directory.",
+        help="Sensitivity output directory; defaults to joint_sensitivity_separated_capability_marginal_v1 below the base output directory.",
     )
     parser.add_argument("--workers", type=int, default=min(4, os.cpu_count() or 1))
     parser.add_argument("--force", action="store_true", help="Recompute existing candidate checkpoints.")
@@ -501,7 +501,7 @@ def write_reproducibility(output_dir: Path) -> None:
 def main() -> None:
     args = parse_args()
     base_output_dir = Path(args.base_output_dir).resolve()
-    output_dir = Path(args.output_dir).resolve() if args.output_dir else base_output_dir / "joint_sensitivity_v1"
+    output_dir = Path(args.output_dir).resolve() if args.output_dir else base_output_dir / "joint_sensitivity_separated_capability_marginal_v1"
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "tables").mkdir(exist_ok=True)
     (output_dir / "logs").mkdir(exist_ok=True)

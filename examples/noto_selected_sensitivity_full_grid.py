@@ -16,7 +16,7 @@ import noto_correlated_validation_postprocess as validation
 import noto_mechanism_full_grid as mechanism
 from ejor_dad.checkpoint import CheckpointStore, atomic_write_text
 
-VERSION = "noto-selected-sensitivity-full-grid-v1-supplied-spec"
+VERSION = "noto-selected-sensitivity-separated-capability-marginal-v1"
 POLICY_B = np.array([0.0, 1.0, 1.0, 0.0, 0.25])
 SETTINGS = (
     ("design_S1", {"design": "S1"}, (0.25,)),
@@ -109,7 +109,7 @@ def write_tables(root, summaries, top_rows):
 def main(output_dir: Path, workers: int) -> None:
     design = json.loads((output_dir / "run_design.json").read_text())
     args = validation.args_from(design, output_dir)
-    root = output_dir / "selected_sensitivity_full_grid_v1"
+    root = output_dir / "selected_sensitivity_separated_capability_marginal_v1"
     (root / "tables").mkdir(parents=True, exist_ok=True)
     cache = CheckpointStore(root / "checkpoints")
     atomic_write_text(
