@@ -23,7 +23,7 @@ from ejor_dad.fixed_y import evaluate_fixed_y
 RHOS = (0.0, 0.10, 0.25)
 GRID = (0.0, 0.25, 0.50, 0.75, 1.0)
 ORDER = ("M4", "M2", "M0", "M1", "M3")
-VERSION = "noto-mechanism-full-grid-v2-supplied-spec"
+VERSION = "noto-mechanism-separated-capability-marginal-v1"
 _WORKER_INSTANCE = None
 
 
@@ -183,19 +183,6 @@ def key_for(model, rho, index):
     return f"mechanism_{model}_rho{rho:.2f}_grid{index:04d}"
 
 
-def load_m4_lookup(output_dir, rho):
-    lookup = {}
-    source = output_dir / "correlated_facility_full_v1" / "checkpoints"
-    if not source.exists():
-        return lookup
-    for path in source.glob(f"*rho{rho:.2f}_*.json"):
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        y = payload.get("y")
-        if y is not None:
-            lookup[tuple(np.round(y, 10))] = payload
-    return lookup
-
-
 def summarize(model, rho, instance, records):
     feasible = [row for row in records if row.get("status") == "feasible"]
     if not feasible:
@@ -271,7 +258,7 @@ def main(output_dir, workers):
     design = json.loads((output_dir / "run_design.json").read_text())
     args = validation.args_from(design, output_dir)
     base, _ = practical.build_instance(0.0, args)
-    root = output_dir / "mechanism_full_grid_v1"
+    root = output_dir / "mechanism_separated_capability_marginal_v1"
     (root / "tables").mkdir(parents=True, exist_ok=True)
     cache = CheckpointStore(root / "checkpoints")
     atomic_write_text(
@@ -305,11 +292,6 @@ def main(output_dir, workers):
         candidates = candidate_grid(instance)
         records_by_rho = {rho: [] for rho in RHOS}
         missing = []
-        m4_lookups = {
-            rho: load_m4_lookup(output_dir, rho) if model == "M4" else {}
-            for rho in RHOS
-        }
-
         for index, y in candidates:
             missing_rhos = []
             for rho in RHOS:
@@ -317,13 +299,6 @@ def main(output_dir, workers):
                 payload = None
                 if cache.exists(key):
                     payload = cache.load(key)
-                elif model == "M4":
-                    payload = m4_lookups[rho].get(tuple(np.round(y, 10)))
-                    if payload is not None:
-                        payload = dict(payload)
-                        payload["rho"] = rho
-                        payload["candidate_index"] = index
-                        cache.save(key, payload)
                 if payload is None:
                     missing_rhos.append(rho)
                 else:

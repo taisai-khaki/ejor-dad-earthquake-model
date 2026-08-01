@@ -39,6 +39,6 @@ def main(out,workers):
   futures={pool.submit(task,i,y):(rho,m,label,y,len(i.states),len(i.critical_service_state_ids)) for rho,m,label,y,i in jobs}
   for f in as_completed(futures):
    rho,m,label,y,n,ndb=futures[f];r=f.result();rows.append({'rho':rho,'model':m,'policy':label,'y_json':json.dumps(y.tolist()),'state_count':n,'design_basis_count':ndb}|r)
- frame=pd.DataFrame(rows);wide=frame.pivot(index=['rho','model'],columns='policy',values='objective').reset_index();wide['D_A_minus_B']=wide['A']-wide['B'];wide['preferred']=np.where(wide.D_A_minus_B<0,'A','B');wide.to_csv(out/'correlated_facility_full_v1/tables/table_noto_mechanism_ablation.csv',index=False);frame.to_csv(out/'correlated_facility_full_v1/tables/table_noto_mechanism_ablation_details.csv',index=False);print(wide.sort_values(['model','rho']).to_string(index=False))
+ frame=pd.DataFrame(rows);wide=frame.pivot(index=['rho','model'],columns='policy',values='objective').reset_index();wide['D_A_minus_B']=wide['A']-wide['B'];wide['preferred']=np.where(wide.D_A_minus_B<0,'A','B');wide.to_csv(out/'correlated_facility_separated_capability_marginal_v1/tables/table_noto_mechanism_ablation.csv',index=False);frame.to_csv(out/'correlated_facility_separated_capability_marginal_v1/tables/table_noto_mechanism_ablation_details.csv',index=False);print(wide.sort_values(['model','rho']).to_string(index=False))
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--output-dir',required=True);p.add_argument('--workers',type=int,default=8);a=p.parse_args();main(Path(a.output_dir),a.workers)

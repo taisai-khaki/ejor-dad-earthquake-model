@@ -11,7 +11,7 @@ import noto_practical_resilience_experiment as practical
 from ejor_dad import HazardRegime,generate_regime_failure_states
 from ejor_dad.checkpoint import CheckpointStore,atomic_write_text
 from ejor_dad.fixed_y import evaluate_fixed_y
-VERSION='noto-correlated-facility-full-v1';RHOS=[0,.025,.05,.075,.1,.125,.15,.2,.25]
+VERSION='noto-correlated-facility-separated-capability-marginal-v1';RHOS=[0,.025,.05,.075,.1,.125,.15,.2,.25]
 def args_from(d,out):return SimpleNamespace(mode=d['mode'],density_cap=d['density_cap'],residual_failure_ratio=d['residual_failure_ratio'],failure_delay_reduction=d['failure_delay_reduction'],retrofit_budget_scale=d['retrofit_budget_scale'],time_sensitive_fraction=d['time_sensitive_fraction'],immediate_loss_fraction=d['immediate_loss_fraction'],capacity_throughput_per_bed=d['capacity_throughput_per_bed'],response_threshold_minutes=d.get('response_threshold_minutes'),graded_response=True,output_dir=str(out),workers=1,force=False)
 def regimes(base):
  ids=base.link_ids
@@ -24,7 +24,7 @@ def evaluate(instance,y):
   if 'infeasible' in str(e).lower():return {'status':'infeasible','y':np.asarray(y).tolist()}
   raise
 def main(out,workers):
- d=json.loads((out/'run_design.json').read_text());a=args_from(d,out);target=out/'correlated_facility_full_v1';(target/'tables').mkdir(parents=True,exist_ok=True);cache=CheckpointStore(target/'checkpoints');rows=[];levels=[[0,.25,.5,.75,1]]*5
+ d=json.loads((out/'run_design.json').read_text());a=args_from(d,out);target=out/'correlated_facility_separated_capability_marginal_v1';(target/'tables').mkdir(parents=True,exist_ok=True);cache=CheckpointStore(target/'checkpoints');rows=[];levels=[[0,.25,.5,.75,1]]*5
  for rho in RHOS:
   base,_=practical.build_instance(rho,a);R=regimes(base);states=generate_regime_failure_states(base.links,R);critical={s.id for s in states if s.hazard_regime_id in {'normal','north','central'} and len(s.failed_links)<=1};instance=replace(base,states=states,hazard_regimes=R,critical_service_state_ids=critical,minimum_protected_population=.1*base.protected_population_coefficients.sum(),minimum_zone_service_fraction=.08)
   candidates=[]
@@ -37,14 +37,7 @@ def main(out,workers):
    if cache.exists(key):
     results.append(cache.load(key))
    else:
-    reused=None
-    reduced_root=out/'correlated_facility_v1'/'checkpoints'
-    for old_path in reduced_root.glob(f'*rho{rho:.2f}_*.json'):
-     old=json.loads(old_path.read_text())
-     if np.allclose(old.get('y',[]),y):reused=old;break
-    if reused is not None:
-     cache.save(key,reused);results.append(reused)
-    else:pending.append((index,y,key))
+    pending.append((index,y,key))
   with ProcessPoolExecutor(max_workers=workers) as pool:
    futures={pool.submit(evaluate,instance,y):(index,key) for index,y,key in pending}
    for count,f in enumerate(as_completed(futures),1):

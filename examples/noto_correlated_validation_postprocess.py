@@ -23,7 +23,7 @@ def min_radius(profile,target):
    return segment.start_radius+(target-segment.start_value)/segment.value_slope
  return profile.terminal_radius
 def main(out):
- root=out/'correlated_facility_full_v1';summary=pd.read_csv(root/'tables/table_noto_correlated_facility.csv');d=json.loads((out/'run_design.json').read_text());args=args_from(d,out);rho0=summary.iloc[(summary.rho-0).abs().argmin()];y0=np.array(json.loads(rho0.selected_y_json));z0=np.array(json.loads(rho0.selected_z_json));w0=np.array(json.loads(rho0.selected_w_json));adapt=[];prob=[];regime=[];capacity=[]
+ root=out/'correlated_facility_separated_capability_marginal_v1';summary=pd.read_csv(root/'tables/table_noto_correlated_facility.csv');d=json.loads((out/'run_design.json').read_text());args=args_from(d,out);rho0=summary.iloc[(summary.rho-0).abs().argmin()];y0=np.array(json.loads(rho0.selected_y_json));z0=np.array(json.loads(rho0.selected_z_json));w0=np.array(json.loads(rho0.selected_w_json));adapt=[];prob=[];regime=[];capacity=[]
  for row in summary.itertuples(index=False):
   rho=float(row.rho);instance=build(rho,args);y=np.array(json.loads(row.selected_y_json));selected=evaluate_fixed_y(instance,y,epsilon=1e-8,max_iterations=300);road0=evaluate_fixed_y(instance,y0,epsilon=1e-8,max_iterations=300);complete0=evaluate_fixed_plan(instance,z0,w0,y0);selected_plan=evaluate_fixed_plan(instance,selected.z,selected.w,y)
   road_delta=road0.objective-selected.objective;zw_delta=complete0.objective-road0.objective;all_delta=complete0.objective-selected.objective

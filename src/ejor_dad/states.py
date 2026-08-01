@@ -48,8 +48,17 @@ def nominal_probabilities(links: Sequence[Link], states: Sequence[State], y: Seq
             phi=base_phi;regime_weight=1.0
         else:
             if state.hazard_regime_id not in regime_lookup:raise ValueError(f'State {state.id} has no valid hazard regime.')
-            regime=regime_lookup[state.hazard_regime_id];multipliers=np.array([regime.link_failure_multipliers.get(link.id,1.0) for link in links])
-            phi=np.clip(floors+multipliers*(base_phi-floors),floors,1.0);regime_weight=regime.probability
+            regime=regime_lookup[state.hazard_regime_id]
+            raw_multipliers=np.array([regime.link_failure_multipliers.get(link.id,1.0) for link in links],dtype=float)
+            regime_weights=np.array([candidate.probability for candidate in hazard_regimes],dtype=float); regime_weight_total=regime_weights.sum()
+            if regime_weight_total <= 0.0:raise ValueError('Hazard-regime probabilities must have positive total mass.')
+            regime_weights=regime_weights/regime_weight_total
+            weighted_means=np.array([sum(weight*candidate.link_failure_multipliers.get(link.id,1.0) for weight,candidate in zip(regime_weights,hazard_regimes)) for link in links],dtype=float)
+            if np.any(weighted_means <= 0.0):raise ValueError('Hazard-regime multipliers must have positive weighted means.')
+            multipliers=raw_multipliers/weighted_means
+            phi=floors+multipliers*(base_phi-floors)
+            if np.any(phi < floors-1e-10) or np.any(phi > 1.0+1e-10):raise ValueError('Calibrated regime failure probabilities leave [floor,1].')
+            phi=np.asarray(phi,dtype=float);regime_weight=regime.probability
         failed=set(state.failed_links);probability=regime_weight
         for link in links:
             link_phi=phi[link_index[link.id]];probability*=link_phi if link.id in failed else 1.0-link_phi

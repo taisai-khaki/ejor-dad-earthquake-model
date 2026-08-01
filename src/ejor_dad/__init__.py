@@ -9,6 +9,7 @@ from ejor_dad.certification import (
 )
 from ejor_dad.channels import RoadRetrofitChannelResult, decompose_road_retrofit_channels
 from ejor_dad.fixed_y import FixedPlanResult, FixedYResult, evaluate_fixed_plan, evaluate_fixed_y
+from ejor_dad.recourse import CapabilityResult, solve_capability
 from ejor_dad.model import (
     AidCenter,
     DADInstance,
@@ -28,6 +29,7 @@ from ejor_dad.tv import CappedTVProfile, TVProfileSegment, capped_tv_profile, wo
 __all__ = [
     "AidCenter",
     "CappedTVProfile",
+    "CapabilityResult",
     "ContinuousGridCertificate",
     "DADInstance",
     "FailureMomentEnvelope",
@@ -53,6 +55,7 @@ __all__ = [
     "generate_failure_states",
     "generate_regime_failure_states",
     "nominal_probabilities",
+    "solve_capability",
     "solve_global_sbb",
     "validate_upper_corner_certificate_instance",
     "worst_case_tv_distribution",
