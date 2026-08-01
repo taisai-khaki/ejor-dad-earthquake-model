@@ -93,8 +93,10 @@ def selected_rows(output_dir: Path) -> pd.DataFrame:
 
 def probability_audit(base, model_specs, table):
     rows = []
+    marginal_rows = []
     max_sum_error = 0.0
     minimum_probability = 1.0
+    maximum_marginal_error = 0.0
     for row in table.itertuples(index=False):
         model = str(row.model)
         rho = float(row.rho)
@@ -106,6 +108,38 @@ def probability_audit(base, model_specs, table):
             y,
             instance.hazard_regimes,
         )
+        if any(state.is_tail for state in instance.states):
+            raise RuntimeError("Nominal marginal preservation requires explicit no-tail support.")
+        indicators = np.asarray(
+            [
+                [link.id in state.failed_links for state in instance.states]
+                for link in instance.links
+            ],
+            dtype=float,
+        )
+        targets = np.asarray(
+            [
+                link.failure_probability(float(level))
+                for link, level in zip(instance.links, y)
+            ],
+            dtype=float,
+        )
+        computed = indicators @ nominal
+        for link_index, link in enumerate(instance.links):
+            error = float(computed[link_index] - targets[link_index])
+            maximum = abs(error)
+            maximum_marginal_error = max(maximum_marginal_error, maximum)
+            marginal_rows.append(
+                {
+                    "model": model,
+                    "rho": rho,
+                    "corridor": link.id,
+                    "y_level": float(y[link_index]),
+                    "target_nominal_marginal": float(targets[link_index]),
+                    "computed_nominal_marginal": float(computed[link_index]),
+                    "absolute_error": maximum,
+                }
+            )
         sum_error = abs(float(nominal.sum()) - 1.0)
         max_sum_error = max(max_sum_error, sum_error)
         minimum_probability = min(minimum_probability, float(nominal.min()))
@@ -130,7 +164,7 @@ def probability_audit(base, model_specs, table):
                 ),
             }
         )
-    return rows, max_sum_error, minimum_probability
+    return rows, marginal_rows, max_sum_error, minimum_probability, maximum_marginal_error
 
 
 def primal_dual_value(instance, state, z, w, alpha, beta):
@@ -147,6 +181,7 @@ def primal_dual_value(instance, state, z, w, alpha, beta):
 
 def numerical_replay(output_dir, args, table):
     rows = []
+    worst_case_rows = []
     maximum_primal_dual_error = 0.0
     maximum_replay_error = 0.0
     m4 = table[table["model"] == "M4"].sort_values("rho")
@@ -198,6 +233,24 @@ def numerical_replay(output_dir, args, table):
             max_iterations=300,
         )
         replay_error = abs(float(replay.objective) - stored_objective)
+        indicators = np.asarray(
+            [
+                [link.id in state.failed_links for state in instance.states]
+                for link in instance.links
+            ],
+            dtype=float,
+        )
+        worst_case_marginals = indicators @ replay.worst_case_distribution
+        for link_index, link in enumerate(instance.links):
+            worst_case_rows.append(
+                {
+                    "model": "M4",
+                    "rho": rho,
+                    "corridor": link.id,
+                    "y_level": float(y[link_index]),
+                    "worst_case_marginal": float(worst_case_marginals[link_index]),
+                }
+            )
         maximum_primal_dual_error = max(
             maximum_primal_dual_error,
             state_maximum,
@@ -221,7 +274,57 @@ def numerical_replay(output_dir, args, table):
                 ),
             }
         )
-    return rows, maximum_primal_dual_error, maximum_replay_error
+    return rows, worst_case_rows, maximum_primal_dual_error, maximum_replay_error
+
+
+def monotonicity_audit(output_dir: Path) -> list[dict[str, float | int]]:
+    checkpoint_root = (
+        output_dir
+        / "mechanism_separated_capability_marginal_v1"
+        / "checkpoints"
+    )
+    rows = []
+    for rho in mechanism.RHOS:
+        records = {}
+        pattern = f"mechanism_M4_rho{rho:.2f}_grid*.json"
+        for path in checkpoint_root.glob(pattern):
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            records[tuple(np.round(payload["y"], 12))] = payload
+        if len(records) != 996:
+            raise RuntimeError(
+                f"Expected 996 M4 checkpoints at rho={rho:.2f}, found {len(records)}."
+            )
+        comparable_pairs = 0
+        acceptability_violations = 0
+        objective_violations = 0
+        largest_violation = 0.0
+        items = list(records.items())
+        for lower_y, lower_payload in items:
+            for upper_y, upper_payload in items:
+                if lower_y == upper_y or not np.all(
+                    np.asarray(upper_y) >= np.asarray(lower_y) - 1e-10
+                ):
+                    continue
+                comparable_pairs += 1
+                if lower_payload.get("status") != "feasible":
+                    continue
+                if upper_payload.get("status") != "feasible":
+                    acceptability_violations += 1
+                    continue
+                violation = float(upper_payload["objective"]) - float(lower_payload["objective"])
+                if violation > 1e-7:
+                    objective_violations += 1
+                    largest_violation = max(largest_violation, violation)
+        rows.append(
+            {
+                "rho": float(rho),
+                "comparable_pair_count": comparable_pairs,
+                "acceptability_nesting_violations": acceptability_violations,
+                "objective_monotonicity_violations": objective_violations,
+                "largest_objective_violation": largest_violation,
+            }
+        )
+    return rows
 
 
 def experiment_runtime_and_checkpoints(output_dir: Path):
@@ -229,7 +332,7 @@ def experiment_runtime_and_checkpoints(output_dir: Path):
         ("mechanism_full_grid", "mechanism_separated_capability_marginal_v1"),
         (
             "selected_sensitivity_full_grid",
-            "selected_sensitivity_full_grid_v1",
+            "selected_sensitivity_separated_capability_marginal_v1",
         ),
         ("stage2_joint_full_grid", "operational_stage2_joint_separated_capability_marginal_v1"),
     )
@@ -355,14 +458,29 @@ def main(output_dir: Path) -> None:
         json.dumps(grid_manifest, indent=2, sort_keys=True),
     )
 
-    probability_rows, max_sum_error, minimum_probability = (
-        probability_audit(base, model_specs, table)
-    )
-    replay_rows, max_primal_dual, max_replay = numerical_replay(
+    (
+        probability_rows,
+        marginal_rows,
+        max_sum_error,
+        minimum_probability,
+        max_marginal_error,
+    ) = probability_audit(base, model_specs, table)
+    replay_rows, worst_case_rows, max_primal_dual, max_replay = numerical_replay(
         output_dir,
         args,
         table,
     )
+    monotonicity_rows = monotonicity_audit(output_dir)
+    if max_marginal_error > 1e-10:
+        raise RuntimeError(
+            f"Nominal marginal preservation failed with maximum error {max_marginal_error:.6g}."
+        )
+    if any(
+        row["acceptability_nesting_violations"]
+        or row["objective_monotonicity_violations"]
+        for row in monotonicity_rows
+    ):
+        raise RuntimeError("M4 exhaustive monotonicity audit failed.")
     runtime_rows = experiment_runtime_and_checkpoints(output_dir)
     tests = run_tests(repo)
     if tests["return_code"] != 0:
@@ -374,8 +492,20 @@ def main(output_dir: Path) -> None:
         root / "table_probability_audit.csv",
         index=False,
     )
+    pd.DataFrame(marginal_rows).to_csv(
+        root / "table_nominal_marginal_audit.csv",
+        index=False,
+    )
     pd.DataFrame(replay_rows).to_csv(
         root / "table_numerical_replay_audit.csv",
+        index=False,
+    )
+    pd.DataFrame(worst_case_rows).to_csv(
+        root / "table_worst_case_marginal_audit.csv",
+        index=False,
+    )
+    pd.DataFrame(monotonicity_rows).to_csv(
+        root / "table_monotonicity_audit.csv",
         index=False,
     )
     pd.DataFrame(runtime_rows).to_csv(
@@ -432,7 +562,9 @@ def main(output_dir: Path) -> None:
         "probability_audit": {
             "maximum_probability_sum_error": max_sum_error,
             "minimum_probability": minimum_probability,
+            "maximum_nominal_marginal_error": max_marginal_error,
         },
+        "monotonicity_audit": monotonicity_rows,
         "numerical_audit": {
             "maximum_primal_dual_discrepancy": max_primal_dual,
             "maximum_replay_discrepancy": max_replay,

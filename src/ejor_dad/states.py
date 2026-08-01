@@ -38,7 +38,6 @@ def nominal_probabilities(links: Sequence[Link], states: Sequence[State], y: Seq
     y_vec=np.asarray(y,dtype=float)
     if len(y_vec)!=len(links):raise ValueError(f'Expected {len(links)} retrofit decisions, received {len(y_vec)}.')
     base_phi=np.array([link.failure_probability(float(level)) for link,level in zip(links,y_vec)],dtype=float)
-    floors=np.array([link.residual_failure_probability for link in links],dtype=float)
     link_index={link.id:i for i,link in enumerate(links)}
     regime_lookup={regime.id:regime for regime in hazard_regimes or []}
     probabilities=np.zeros(len(states));tail_index=None;non_tail_total=0.0
@@ -56,8 +55,8 @@ def nominal_probabilities(links: Sequence[Link], states: Sequence[State], y: Seq
             weighted_means=np.array([sum(weight*candidate.link_failure_multipliers.get(link.id,1.0) for weight,candidate in zip(regime_weights,hazard_regimes)) for link in links],dtype=float)
             if np.any(weighted_means <= 0.0):raise ValueError('Hazard-regime multipliers must have positive weighted means.')
             multipliers=raw_multipliers/weighted_means
-            phi=floors+multipliers*(base_phi-floors)
-            if np.any(phi < floors-1e-10) or np.any(phi > 1.0+1e-10):raise ValueError('Calibrated regime failure probabilities leave [floor,1].')
+            phi=multipliers*base_phi
+            if np.any(phi < -1e-10) or np.any(phi > 1.0+1e-10):raise ValueError('Calibrated regime failure probabilities must lie in [0,1].')
             phi=np.asarray(phi,dtype=float);regime_weight=regime.probability
         failed=set(state.failed_links);probability=regime_weight
         for link in links:

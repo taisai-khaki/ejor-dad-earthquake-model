@@ -19,7 +19,7 @@ import noto_practical_resilience_experiment as practical
 from ejor_dad.checkpoint import CheckpointStore, atomic_write_text
 from ejor_dad.fixed_y import evaluate_fixed_y
 
-VERSION = "noto-stage2-joint-full-grid-v2-supplied-spec"
+VERSION = "noto-stage2-joint-separated-capability-marginal-v1"
 RHOS = (0.0, 0.075, 0.10, 0.125, 0.25)
 RELATIVE_TOLERANCES = (0.001, 0.005)
 ABSOLUTE_TOLERANCE = 1e-5

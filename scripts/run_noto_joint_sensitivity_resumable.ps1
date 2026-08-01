@@ -8,7 +8,7 @@ param(
 $ErrorActionPreference = "Stop"
 $Repo = Split-Path -Parent $PSScriptRoot
 $BaseOutputDir = Join-Path $Repo ("data_work\noto\" + $OutputName)
-$SensitivityDir = Join-Path $BaseOutputDir "joint_sensitivity_v1"
+$SensitivityDir = Join-Path $BaseOutputDir "joint_sensitivity_separated_capability_marginal_v1"
 $LogDir = Join-Path $SensitivityDir "logs"
 $RunnerStatus = Join-Path $SensitivityDir "runner_status.json"
 $RunLog = Join-Path $LogDir ("joint_sensitivity_runner_{0:yyyyMMdd_HHmmss}.log" -f (Get-Date))

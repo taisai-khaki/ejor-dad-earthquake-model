@@ -148,7 +148,7 @@ def main(
     repo = Path(__file__).resolve().parent.parent
     steps = (
         (
-            "selected_sensitivity_full_grid",
+            "selected_sensitivity_separated_capability_marginal",
             repo / "examples" / "noto_selected_sensitivity_full_grid.py",
         ),
         (

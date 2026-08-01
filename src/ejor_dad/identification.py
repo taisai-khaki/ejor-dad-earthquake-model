@@ -106,4 +106,4 @@ def _solve_range_master(instance, cuts, threshold, center_index, maximize, y):
     )
     if not solution.success:
         raise RuntimeError(f"Capacity-range master failed: {solution.message}")
-    return solution.x[:num_zones], solution.x[num_zones:]
+    return solution.x[:num_zones], solution.x[num_zones:h_start]
