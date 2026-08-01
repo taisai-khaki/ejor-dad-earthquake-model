@@ -69,7 +69,7 @@ function Copy-ReleaseTree {
     @{ Source = 'practitioner_layer_design.json'; Destination = 'frozen_inputs\practitioner_layer_design.json' },
     @{ Source = 'runtime_summary.json'; Destination = 'frozen_inputs\runtime_summary.json' },
     @{ Source = 'certificate_runtime_summary.json'; Destination = 'frozen_inputs\certificate_runtime_summary.json' },
-    @{ Source = 'operational_stage2_joint_separated_capability_marginal_v1\run_manifest.json'; Destination = 'operational_stage2\run_manifest.json' },
+    @{ Source = 'operational_stage2_joint_separated_capability_marginal_v2\run_manifest.json'; Destination = 'operational_stage2\run_manifest.json' },
     @{ Source = 'joint_response_separated_capability_marginal_v1\run_manifest.json'; Destination = 'sensitivity\graded_response\run_manifest.json' },
     @{ Source = 'joint_response_separated_capability_marginal_v1\status.json'; Destination = 'sensitivity\graded_response\status.json' },
     @{ Source = 'joint_response_separated_capability_marginal_v1\runtime_summary.json'; Destination = 'sensitivity\graded_response\runtime_summary.json' }
@@ -79,9 +79,9 @@ function Copy-ReleaseTree {
 
 Copy-ReleaseTree -RelativeSource 'tables' -RelativeDestination 'base_tables' -Extensions @('.csv', '.tex')
 Copy-ReleaseTree -RelativeSource 'figures\maps' -RelativeDestination 'figures\maps' -Extensions @('.png', '.pdf', '.svg', '.md', '.json')
-Copy-ReleaseTree -RelativeSource 'correlated_facility_separated_capability_marginal_v1\tables' -RelativeDestination 'correlated_facility\tables' -Extensions @('.csv', '.tex')
-Copy-ReleaseTree -RelativeSource 'correlated_facility_separated_capability_marginal_v1\configs' -RelativeDestination 'correlated_facility\configs' -Extensions @('.json')
-Copy-ReleaseTree -RelativeSource 'operational_stage2_joint_separated_capability_marginal_v1\tables' -RelativeDestination 'operational_stage2\tables' -Extensions @('.csv', '.tex')
+Copy-ReleaseTree -RelativeSource 'correlated_facility_separated_capability_marginal_v2\tables' -RelativeDestination 'correlated_facility\tables' -Extensions @('.csv', '.tex')
+Copy-ReleaseTree -RelativeSource 'correlated_facility_separated_capability_marginal_v2\configs' -RelativeDestination 'correlated_facility\configs' -Extensions @('.json')
+Copy-ReleaseTree -RelativeSource 'operational_stage2_joint_separated_capability_marginal_v2\tables' -RelativeDestination 'operational_stage2\tables' -Extensions @('.csv', '.tex')
 Copy-ReleaseTree -RelativeSource 'joint_sensitivity_separated_capability_marginal_v1\tables' -RelativeDestination 'sensitivity\density_cap\tables' -Extensions @('.csv', '.tex')
 Copy-ReleaseTree -RelativeSource 'joint_sensitivity_separated_capability_marginal_v1\selected_diagnostics' -RelativeDestination 'sensitivity\density_cap\selected_diagnostics' -Extensions @('.json', '.csv')
 Copy-ReleaseTree -RelativeSource 'joint_response_separated_capability_marginal_v1\tables' -RelativeDestination 'sensitivity\graded_response\tables' -Extensions @('.csv', '.tex')

@@ -23,7 +23,7 @@ from ejor_dad.fixed_y import evaluate_fixed_y
 RHOS = (0.0, 0.10, 0.25)
 GRID = (0.0, 0.25, 0.50, 0.75, 1.0)
 ORDER = ("M4", "M2", "M0", "M1", "M3")
-VERSION = "noto-mechanism-separated-capability-marginal-v1"
+VERSION = "noto-mechanism-separated-capability-marginal-v2"
 _WORKER_INSTANCE = None
 
 
@@ -258,7 +258,7 @@ def main(output_dir, workers):
     design = json.loads((output_dir / "run_design.json").read_text())
     args = validation.args_from(design, output_dir)
     base, _ = practical.build_instance(0.0, args)
-    root = output_dir / "mechanism_separated_capability_marginal_v1"
+    root = output_dir / "mechanism_separated_capability_marginal_v2"
     (root / "tables").mkdir(parents=True, exist_ok=True)
     cache = CheckpointStore(root / "checkpoints")
     atomic_write_text(

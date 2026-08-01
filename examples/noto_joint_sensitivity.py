@@ -326,7 +326,7 @@ def selected_diagnostic(
 
 
 def frozen_rows(base_output_dir: Path, rhos: Sequence[float]) -> list[dict[str, Any]]:
-    path = base_output_dir / "correlated_facility_separated_capability_marginal_v1" / "tables" / "table_noto_correlated_facility.csv"
+    path = base_output_dir / "correlated_facility_separated_capability_marginal_v2" / "tables" / "table_noto_correlated_facility.csv"
     frame = pd.read_csv(path)
     rows = []
     for rho in rhos:

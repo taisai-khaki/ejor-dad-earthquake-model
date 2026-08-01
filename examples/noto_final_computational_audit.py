@@ -16,6 +16,7 @@ import scipy
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import noto_correlated_validation_postprocess as validation
+import noto_correlated_facility_dense_full_grid as dense
 import noto_mechanism_full_grid as mechanism
 import noto_practical_resilience_experiment as practical
 from ejor_dad.checkpoint import atomic_write_text
@@ -74,7 +75,7 @@ def repository_revision(repo: Path) -> dict:
 def selected_rows(output_dir: Path) -> pd.DataFrame:
     path = (
         output_dir
-        / "mechanism_separated_capability_marginal_v1"
+        / "mechanism_separated_capability_marginal_v2"
         / "tables"
         / "table_noto_mechanism_ablation_full_grid.csv"
     )
@@ -280,13 +281,14 @@ def numerical_replay(output_dir, args, table):
 def monotonicity_audit(output_dir: Path) -> list[dict[str, float | int]]:
     checkpoint_root = (
         output_dir
-        / "mechanism_separated_capability_marginal_v1"
+        / "correlated_facility_separated_capability_marginal_v2"
         / "checkpoints"
     )
     rows = []
-    for rho in mechanism.RHOS:
+    monotonicity_tolerance = 1e-8
+    for rho in dense.RHOS:
         records = {}
-        pattern = f"mechanism_M4_rho{rho:.2f}_grid*.json"
+        pattern = f"{dense.VERSION}_rho{rho:.2f}_grid*.json"
         for path in checkpoint_root.glob(pattern):
             payload = json.loads(path.read_text(encoding="utf-8"))
             records[tuple(np.round(payload["y"], 12))] = payload
@@ -311,8 +313,11 @@ def monotonicity_audit(output_dir: Path) -> list[dict[str, float | int]]:
                 if upper_payload.get("status") != "feasible":
                     acceptability_violations += 1
                     continue
-                violation = float(upper_payload["objective"]) - float(lower_payload["objective"])
-                if violation > 1e-7:
+                violation = (
+                    float(upper_payload["lower_bound"])
+                    - float(lower_payload["objective"])
+                )
+                if violation > monotonicity_tolerance:
                     objective_violations += 1
                     largest_violation = max(largest_violation, violation)
         rows.append(
@@ -322,6 +327,7 @@ def monotonicity_audit(output_dir: Path) -> list[dict[str, float | int]]:
                 "acceptability_nesting_violations": acceptability_violations,
                 "objective_monotonicity_violations": objective_violations,
                 "largest_objective_violation": largest_violation,
+                "monotonicity_tolerance": monotonicity_tolerance,
             }
         )
     return rows
@@ -329,12 +335,12 @@ def monotonicity_audit(output_dir: Path) -> list[dict[str, float | int]]:
 
 def experiment_runtime_and_checkpoints(output_dir: Path):
     definitions = (
-        ("mechanism_full_grid", "mechanism_separated_capability_marginal_v1"),
+        ("mechanism_full_grid", "mechanism_separated_capability_marginal_v2"),
         (
             "selected_sensitivity_full_grid",
             "selected_sensitivity_separated_capability_marginal_v1",
         ),
-        ("stage2_joint_full_grid", "operational_stage2_joint_separated_capability_marginal_v1"),
+        ("stage2_joint_full_grid", "operational_stage2_joint_separated_capability_marginal_v2"),
     )
     rows = []
     for name, directory in definitions:
