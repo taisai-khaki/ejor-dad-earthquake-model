@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 import argparse,json,sys
 from concurrent.futures import ProcessPoolExecutor,as_completed
 from dataclasses import replace
@@ -12,8 +12,32 @@ from ejor_dad import HazardRegime,generate_regime_failure_states
 from ejor_dad.fixed_y import evaluate_fixed_y
 A=np.array([.25,1,1,0,0]);B=np.array([0,1,1,0,.25]);RHOS=[0,.1,.25]
 def base_regimes(base):return corr.regimes(base)
-def normalize_weights(regimes,factor):
- raw=[regimes[0].probability]+[r.probability*factor for r in regimes[1:]];total=sum(raw);return [HazardRegime(r.id,w/total,r.failed_centers,r.link_failure_multipliers) for r,w in zip(regimes,raw)]
+def normalize_weights(regimes, factor, links=None):
+ raw_weights = [regimes[0].probability] + [regime.probability * factor for regime in regimes[1:]]
+ total = sum(raw_weights)
+ weights = np.asarray(raw_weights, dtype=float) / total
+ if links is None:
+  return [HazardRegime(regime.id, weight, regime.failed_centers, regime.link_failure_multipliers) for regime, weight in zip(regimes, weights)]
+ adjusted_by_link = {}
+ for link in links:
+  raw_multipliers = np.asarray([regime.link_failure_multipliers.get(link.id, 1.0) for regime in regimes], dtype=float)
+  maximum_base_probability = max(link.failure_probability(0.0), 1e-12)
+  maximum_normalized_multiplier = 1.0 / maximum_base_probability
+  def maximum_ratio(scale):
+   adjusted = 1.0 + scale * (raw_multipliers - 1.0)
+   return float(np.max(adjusted / (weights @ adjusted)))
+  scale = 1.0
+  if maximum_ratio(scale) > maximum_normalized_multiplier:
+   lower, upper = 0.0, 1.0
+   for _ in range(60):
+    midpoint = 0.5 * (lower + upper)
+    if maximum_ratio(midpoint) <= maximum_normalized_multiplier:
+     lower = midpoint
+    else:
+     upper = midpoint
+   scale = lower * (1.0 - 1e-10)
+  adjusted_by_link[link.id] = 1.0 + scale * (raw_multipliers - 1.0)
+ return [HazardRegime(regime.id, weight, regime.failed_centers, {link.id: float(adjusted_by_link[link.id][index]) for link in links}) for index, (regime, weight) in enumerate(zip(regimes, weights))]
 def scale_intensity(regimes,factor):return [HazardRegime(r.id,r.probability,r.failed_centers,{k:max(0,1+factor*(v-1)) for k,v in r.link_failure_multipliers.items()}) for r in regimes]
 def mild_facilities(regimes):
  patterns={'normal':(),'north':('center_17205',),'central':('center_17461',),'widespread':('center_17202',)};return [HazardRegime(r.id,r.probability,patterns[r.id],r.link_failure_multipliers) for r in regimes]
@@ -32,7 +56,7 @@ def settings():
  return unique
 def construct(rho,args,params):
  local=type(args)(**(vars(args)|{'residual_failure_ratio':params.get('residual',args.residual_failure_ratio)}));base,_=practical.build_instance(rho,local);R=base_regimes(base)
- if 'weights' in params:R=normalize_weights(R,params['weights'])
+ if 'weights' in params:R=normalize_weights(R,params['weights'],base.links)
  if 'intensity' in params:R=scale_intensity(R,params['intensity'])
  if params.get('facility')=='mild':R=mild_facilities(R)
  states=generate_regime_failure_states(base.links,R)
