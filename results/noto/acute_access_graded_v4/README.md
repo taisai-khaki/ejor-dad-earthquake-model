@@ -11,7 +11,7 @@ It is generated from the local run archive by
 - `base_tables/`: paper-ready tables and LaTeX exports for the frozen final
   joint model.
 - `correlated_facility/`: exhaustive correlated-facility grid tables and
-  configuration snapshots.
+  configuration snapshots, including the completed nine-radius continuous certificate.
 - `operational_stage2/`: epsilon-constrained max-min service results.
 - `sensitivity/density_cap/`: completed kappa-bar sensitivity tables.
 - `sensitivity/graded_response/`: completed lower/base/higher response-knot
@@ -31,3 +31,4 @@ graded-response release.
 
 Raw source layers, solver checkpoints, and execution logs are not included.
 See `docs/PUBLIC_RELEASE.md` for the data-access policy and rebuild steps.
+
