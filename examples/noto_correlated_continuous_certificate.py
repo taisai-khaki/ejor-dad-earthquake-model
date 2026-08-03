@@ -196,15 +196,18 @@ def main(out, workers):
         if len(feasible_cells) != len(values):
             missing = sorted(cell.index for cell in feasible_cells if cell.index not in values)
             raise RuntimeError(f"Certificate has missing feasible cell values: {missing[:10]}")
-        upper_bound = float(summary.loc[np.isclose(summary.rho, rho), "objective"].iloc[0])
+        stage1_objective = float(summary.loc[np.isclose(summary.rho, rho), "objective"].iloc[0])
         certificate = continuous_grid_certificate(
             feasible_cells,
             [values[cell.index] for cell in feasible_cells],
-            upper_bound,
+            stage1_objective,
         )
+        if not np.isclose(certificate.grid_upper_bound, stage1_objective, rtol=0.0, atol=1e-10):
+            raise RuntimeError(f"Certificate grid upper bound disagrees with Stage-1 objective at rho={rho:.3f}.")
         rows.append(
             {
                 "rho": rho,
+                "stage1_objective": stage1_objective,
                 "continuous_lower_bound": certificate.continuous_lower_bound,
                 "grid_upper_bound": certificate.grid_upper_bound,
                 "absolute_gap": certificate.absolute_gap,
