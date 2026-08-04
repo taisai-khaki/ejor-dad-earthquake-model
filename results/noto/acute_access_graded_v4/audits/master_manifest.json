@@ -1,0 +1,215 @@
+{
+  "audit_version": "noto-final-computational-audit-v1-supplied-spec",
+  "generated_epoch": 1785774425.2221587,
+  "model_version": "noto-mechanism-separated-capability-marginal-v2",
+  "code_revision": {
+    "commit": "e3f2bcee71104c9b58dbf0695a3de4f186d7bb2f",
+    "status": "available"
+  },
+  "source_bundle_sha256": "73c27b6f7752c3643a33d1c5bde4b90807ea72e0156a21a153eb48904c60ed3d",
+  "parameter_file": "data_work\\noto\\acute_access_graded_v4\\run_design.json",
+  "parameter_file_sha256": "e34cbbc1747a5a3f10a6f016772b32440d8c78b6a8c3f957ee7208613b13908e",
+  "state_manifest_sha256": "02145ad15e1efd2fa9a50d4b9826e6df87dd816fa92a700c5627f46de86d549c",
+  "grid_manifest_sha256": "f7f781c5ef18ff1ad64407106e2814ae07b2c1e7ead26d39d74caa84c8f5bb23",
+  "regime_definition": [
+    {
+      "id": "normal",
+      "probability": 0.7,
+      "failed_centers": [],
+      "link_failure_multipliers": {
+        "corr_kanazawa_nanao": 0.75,
+        "corr_nanao_anamizu": 0.75,
+        "corr_anamizu_wajima": 0.75,
+        "corr_anamizu_noto": 0.75,
+        "corr_anamizu_suzu": 0.75
+      }
+    },
+    {
+      "id": "north",
+      "probability": 0.15,
+      "failed_centers": [
+        "center_17204",
+        "center_17205"
+      ],
+      "link_failure_multipliers": {
+        "corr_kanazawa_nanao": 0.9,
+        "corr_nanao_anamizu": 1.2,
+        "corr_anamizu_wajima": 1.7,
+        "corr_anamizu_noto": 1.4,
+        "corr_anamizu_suzu": 1.7
+      }
+    },
+    {
+      "id": "central",
+      "probability": 0.1,
+      "failed_centers": [
+        "center_17461",
+        "center_17463"
+      ],
+      "link_failure_multipliers": {
+        "corr_kanazawa_nanao": 1.0,
+        "corr_nanao_anamizu": 1.5,
+        "corr_anamizu_wajima": 1.5,
+        "corr_anamizu_noto": 1.5,
+        "corr_anamizu_suzu": 1.4
+      }
+    },
+    {
+      "id": "widespread",
+      "probability": 0.05,
+      "failed_centers": [
+        "center_17202",
+        "center_17204",
+        "center_17205"
+      ],
+      "link_failure_multipliers": {
+        "corr_kanazawa_nanao": 1.8,
+        "corr_nanao_anamizu": 1.8,
+        "corr_anamizu_wajima": 1.8,
+        "corr_anamizu_noto": 1.8,
+        "corr_anamizu_suzu": 1.8
+      }
+    }
+  ],
+  "design_basis_definition": "normal, north, and central regimes with at most one failed road",
+  "design_basis_state_count": 18,
+  "road_grid_definition": "{0,.25,.50,.75,1}^5 intersect retrofit budget",
+  "road_grid_candidate_count": 996,
+  "solver": {
+    "linear_programming_method": "scipy.optimize.linprog(method='highs')",
+    "scipy_version": "1.17.1",
+    "numpy_version": "2.4.3",
+    "python_version": "3.14.3",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "tolerances": {
+    "fixed_y_cut_gap": 1e-05,
+    "fixed_y_max_iterations": 300,
+    "stage2_service_resolution": 0.0001,
+    "lp_primal_dual_tolerances": "SciPy/HiGHS defaults",
+    "near_optimal_relative_thresholds": [
+      0.0001,
+      0.001,
+      0.005
+    ]
+  },
+  "probability_audit": {
+    "maximum_probability_sum_error": 0.0,
+    "minimum_probability": 3.2316218953546785e-07,
+    "maximum_nominal_marginal_error": 1.6653345369377348e-16
+  },
+  "monotonicity_audit": [
+    {
+      "rho": 0.0,
+      "comparable_pair_count": 37807,
+      "acceptability_nesting_violations": 0,
+      "objective_monotonicity_violations": 0,
+      "largest_objective_violation": 0.0,
+      "monotonicity_tolerance": 1e-08
+    },
+    {
+      "rho": 0.025,
+      "comparable_pair_count": 37807,
+      "acceptability_nesting_violations": 0,
+      "objective_monotonicity_violations": 0,
+      "largest_objective_violation": 0.0,
+      "monotonicity_tolerance": 1e-08
+    },
+    {
+      "rho": 0.05,
+      "comparable_pair_count": 37807,
+      "acceptability_nesting_violations": 0,
+      "objective_monotonicity_violations": 0,
+      "largest_objective_violation": 0.0,
+      "monotonicity_tolerance": 1e-08
+    },
+    {
+      "rho": 0.075,
+      "comparable_pair_count": 37807,
+      "acceptability_nesting_violations": 0,
+      "objective_monotonicity_violations": 0,
+      "largest_objective_violation": 0.0,
+      "monotonicity_tolerance": 1e-08
+    },
+    {
+      "rho": 0.1,
+      "comparable_pair_count": 37807,
+      "acceptability_nesting_violations": 0,
+      "objective_monotonicity_violations": 0,
+      "largest_objective_violation": 0.0,
+      "monotonicity_tolerance": 1e-08
+    },
+    {
+      "rho": 0.125,
+      "comparable_pair_count": 37807,
+      "acceptability_nesting_violations": 0,
+      "objective_monotonicity_violations": 0,
+      "largest_objective_violation": 0.0,
+      "monotonicity_tolerance": 1e-08
+    },
+    {
+      "rho": 0.15,
+      "comparable_pair_count": 37807,
+      "acceptability_nesting_violations": 0,
+      "objective_monotonicity_violations": 0,
+      "largest_objective_violation": 0.0,
+      "monotonicity_tolerance": 1e-08
+    },
+    {
+      "rho": 0.2,
+      "comparable_pair_count": 37807,
+      "acceptability_nesting_violations": 0,
+      "objective_monotonicity_violations": 0,
+      "largest_objective_violation": 0.0,
+      "monotonicity_tolerance": 1e-08
+    },
+    {
+      "rho": 0.25,
+      "comparable_pair_count": 37807,
+      "acceptability_nesting_violations": 0,
+      "objective_monotonicity_violations": 0,
+      "largest_objective_violation": 0.0,
+      "monotonicity_tolerance": 1e-08
+    }
+  ],
+  "numerical_audit": {
+    "maximum_primal_dual_discrepancy": 9.094947017729282e-13,
+    "maximum_replay_discrepancy": 2.2737367544323206e-13
+  },
+  "experiment_runtime_and_checkpoints": [
+    {
+      "experiment": "mechanism_full_grid",
+      "started_epoch": 1785708916.242888,
+      "completed_epoch": 1785708958.5478437,
+      "wall_runtime_seconds": 42.30495572090149,
+      "checkpoint_count": 14940,
+      "status": "completed"
+    },
+    {
+      "experiment": "selected_sensitivity_full_grid",
+      "started_epoch": 1785709037.183805,
+      "completed_epoch": 1785713718.9928994,
+      "wall_runtime_seconds": 4681.809094429016,
+      "checkpoint_count": 6972,
+      "status": "completed"
+    },
+    {
+      "experiment": "stage2_joint_full_grid",
+      "started_epoch": 1785713725.7312474,
+      "completed_epoch": 1785715514.910037,
+      "wall_runtime_seconds": 1789.178789615631,
+      "checkpoint_count": 31,
+      "status": "completed"
+    }
+  ],
+  "final_test_suite": {
+    "return_code": 0,
+    "passed": 49,
+    "runtime_seconds": 528.5293346999679,
+    "output": ".................................................                        [100%]\n49 passed in 521.68s (0:08:41)"
+  },
+  "priority_gate": {
+    "status": "not_run",
+    "reason": "The supplied computation requirements do not specify the cascade allocation rule, sector floors and ceilings, baseline envelope, or schedule tie tolerance."
+  }
+}

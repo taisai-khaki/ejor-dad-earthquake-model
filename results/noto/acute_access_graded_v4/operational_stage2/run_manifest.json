@@ -1,5 +1,5 @@
 {
-  "experiment_version": "noto-stage2-joint-full-grid-v2-supplied-spec",
+  "experiment_version": "noto-stage2-joint-separated-capability-marginal-v2",
   "rhos": [
     0.0,
     0.075,
@@ -16,8 +16,8 @@
   "maximum_service_floor": 1.0,
   "service_resolution": 0.0001,
   "expected_bisection_steps": 14,
-  "stage1_source": "correlated_facility_full_v1 full 996-policy M4 grid",
+  "stage1_source": "correlated_facility_separated_capability_marginal_v2 full 996-policy M4 grid",
   "checkpointing": "one atomic JSON per radius-tolerance-admissible policy",
-  "workers": 8,
-  "started": 1785213953.0166852
+  "workers": 4,
+  "started": 1785713725.7312474
 }
