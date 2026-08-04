@@ -83,7 +83,6 @@ Copy-ReleaseTree -RelativeSource 'figures\maps' -RelativeDestination 'figures\ma
 Copy-ReleaseTree -RelativeSource 'correlated_facility_separated_capability_marginal_v2\tables' -RelativeDestination 'correlated_facility\tables' -Extensions @('.csv', '.tex')
 Copy-ReleaseTree -RelativeSource 'operational_stage2_joint_separated_capability_marginal_v2\tables' -RelativeDestination 'operational_stage2\tables' -Extensions @('.csv', '.tex')
 Copy-ReleaseTree -RelativeSource 'joint_sensitivity_separated_capability_marginal_v1\tables' -RelativeDestination 'sensitivity\density_cap\tables' -Extensions @('.csv', '.tex')
-Copy-ReleaseTree -RelativeSource 'joint_sensitivity_separated_capability_marginal_v1\selected_diagnostics' -RelativeDestination 'sensitivity\density_cap\selected_diagnostics' -Extensions @('.json', '.csv')
 
 $checksumFile = Join-Path $outputPath 'SHA256SUMS.txt'
 $hashLines = Get-ChildItem -LiteralPath $outputPath -File -Recurse |
@@ -165,13 +164,11 @@ Set-Content -LiteralPath $checksumFile -Value $hashLines -Encoding utf8
 
 $gradedDirectory = Join-Path $outputPath "sensitivity/graded_response"
 New-Item -ItemType Directory -Force -Path (Join-Path $gradedDirectory "tables") | Out-Null
-New-Item -ItemType Directory -Force -Path (Join-Path $gradedDirectory "selected_diagnostics") | Out-Null
 Copy-Item -LiteralPath (Join-Path $sourcePath "joint_sensitivity_separated_capability_marginal_v1/run_manifest.json") -Destination (Join-Path $gradedDirectory "run_manifest.json") -Force
 Copy-Item -LiteralPath (Join-Path $sourcePath "joint_sensitivity_separated_capability_marginal_v1/status.json") -Destination (Join-Path $gradedDirectory "status.json") -Force
 Copy-Item -LiteralPath (Join-Path $sourcePath "joint_sensitivity_separated_capability_marginal_v1/runtime_summary.json") -Destination (Join-Path $gradedDirectory "runtime_summary.json") -Force
 Copy-Item -LiteralPath (Join-Path $sourcePath "joint_sensitivity_separated_capability_marginal_v1/tables/table_noto_graded_response_sensitivity.csv") -Destination (Join-Path $gradedDirectory "tables/table_noto_graded_response_sensitivity.csv") -Force
 Copy-Item -LiteralPath (Join-Path $sourcePath "joint_sensitivity_separated_capability_marginal_v1/tables/table_noto_joint_sensitivity_full_grid.csv") -Destination (Join-Path $gradedDirectory "tables/table_noto_joint_sensitivity_full_grid.csv") -Force
-Copy-Item -Path (Join-Path $sourcePath "joint_sensitivity_separated_capability_marginal_v1/selected_diagnostics/*") -Destination (Join-Path $gradedDirectory "selected_diagnostics") -Force
 
 $checksumFile = Join-Path $outputPath "SHA256SUMS.txt"
 $hashLines = Get-ChildItem -LiteralPath $outputPath -File -Recurse |
@@ -186,7 +183,6 @@ Set-Content -LiteralPath $checksumFile -Value $hashLines -Encoding utf8
 
 
 Copy-ReleaseTree -RelativeSource "selected_sensitivity_separated_capability_marginal_v1/tables" -RelativeDestination "sensitivity/selected/tables" -Extensions @(".csv", ".tex")
-Copy-ReleaseTree -RelativeSource "selected_sensitivity_separated_capability_marginal_v1/selected_diagnostics" -RelativeDestination "sensitivity/selected/selected_diagnostics" -Extensions @(".json", ".csv")
 Copy-ReleaseFile -RelativeSource "selected_sensitivity_separated_capability_marginal_v1/run_manifest.json" -RelativeDestination "sensitivity/selected/run_manifest.json"
 Copy-ReleaseFile -RelativeSource "selected_sensitivity_separated_capability_marginal_v1/status.json" -RelativeDestination "sensitivity/selected/status.json"
 
