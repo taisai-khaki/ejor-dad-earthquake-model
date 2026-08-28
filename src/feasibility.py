@@ -146,16 +146,7 @@ def validate_solution(instance: InstanceData, solution: SolutionData, *, tol: fl
     solution.truck_routes = truck_routes
     solution.drone_routes = drone_routes
 
-    coords = _node_positions(instance)
-    # Build full distance matrices
-    dist_manh = np.zeros((len(nodes), len(nodes)))
-    dist_euc = np.zeros((len(nodes), len(nodes)))
-    for i in nodes:
-        for j in nodes:
-            if i == j:
-                continue
-            dist_manh[i, j] = manhattan_distance(coords[i], coords[j])
-            dist_euc[i, j] = euclidean_distance(coords[i], coords[j])
+    dist_manh, dist_euc = instance.distance_matrices()
 
     # Truck and drone timing consistency
     for t, route in truck_routes.items():

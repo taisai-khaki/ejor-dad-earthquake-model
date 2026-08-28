@@ -43,6 +43,12 @@ experiment:
   study_d_optimal_points: 72
   study_d_optimal_restarts: 10
   study_reps_per_scenario: 10
+  nils_r_reconstruction_max_attempts: 1
+  nils_r_reconstruction_stagnation: 8
+  nils_r_reconstruction_size_cap: 3
+  nils_r_epsilon_z: 1.0e-6
+  nils_r_epsilon_h: 1.0e-6
+  nils_r_epsilon_tail: 1.0e-6
   study_feasibility_policy: feasible_only
 
   study_exclude_conditions:

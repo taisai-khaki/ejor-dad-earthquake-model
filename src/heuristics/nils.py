@@ -1014,12 +1014,22 @@ def run_nils(
     stagnation_perturb_from_best: bool = False,
     stagnation_perturb_attempts: int = 1,
     metropolis_temperature_scale: float = 1.0,
+    risk_rollback: bool = False,
+    risk_rollback_reconstruction_max: int = 1,
+    risk_rollback_stagnation: int | None = None,
+    risk_rollback_size_cap: int = 3,
+    risk_rollback_epsilon_z: float = 1e-6,
+    risk_rollback_epsilon_h: float = 1e-6,
+    risk_rollback_epsilon_tail: float = 1e-6,
+    risk_rollback_logs: List[Dict[str, object]] | None = None,
+    risk_rollback_move_logs: List[Dict[str, object]] | None = None,
 ) -> SolutionData:
     """Run the NILS routine.
 
     If `drone_to_truck` is provided, the algorithm uses fixed-pair neighborhoods where
     each drone can only launch and recover on its assigned truck.
-    If `no_unpairing_mode` is True, cross-truck recovery is disabled and a drone may
+    If 
+o_unpairing_mode` is True, cross-truck recovery is disabled and a drone may
     only recover at the depot or on the launch truck route.
     """
     rng = np.random.default_rng(seed)
@@ -1029,6 +1039,12 @@ def run_nils(
     battery_slack_ratio = float(max(0.0, battery_slack_ratio))
     stagnation_perturb_attempts = max(1, int(stagnation_perturb_attempts))
     metropolis_temperature_scale = max(1e-6, float(metropolis_temperature_scale))
+    risk_rollback_reconstruction_max = max(0, int(risk_rollback_reconstruction_max))
+    risk_rollback_stagnation = max(1, int(max_no_improve if risk_rollback_stagnation is None else risk_rollback_stagnation))
+    risk_logs = risk_rollback_logs if risk_rollback_logs is not None else []
+    risk_move_logs = risk_rollback_move_logs if risk_rollback_move_logs is not None else []
+    risk_rollback_attempts = 0
+    risk_admission_guard = False
 
     current = build_initial_solution(
         instance,
@@ -1109,6 +1125,10 @@ def run_nils(
         "repair_successes": 0,
         "repair_failures": 0,
     }
+    stats["risk_rollback_attempts"] = 0
+    stats["risk_rollback_candidates_evaluated"] = 0
+    stats["risk_rollback_accepted"] = 0
+    stats["risk_rollback_guard_rejections"] = 0
     tabu_moves: set[Tuple[int, int, int]] = set()
 
     if use_paired_initialization and pairing_map:
@@ -1130,6 +1150,139 @@ def run_nils(
     best = _empty_solution_clone(current)
     best.status = "nils_best"
     no_improve = 0
+
+    def _record_risk_move(before: SolutionData, after: SolutionData, iteration: int) -> None:
+        if not risk_rollback:
+            return
+        before_truck = before.served_by_truck()
+        before_drone = before.served_by_drone()
+        after_truck = after.served_by_truck()
+        after_drone = after.served_by_drone()
+        all_customers = (before_truck | before_drone | after_truck | after_drone)
+        changed_customers = sorted(
+            customer_id for customer_id in all_customers
+            if (customer_id in before_drone) != (customer_id in after_drone)
+        )
+        for customer_id in changed_customers:
+            from_mode = "drone" if customer_id in before_drone else "truck"
+            to_mode = "drone" if customer_id in after_drone else "truck"
+            if from_mode == to_mode:
+                continue
+            drone_id = next(
+                (drone for (drone, customer), value in after.u_drone.items() if customer == customer_id and value >= 0.5),
+                next((drone for (drone, customer), value in before.u_drone.items() if customer == customer_id and value >= 0.5), None),
+            )
+            route = list(after.drone_routes.get(drone_id, [])) if drone_id is not None else []
+            launch_node = route[0] if route else ""
+            recovery_node = route[-1] if route else ""
+            sync_truck_id = ""
+            recovery_type = ""
+            if drone_id is not None:
+                sync_truck_id = next(
+                    (truck for (node, drone, truck), value in after.z2.items()
+                     if drone == drone_id and value >= 0.5),
+                    next((truck for (node, drone, truck), value in after.z1.items()
+                          if drone == drone_id and value >= 0.5), ""),
+                )
+                recovery_type = "depot" if recovery_node == 0 else "truck"
+            from .nils_r import compute_priority_metrics
+
+            before_components = before.components or {}
+            after_components = after.components or {}
+            before_metrics = compute_priority_metrics(instance, before)
+            after_metrics = compute_priority_metrics(instance, after)
+            battery_slack = float("nan")
+            if drone_id is not None and route:
+                drone = instance.drones[int(drone_id) - 1]
+                energy = 0.0
+                for left, right in zip(route, route[1:]):
+                    duration = _travel_time(
+                        euclidean_distance(instance.coordinate_map()[left], instance.coordinate_map()[right]),
+                        drone.speed_kmph,
+                    )
+                    burn = drone.energy_per_min_when_loaded if right != 0 else drone.energy_per_min_when_empty
+                    energy += duration * burn
+                battery_value = after.battery_drone.get((drone_id, recovery_node))
+                battery_slack = float(battery_value) if battery_value is not None else float(drone.max_battery_wh - energy)
+            risk_move_logs.append(
+                {
+                    "iteration": int(iteration),
+                    "move_type": "truck_to_drone" if to_mode == "drone" else "drone_to_truck",
+                    "customer_id": int(customer_id),
+                    "action": "admit_drone" if to_mode == "drone" else "rollback_to_truck",
+                    "from_mode": from_mode,
+                    "to_mode": to_mode,
+                    "launch_node": launch_node,
+                    "recovery_node": recovery_node,
+                    "recovery_type": recovery_type,
+                    "sync_truck_id": sync_truck_id,
+                    "delta_Z": float(after.objective - before.objective),
+                    "delta_priority_tardiness_cost": float(
+                        after_components.get("tardiness_cost", 0.0) - before_components.get("tardiness_cost", 0.0)
+                    ),
+                    "delta_high_priority_tardiness": float(
+                        after_metrics["high_priority_tardiness"] - before_metrics["high_priority_tardiness"]
+                    ),
+                    "delta_max_high_priority_tardiness": float(
+                        after_metrics["max_high_priority_tardiness"] - before_metrics["max_high_priority_tardiness"]
+                    ),
+                    "delta_truck_cost": float(
+                        after_components.get("truck_cost", 0.0) - before_components.get("truck_cost", 0.0)
+                    ),
+                    "delta_drone_cost": float(
+                        after_components.get("drone_cost", 0.0) - before_components.get("drone_cost", 0.0)
+                    ),
+                    "delta_sync_wait": float(
+                        after_components.get("waiting_cost", 0.0) - before_components.get("waiting_cost", 0.0)
+                    ),
+                    "battery_slack_after_move": battery_slack,
+                    "accepted": True,
+                    "rejection_reason": "",
+                }
+            )
+
+    def _try_risk_rollback() -> bool:
+        nonlocal current, best, no_improve, risk_rollback_attempts, risk_admission_guard
+        if not risk_rollback or risk_rollback_attempts >= risk_rollback_reconstruction_max:
+            return False
+        from .nils_r import _attempt_priority_risk_rollback, compute_priority_metrics
+
+        metrics = compute_priority_metrics(instance, best)
+        trigger_reasons = []
+        if metrics["high_priority_tardiness"] > risk_rollback_epsilon_h:
+            trigger_reasons.append("high_priority_tardiness")
+        if metrics["max_high_priority_tardiness"] > risk_rollback_epsilon_tail:
+            trigger_reasons.append("max_high_priority_tardiness")
+        if no_improve >= risk_rollback_stagnation:
+            trigger_reasons.append("objective_stagnation")
+        if not trigger_reasons:
+            return False
+
+        result = _attempt_priority_risk_rollback(
+            instance,
+            current,
+            best,
+            trigger_reason=";".join(trigger_reasons),
+            reconstruction_attempt=risk_rollback_attempts + 1,
+            size_cap=risk_rollback_size_cap,
+            epsilon_z=risk_rollback_epsilon_z,
+            epsilon_h=risk_rollback_epsilon_h,
+            epsilon_tail=risk_rollback_epsilon_tail,
+        )
+        risk_rollback_attempts += 1
+        stats["risk_rollback_attempts"] = risk_rollback_attempts
+        stats["risk_rollback_candidates_evaluated"] += result.candidates_evaluated
+        risk_logs.append(result.log)
+        if not result.accepted or result.solution is None:
+            return False
+
+        current = result.solution
+        best = _empty_solution_clone(current)
+        best.status = "nils_r_best"
+        no_improve = 0
+        risk_admission_guard = True
+        stats["risk_rollback_accepted"] += 1
+        return True
 
     coords = instance.coordinate_map()
     for it in range(1, max_iter + 1):
@@ -1175,7 +1328,31 @@ def run_nils(
                 stats=stats,
             )
 
+        if candidate is not None and risk_admission_guard:
+            from .nils_r import compute_priority_metrics
+
+            before_risk = compute_priority_metrics(instance, current)
+            after_risk = compute_priority_metrics(instance, candidate)
+            guarded = (
+                candidate.objective >= current.objective - risk_rollback_epsilon_z
+                or after_risk["high_priority_tardiness"]
+                > before_risk["high_priority_tardiness"] + risk_rollback_epsilon_h
+                or after_risk["max_high_priority_tardiness"]
+                > before_risk["max_high_priority_tardiness"] + risk_rollback_epsilon_tail
+            )
+            if guarded:
+                stats["risk_rollback_guard_rejections"] += 1
+                candidate = None
+                no_improve += 1
+                if _try_risk_rollback():
+                    continue
+                if no_improve >= max_no_improve:
+                    break
+                continue
+
         if candidate is None:
+            if _try_risk_rollback():
+                continue
             if enable_perturbation:
                 perturb_source = best if stagnation_perturb_from_best else current
                 best_perturbed = None
@@ -1272,11 +1449,13 @@ def run_nils(
         if not strict_improving_acceptance and not accept:
             accept = metropolis(current.objective, candidate.objective, temp, rnd)
         if accept:
+            previous_current = _empty_solution_clone(current)
             if enable_local_search:
                 candidate = apply_two_opt_to_solution(candidate, instance)
                 candidate.objective, candidate.components = evaluate_solution(instance, candidate)
                 _sync_route_assignments(candidate, instance)
                 stats["local_search_calls"] += 1
+            _record_risk_move(previous_current, candidate, it)
             current = candidate
             no_improve = 0
             if candidate.objective < best.objective - 1e-12:
@@ -1284,6 +1463,10 @@ def run_nils(
                 stats["improving_moves_accepted"] += 1
         else:
             no_improve += 1
+
+        if risk_rollback and no_improve >= risk_rollback_stagnation:
+            if _try_risk_rollback():
+                continue
 
         if no_improve >= max_no_improve:
             break
@@ -1320,4 +1503,17 @@ def run_nils(
     best.components["stagnation_perturb_from_best"] = 1.0 if stagnation_perturb_from_best else 0.0
     best.components["stagnation_perturb_attempts"] = float(stagnation_perturb_attempts)
     best.components["metropolis_temperature_scale"] = float(metropolis_temperature_scale)
+    if risk_rollback:
+        best.components["nils_r_enabled"] = 1.0
+        best.components["nils_r_reconstruction_attempts"] = float(risk_rollback_attempts)
+        best.components["nils_r_reconstruction_accepted"] = float(stats["risk_rollback_accepted"])
+        best.components["nils_r_reconstruction_candidates_evaluated"] = float(
+            stats["risk_rollback_candidates_evaluated"]
+        )
+        best.components["nils_r_drone_guard_rejections"] = float(stats["risk_rollback_guard_rejections"])
+        best.components["nils_r_reconstruction_max_attempts"] = float(risk_rollback_reconstruction_max)
+        best.components["nils_r_reconstruction_size_cap"] = float(risk_rollback_size_cap)
+        best.components["nils_r_reconstruction_stagnation"] = float(risk_rollback_stagnation)
+        best.__dict__["nils_r_reconstruction_logs"] = list(risk_logs)
+        best.__dict__["nils_r_drone_decision_logs"] = list(risk_move_logs)
     return best

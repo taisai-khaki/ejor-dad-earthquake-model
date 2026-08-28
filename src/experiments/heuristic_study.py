@@ -21,6 +21,7 @@ from ..heuristics.baselines import (
     feasibility_aware_alns_baseline,
     nils_soft_drone_target_baseline,
     nils_no_battery_screening_baseline,
+    nils_r_baseline,
     nils_no_local_search_baseline,
     nils_no_perturbation_baseline,
     no_priority_baseline,
@@ -57,6 +58,7 @@ DEFAULT_METHODS = [
     "paired_baseline",
     "no_unpairing",
     "nils",
+    "nils_r",
     "nils_no_local_search",
     "nils_no_perturbation",
     "nils_no_battery_screening",
@@ -528,6 +530,8 @@ def _run_method(instance: InstanceData, config: SearchConfig, method_name: str) 
         )
     if method_name == "nils_soft_drone_target":
         return nils_soft_drone_target_baseline(instance, config).solution
+    if method_name == "nils_r":
+        return nils_r_baseline(instance, config).solution
     if method_name == "nils_no_local_search":
         return nils_no_local_search_baseline(instance, config).solution
     if method_name == "nils_no_perturbation":

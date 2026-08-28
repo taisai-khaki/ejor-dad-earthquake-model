@@ -192,7 +192,11 @@ class InstanceData:
         return [0] + list(self.customer_ids)
 
     def customer_map(self) -> Dict[int, Customer]:
-        return {c.node_id: c for c in self.customers}
+        cached = self.__dict__.get("_customer_map_cache")
+        if cached is None:
+            cached = {c.node_id: c for c in self.customers}
+            self.__dict__["_customer_map_cache"] = cached
+        return cached
 
     def demand(self, node: int) -> float:
         if node == 0:
@@ -230,10 +234,32 @@ class InstanceData:
         return self.customer_map()[node_id]
 
     def coordinate_map(self) -> Dict[int, Tuple[float, float]]:
-        coords = {0: (0.0, 0.0)}
-        for customer in self.customers:
-            coords[customer.node_id] = (customer.x, customer.y)
-        return coords
+        cached = self.__dict__.get("_coordinate_map_cache")
+        if cached is None:
+            cached = {0: (0.0, 0.0)}
+            for customer in self.customers:
+                cached[customer.node_id] = (customer.x, customer.y)
+            self.__dict__["_coordinate_map_cache"] = cached
+        return cached
+
+    def distance_matrices(self) -> Tuple[np.ndarray, np.ndarray]:
+        cached = self.__dict__.get("_distance_matrices_cache")
+        if cached is None:
+            nodes = self.all_nodes()
+            coords = self.coordinate_map()
+            dist_manhattan = np.zeros((len(nodes), len(nodes)))
+            dist_euclidean = np.zeros((len(nodes), len(nodes)))
+            for left in nodes:
+                for right in nodes:
+                    if left == right:
+                        continue
+                    dx = abs(coords[left][0] - coords[right][0])
+                    dy = abs(coords[left][1] - coords[right][1])
+                    dist_manhattan[left, right] = dx + dy
+                    dist_euclidean[left, right] = float(np.hypot(dx, dy))
+            cached = (dist_manhattan, dist_euclidean)
+            self.__dict__["_distance_matrices_cache"] = cached
+        return cached
 
     def as_dict(self) -> Dict[str, object]:
         return {

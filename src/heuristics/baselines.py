@@ -17,6 +17,7 @@ from .nils import (
     move_to_drone,
     run_nils,
 )
+from .nils_r import run_nils_r
 from .alns import run_alns
 
 
@@ -239,6 +240,30 @@ def nils_no_battery_screening_baseline(instance: InstanceData, config: SearchCon
     )
     sol.status = "ablation_no_battery_screening"
     return BaselineResult(name="nils_no_battery_screening", solution=sol)
+
+
+def nils_r_baseline(instance: InstanceData, config: SearchConfig) -> BaselineResult:
+    exp_cfg = dict(config.experiment or {})
+    sol = run_nils_r(
+        instance,
+        seed=config.heuristics.random_seed,
+        max_iter=max(1, config.heuristics.max_outer_iter),
+        max_no_improve=max(1, config.heuristics.max_no_improve),
+        time_limit=max(10, int(config.heuristics.time_limit_seconds)),
+        reconstruction_max_attempts=max(
+            0,
+            int(exp_cfg.get("nils_r_reconstruction_max_attempts", 1)),
+        ),
+        reconstruction_stagnation=int(
+            exp_cfg.get("nils_r_reconstruction_stagnation", config.heuristics.max_no_improve)
+        ),
+        reconstruction_size_cap=max(1, int(exp_cfg.get("nils_r_reconstruction_size_cap", 3))),
+        epsilon_z=float(exp_cfg.get("nils_r_epsilon_z", 1e-6)),
+        epsilon_h=float(exp_cfg.get("nils_r_epsilon_h", 1e-6)),
+        epsilon_tail=float(exp_cfg.get("nils_r_epsilon_tail", 1e-6)),
+    )
+    sol.status = "baseline_nils_r"
+    return BaselineResult(name="nils_r", solution=sol)
 
 
 def nils_soft_drone_target_baseline(instance: InstanceData, config: SearchConfig) -> BaselineResult:
