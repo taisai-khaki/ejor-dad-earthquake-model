@@ -1,0 +1,72 @@
+{
+  "authoritative_model": "noto-mechanism-separated-capability-marginal-v2",
+  "base_output_dir": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4",
+  "base_run_design_sha256": "e34cbbc1747a5a3f10a6f016772b32440d8c78b6a8c3f957ee7208613b13908e",
+  "errors": [
+    {
+      "reason": "No externally_supported rows were supplied; illustrative rows cannot anchor calibration.",
+      "status": "blocked_missing_regime_weight_ensemble"
+    }
+  ],
+  "expected_work": {
+    "full_tier_enumeration": true
+  },
+  "experiment": "empirical_ambiguity_ensemble_calibration",
+  "externally_supported_valid_rows": 0,
+  "finished_at_epoch": 1788058223.6112387,
+  "input": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\inputs\\regime_weight_ensemble.csv",
+  "input_hashes": {
+    "run_design.json": "e34cbbc1747a5a3f10a6f016772b32440d8c78b6a8c3f957ee7208613b13908e",
+    "tables/table_noto_capacity_ranges.csv": "777e9d81a518c6bbb20aee75bb4be2104c66f7831121a3282f6b94f2df468bd4",
+    "tables/table_noto_centers.csv": "24839c405c0639a20ed573c7a48261758d8de14c9e2b374b651a5385a236bbaf",
+    "tables/table_noto_continuous_certificate.csv": "85ff10096ffdd4a526fb6c5df7e5cc91a026a898b6f04a52bd81bc7c0352830a",
+    "tables/table_noto_corridors.csv": "5a6bec882df73506b95ce89d6ee4cb1c9ce72db91ed5bdae61dbd23853e22acf",
+    "tables/table_noto_data_coverage.csv": "3d0a3b168af7cf9ba654a7287825cd55b1eec5ac479f4636327e2a0612d892de",
+    "tables/table_noto_deterministic_selection.csv": "7f8c71dfcd8dee3b56cdeb372d2d1eb9d5f369d0e874172cbfbe917b9559c6eb",
+    "tables/table_noto_epsilon_constrained_practitioner_policies.csv": "76bb81e796d041521d24b7a17cc21c82a56ee59dc24c724c0ba51dd4888568db",
+    "tables/table_noto_fixed_plan_radius_profile.csv": "b67f9bf9ad79ac2de81b2f7eace73cfb9776a69b793452fb71ff87e285a5725a",
+    "tables/table_noto_fixed_zw_road_channels_final.csv": "49df13f28e2d61ad69d121eb0c99137cf238037f18d4295dd3c5e5a5336df6a1",
+    "tables/table_noto_fresh_replay_verification.csv": "dc12b1a20b8243a5526a344cdd9497cf4fcc059c7843af1c728be212662f6f84",
+    "tables/table_noto_optimized_road_channels.csv": "8960f8a2a09678e8ed37fdffbd3b6ed0ac52faedcce4d52d26e9c623ae54e208",
+    "tables/table_noto_practical_heuristics.csv": "5c6030b79a083e5befa4d58740d3dcb33350150b7703247ada881b8a494d6420",
+    "tables/table_noto_practical_near_optimal.csv": "25b68a2d5fe534c8c5a81c2868aa115034ccc3eec80469fdd05aa0abf83aeb30",
+    "tables/table_noto_practical_probability_shifts.csv": "32b39f21dadacd3973bea76ebc629441bceb3df48a29343a153a18fd8c6ee2cb",
+    "tables/table_noto_practical_sector_comparison.csv": "1c978a74c9dce8138565d944bb099751aa9c6614b46bb0dcdbd9f98eed8e1093",
+    "tables/table_noto_practical_summary.csv": "9be585fbf9a54f80ad1b07bb0938eefd42a0975b9d15b8156d5bb28b0354be5b",
+    "tables/table_noto_practical_top10.csv": "4876329260216a88ccdef4f261aabaf9cfe7b2ad2b2885a89ab55defef80c7ac",
+    "tables/table_noto_road_channels.csv": "e1208d4e7c3b5ebe4a5f7ec526ff2acc1caabe06f6adf2be2091acfeacee3def",
+    "tables/table_noto_saturation_radius.csv": "59e04e8f6eccb4911d136aa36c6e2aef1f8ee5e432d02812cd67922f23b84722",
+    "tables/table_noto_source_manifest.csv": "cf50adebece6e1dbc1c9e920c91cac1e79e3e28b1dad1f844d331d1c0bcfdeae",
+    "tables/table_noto_zones.csv": "6d96aee387cd6fe8270558558de9d3db1ce21163627f493ebc74c6882d6a9b66"
+  },
+  "parameters": {
+    "base_output_dir": "data_work/noto/acute_access_graded_v4",
+    "output_dir": "data_work/noto/critical_revision_v1/ambiguity_anchor",
+    "resume": true,
+    "weights": "inputs/regime_weight_ensemble.csv"
+  },
+  "release": "noto-corrected-v2",
+  "runtime_seconds": 0.053428599843755364,
+  "started_at_epoch": 1787205605.137747,
+  "starting_commit": "9147b43819f72b84cde1b121b0e2b8c07dab0cd9",
+  "starting_worktree_dirty": true,
+  "status": "blocked_missing_regime_weight_ensemble",
+  "system": {
+    "logical_cores": 8,
+    "memory_gb": null,
+    "numpy": "2.4.3",
+    "pandas": "2.3.3",
+    "physical_cores": null,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+    "scipy": "1.17.1"
+  },
+  "tolerances": {
+    "box_width_tolerance": 1e-08,
+    "budget_tolerance": 1e-10,
+    "fixed_y_epsilon": 1e-06,
+    "fixed_y_max_iterations": 500,
+    "probability_tolerance": 1e-10
+  }
+}

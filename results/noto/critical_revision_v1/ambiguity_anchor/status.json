@@ -1,0 +1,14 @@
+{
+  "block": "ambiguity_calibration",
+  "errors": [
+    {
+      "reason": "No externally_supported rows were supplied; illustrative rows cannot anchor calibration.",
+      "status": "blocked_missing_regime_weight_ensemble"
+    }
+  ],
+  "externally_supported_valid_rows": 0,
+  "input": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\inputs\\regime_weight_ensemble.csv",
+  "pid": 31364,
+  "status": "blocked_missing_regime_weight_ensemble",
+  "updated_at_epoch": 1788058223.6014526
+}

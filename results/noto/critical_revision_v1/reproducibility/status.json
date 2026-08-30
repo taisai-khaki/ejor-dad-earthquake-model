@@ -1,0 +1,10 @@
+{
+  "block": "path_incidence_audit",
+  "maximum_reconstruction_error": 0.0,
+  "pid": 13968,
+  "rows": 150,
+  "shortest_path_tie_count": 0,
+  "status": "passed",
+  "tie_note": "The audit records NetworkX's deterministic shortest path; no equal-weight alternatives were detected by this implementation.",
+  "updated_at_epoch": 1787202907.2704036
+}

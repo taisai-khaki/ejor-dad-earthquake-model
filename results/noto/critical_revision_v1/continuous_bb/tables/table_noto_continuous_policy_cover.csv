@@ -1,0 +1,10 @@
+A_like_box_count,B_like_box_count,corridor_2_full_certified,corridor_3_full_certified,mixed_box_count,objective_gap_percent,policy_class_status,potential_box_count,rho,y1_max,y1_min,y2_max,y2_min,y3_max,y3_min,y4_max,y4_min,y5_max,y5_min
+2,0,False,False,0,2.131433458846772e-14,resolved_A_like,2,0.0,0.75,0.5,1.0,0.75,1.0,0.75,0.5,0.0,0.25,0.0
+2,0,False,False,0,6.241046805275893e-14,resolved_A_like,2,0.025,0.75,0.5,1.0,0.75,1.0,0.75,0.5,0.0,0.25,0.0
+2,0,False,False,0,6.104167494556392e-14,resolved_A_like,2,0.05,0.75,0.5,1.0,0.75,1.0,0.75,0.5,0.0,0.25,0.0
+2,0,False,False,0,7.986730927184328e-14,resolved_A_like,2,0.075,0.75,0.5,1.0,0.75,1.0,0.75,0.5,0.0,0.25,0.0
+0,1,False,False,0,5.920308170266953e-14,resolved_B_like,1,0.1,0.25,0.0,1.0,0.75,1.0,0.75,0.25,0.0,1.0,0.75
+0,1,False,False,0,5.870079831600483e-14,resolved_B_like,1,0.125,0.25,0.0,1.0,0.75,1.0,0.75,0.25,0.0,1.0,0.75
+0,1,False,False,0,1.94131269125005e-14,resolved_B_like,1,0.15,0.25,0.0,1.0,0.75,1.0,0.75,0.25,0.0,1.0,0.75
+0,1,False,False,0,5.734545120045927e-14,resolved_B_like,1,0.2,0.25,0.0,1.0,0.75,1.0,0.75,0.25,0.0,1.0,0.75
+0,1,False,False,0,7.531030774559607e-14,resolved_B_like,1,0.25,0.25,0.0,1.0,0.75,1.0,0.75,0.25,0.0,1.0,0.75

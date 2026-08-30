@@ -1,0 +1,8 @@
+{
+  "candidate_count": 996,
+  "required_design_basis_state_count": 18,
+  "required_state_count": 128,
+  "rows": 3,
+  "runtime_seconds": 37.546041999943554,
+  "status": "passed"
+}
