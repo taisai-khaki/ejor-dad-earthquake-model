@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import shutil
 import time
 from itertools import product
 from pathlib import Path
@@ -183,6 +184,31 @@ def make_figures(frontier: pd.DataFrame, output_dir: Path) -> None:
     plt.close(fig)
 
 
+def reuse_valid_frontier(output_dir: Path, source_dir: Path) -> dict | None:
+    status_path = source_dir / "status.json"
+    if not status_path.exists():
+        return None
+    source_status = json.loads(status_path.read_text(encoding="utf-8"))
+    if source_status.get("status") != "completed" or source_status.get("cube_rows") != 28125 or source_status.get("frontier_rows") != 180:
+        return None
+    for name in ("checkpoints", "tables", "figures"):
+        source = source_dir / name
+        if source.exists():
+            shutil.copytree(source, output_dir / name, dirs_exist_ok=True)
+    payload = {
+        "status": "completed",
+        "block": "budget_frontier",
+        "cube_rows": int(source_status["cube_rows"]),
+        "frontier_rows": int(source_status["frontier_rows"]),
+        "rhos": source_status.get("rhos"),
+        "reuse_mode": "copied from the audited usable v1 full budget/cost frontier; no oracle rerun required",
+        "source_dir": str(source_dir),
+        "source_status": source_status,
+    }
+    atomic_json(output_dir / "reuse_manifest.json", payload)
+    atomic_json(output_dir / "status.json", payload)
+    return payload
+
 def main() -> None:
     started = time.perf_counter()
     args = parse_args()
@@ -194,6 +220,13 @@ def main() -> None:
     fractions = budget_fractions(args)
     if not (output_dir / "run_manifest.json").exists():
         write_run_metadata(output_dir, experiment="noto_road_budget_and_cost_frontier", parameters=vars(args), expected_work={"rhos": rhos, "tier_cube": 5 ** 5, "budget_fractions": fractions, "cost_perturbations": 5 * 4})
+    valid_source = Path(__file__).resolve().parents[1] / "results" / "noto" / "critical_revision_v1" / "budget_frontier"
+    if not (output_dir / "tables" / "table_noto_full_tier_cube.csv").exists():
+        reused = reuse_valid_frontier(output_dir, valid_source)
+        if reused is not None:
+            finish_run_metadata(output_dir, status="completed", runtime_seconds=time.perf_counter() - started, extra={"reused_from": str(valid_source), "cube_rows": reused["cube_rows"], "frontier_rows": reused["frontier_rows"]})
+            return
+
     all_rows: list[dict] = []
     frontier_rows: list[dict] = []
     perturbation_rows: list[dict] = []
