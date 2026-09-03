@@ -40,7 +40,7 @@ def main() -> None:
         "synthetic": [sys.executable, "examples/synthetic_monotone_bb_benchmark.py", "--output-dir", str(root / "synthetic_scaling"), "--dimensions", "5,6,7,8", "--relative-gap", "0.001", "--resume"],
         "equity": [sys.executable, "examples/noto_stage2_robustness_equity.py", "--base-output-dir", str(base), "--output-dir", str(root / "equity"), "--run-base-frontier", "--run-one-factor-sensitivities", "--service-resolution", "1e-4", "--resume"],
         "ambiguity": [sys.executable, "examples/noto_ambiguity_ensemble_calibration.py", "--weights", str(repo / "inputs" / "regime_weight_ensemble.csv"), "--base-output-dir", str(base), "--output-dir", str(root / "ambiguity_anchor"), "--resume"],
-        "integrated": [sys.executable, "examples/build_critical_revision_audit.py", "--input-root", str(root), "--output-root", str(repo / "results" / "noto" / "critical_revision_v1")],
+        "integrated": [sys.executable, "examples/build_critical_revision_audit.py", "--input-root", str(root), "--output-root", str(repo / "results" / "noto" / "critical_revision_v2")],
     }
     if args.skip_synthetic:
         blocks.remove("synthetic")

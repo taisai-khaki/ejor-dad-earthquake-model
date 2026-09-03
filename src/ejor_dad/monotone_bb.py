@@ -56,6 +56,7 @@ class MonotoneBBResult:
     maximum_depth: int
     unique_oracle_calls: int
     oracle_cache_hits: int
+    initial_corner_evaluations: int
     total_fixed_y_iterations: int
     maximum_oracle_gap: float
     convergence_events: tuple[Mapping[str, Any], ...]
@@ -131,6 +132,7 @@ def run_monotone_box_bb(
     cache = {} if cache is None else cache
     oracle_calls = 0
     cache_hits = 0
+    initial_corner_evaluations = 0
     total_iterations = 0
     maximum_oracle_gap = 0.0
     next_node_id = 1
@@ -154,6 +156,8 @@ def run_monotone_box_bb(
     best_y = np.asarray(best.y, dtype=float)
     if best_y.shape != (dimension,):
         raise ValueError("The incumbent dimension does not match costs.")
+    if float(costs_array @ best_y) > budget + budget_tolerance:
+        raise ValueError("The supplied incumbent violates the retrofit budget.")
 
     def cache_key(vector: np.ndarray) -> tuple[float, ...]:
         return tuple(np.round(np.asarray(vector, dtype=float), 12).tolist())
@@ -228,7 +232,8 @@ def run_monotone_box_bb(
         box = MonotoneBox(box_id, lower_array, upper_array, depth, float(evaluation.lower_bound), evaluation)
         active[box_id] = box
         leaves[box_id] = box
-        if float(evaluation.objective) < float(best.objective) - 1e-12:
+        upper_budget = float(costs_array @ upper_array)
+        if upper_budget <= budget + budget_tolerance and float(evaluation.objective) < float(best.objective) - 1e-12:
             best = evaluation
             best_y = np.asarray(evaluation.y, dtype=float)
             incumbent_history.append({
@@ -243,6 +248,7 @@ def run_monotone_box_bb(
             emit("incumbent_improvement", node=box)
 
     for lower, upper in initial_boxes:
+        initial_corner_evaluations += 1
         add_box(lower, upper, 0)
 
     while active:
@@ -295,6 +301,9 @@ def run_monotone_box_bb(
     lower = min((box.lower_bound for box in leaves.values()), default=float("nan"))
     gap = float(best.objective - lower)
     relative_gap = 100.0 * gap / max(1.0, abs(float(best.objective)))
+    final_budget_slack = budget - float(costs_array @ np.asarray(best.y, dtype=float))
+    if final_budget_slack < -budget_tolerance:
+        raise RuntimeError("The B&B incumbent violates the retrofit budget.")
     converged = bool(isfinite(gap) and gap <= absolute_target() + 1e-10 and not active)
     termination_reason = "epsilon_gap_closed" if converged else ("box_width_tolerance" if active else "queue_exhausted")
     return MonotoneBBResult(
@@ -316,6 +325,7 @@ def run_monotone_box_bb(
         maximum_depth=maximum_depth,
         unique_oracle_calls=oracle_calls,
         oracle_cache_hits=cache_hits,
+        initial_corner_evaluations=initial_corner_evaluations,
         total_fixed_y_iterations=total_iterations,
         maximum_oracle_gap=maximum_oracle_gap,
         convergence_events=tuple(events),

@@ -25,11 +25,32 @@ def read_csv(path: Path) -> pd.DataFrame:
     return pd.read_csv(path) if path.exists() else pd.DataFrame()
 
 
+def budget_feasibility_audit(input_root: Path) -> dict:
+    violations = []
+    continuous = read_csv(input_root / "continuous_bb" / "tables" / "table_noto_continuous_monotone_bb.csv")
+    if not continuous.empty and "road_budget_slack" in continuous:
+        for row_index, value in continuous.road_budget_slack.items():
+            if float(value) < -1e-8:
+                violations.append({"block": "continuous_bb", "row": int(row_index), "slack": float(value)})
+    synthetic = read_csv(input_root / "synthetic_scaling" / "tables" / "table_synthetic_scalability.csv")
+    if not synthetic.empty:
+        for column in ("bnb_budget_slack", "best_budget_slack"):
+            if column in synthetic:
+                for row_index, value in synthetic[column].dropna().items():
+                    if float(value) < -1e-8:
+                        violations.append({"block": "synthetic_scaling", "column": column, "row": int(row_index), "slack": float(value)})
+    return {
+        "budget_feasibility_status": "failed" if violations else "passed",
+        "budget_feasibility_violation_count": len(violations),
+        "budget_feasibility_violations": violations,
+    }
+
 def classify(input_root: Path) -> dict:
     continuous = read_csv(input_root / "continuous_bb" / "tables" / "table_noto_continuous_monotone_bb.csv")
     cover = read_csv(input_root / "continuous_bb" / "tables" / "table_noto_continuous_policy_cover.csv")
     dependence = read_csv(input_root / "mechanism_value" / "tables" / "table_noto_value_shared_dependence.csv")
     frontier = read_csv(input_root / "budget_frontier" / "tables" / "table_noto_budget_policy_summary.csv")
+    budget_audit = budget_feasibility_audit(input_root)
     equity_gate = {}
     gate_path = input_root / "equity" / "equity_gate.json"
     if gate_path.exists():
@@ -57,7 +78,7 @@ def classify(input_root: Path) -> dict:
             dependence_status = "; ".join(f"{row.contrast}:{row.transfer_type}:{row.status}" for _, row in selected.iterrows())
     budget_status = "missing" if frontier.empty else "; ".join(sorted(set(frontier.evidence_classification.astype(str))))
     equity_status = "missing" if not equity_gate else ("complementarity_supported" if equity_gate.get("complementarity_supported") else "specification-dependent co-benefit or not supported")
-    return {"continuous_status": continuous_status, "policy_status": policy_status, "dependence_status": dependence_status, "budget_status": budget_status, "equity_status": equity_status, "ambiguity_status": ambiguity_status, "path_audit_status": path_status, "cost_audit_status": cost_status, "continuous_rows": len(continuous), "dependence_rows": len(dependence), "frontier_rows": len(frontier)}
+    return {"continuous_status": continuous_status, "policy_status": policy_status, "dependence_status": dependence_status, "budget_status": budget_status, "equity_status": equity_status, "ambiguity_status": ambiguity_status, "path_audit_status": path_status, "cost_audit_status": cost_status, "continuous_rows": len(continuous), "dependence_rows": len(dependence), "frontier_rows": len(frontier), **budget_audit}
 
 
 def write_decision_tables(input_root: Path, output: Path) -> None:
@@ -150,6 +171,8 @@ def main() -> None:
             elif source.name not in {"run_manifest.json", "runtime_summary.json"}:
                 shutil.copy2(source, destination)
     summary = classify(output)
+    if summary.get("budget_feasibility_status") == "failed":
+        raise RuntimeError("The integrated audit found an over-budget incumbent.")
     atomic_json(output / "critical_revision_summary.json", summary)
     write_decision_tables(output, output)
     report(summary, output)

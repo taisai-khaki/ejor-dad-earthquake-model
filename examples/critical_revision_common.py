@@ -27,7 +27,7 @@ from ejor_dad.reproducibility import sha256_file
 
 
 BASE_VERSION = "acute_access_graded_v4"
-NEW_VERSION = "critical_revision_v1"
+NEW_VERSION = "critical_revision_v2"
 BASE_RHOS = (0.0, 0.025, 0.05, 0.075, 0.10, 0.125, 0.15, 0.20, 0.25)
 DEVELOPMENT_RHOS = (0.0, 0.10, 0.125, 0.25)
 GRID_LEVELS = (0.0, 0.25, 0.50, 0.75, 1.0)

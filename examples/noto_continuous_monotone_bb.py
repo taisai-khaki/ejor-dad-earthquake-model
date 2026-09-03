@@ -272,6 +272,8 @@ def run_radius(args: argparse.Namespace, base_output_dir: Path, output_dir: Path
         "nodes_active_at_end": result.nodes_active_at_end,
         "maximum_depth": result.maximum_depth,
         "unique_fixed_y_oracle_calls": result.unique_oracle_calls,
+        "initial_corner_evaluations": result.initial_corner_evaluations,
+        "total_corner_evaluations": result.initial_corner_evaluations + result.unique_oracle_calls,
         "oracle_cache_hits": result.oracle_cache_hits,
         "total_fixed_y_iterations": result.total_fixed_y_iterations,
         "maximum_fixed_y_oracle_gap": result.maximum_oracle_gap,

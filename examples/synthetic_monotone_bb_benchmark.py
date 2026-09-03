@@ -88,9 +88,15 @@ def run_instance(args: argparse.Namespace, output: Path, L: int, seed: int):
     enumeration_rows = []
     started = time.perf_counter()
     best_enum = None
+    budget_evaluated = 0
+    failed_evaluations = 0
     total = cube_size
     for completed, values in enumerate(product((0.0, 0.25, 0.50, 0.75, 1.0), repeat=L), start=1):
         y = np.asarray(values, dtype=float)
+        expenditure = float(instance.retrofit_costs @ y)
+        if expenditure > instance.budget_retrofit + 1e-10:
+            continue
+        budget_evaluated += 1
         key = "enum_" + "_".join(f"{value:.2f}" for value in values)
         if args.resume and cache.exists(key):
             payload = cache.load(key)
@@ -101,15 +107,19 @@ def run_instance(args: argparse.Namespace, output: Path, L: int, seed: int):
                 payload = {"status": "failed", "error": str(error), "y": y.tolist()}
             cache.save(key, payload)
         if payload.get("status") == "feasible":
-            row = {"instance_id": instance_id, "algorithm": "tier_enumeration", "candidate_index": completed, "objective": float(payload["objective"]), "lower_bound": float(payload["lower_bound"]), "oracle_gap": float(payload["oracle_gap"]), "y_json": json_string(payload["y"]), "runtime_seconds": time.perf_counter() - started}
+            if float(instance.retrofit_costs @ np.asarray(payload["y"], dtype=float)) > instance.budget_retrofit + 1e-10:
+                raise RuntimeError("Enumeration checkpoint contains an over-budget tier vector.")
+            row = {"instance_id": instance_id, "algorithm": "tier_enumeration", "candidate_index": completed, "objective": float(payload["objective"]), "lower_bound": float(payload["lower_bound"]), "oracle_gap": float(payload["oracle_gap"]), "y_json": json_string(payload["y"]), "runtime_seconds": time.perf_counter() - started, "expenditure": expenditure, "budget": float(instance.budget_retrofit), "budget_slack": float(instance.budget_retrofit - expenditure)}
             enumeration_rows.append(row)
             if best_enum is None or row["objective"] < best_enum["objective"]:
                 best_enum = row
+        else:
+            failed_evaluations += 1
         if completed % 100 == 0 or completed == total:
             write_status(output / "status.json", status="running", block="synthetic_enumeration", instance_id=instance_id, completed=completed, total=total, feasible=len(enumeration_rows))
         if time.perf_counter() - started > args.enumeration_time_limit:
             break
-    enum_complete = len(enumeration_rows) == total
+    enum_complete = budget_evaluated == budget_count and failed_evaluations == 0
     if best_enum is None:
         return [], [], [{"instance_id": instance_id, "seed": seed, "L": L, "R": 2, "state_count": len(instance.states), "tier_cube_size": cube_size, "budget_feasible_tier_count": budget_count, "algorithm": "tier_enumeration", "converged": False, "termination_reason": "no_feasible_evaluation", "enumeration_complete": False}]
     seed_y = np.full(L, min(0.40, instance.budget_retrofit / max(1e-9, instance.retrofit_costs.sum())), dtype=float)
@@ -155,9 +165,9 @@ def run_instance(args: argparse.Namespace, output: Path, L: int, seed: int):
     bb_result = run_monotone_box_bb(initial_boxes=[(np.zeros(L), np.ones(L))], costs=instance.retrofit_costs, budget=instance.budget_retrofit, oracle=oracle, incumbent=OracleEvaluation(status="feasible", objective=float(seed_result.objective), lower_bound=float(seed_result.lower_bound), y=seed_result.y, z=seed_result.z, w=seed_result.w, iterations=seed_result.iterations, oracle_gap=seed_result.objective - seed_result.lower_bound), rel_gap_target=args.relative_gap, progress_callback=progress)
     save_table(events, output / "tables" / "table_synthetic_gap_trajectories.csv", ["instance_id", "event_index"])
     peak_memory_mb = None if psutil is None else psutil.Process().memory_info().rss / (1024.0 * 1024.0)
-    bnb_row = {"instance_id": instance_id, "seed": seed, "L": L, "R": 2, "state_count": len(instance.states), "tier_cube_size": cube_size, "budget_feasible_tier_count": budget_count, "algorithm": "adaptive_monotone_bb", "target_gap_percent": args.relative_gap * 100.0, "achieved_gap_percent": bb_result.relative_gap_percent, "converged": bb_result.converged, "incumbent_objective": bb_result.incumbent.objective, "global_lower_bound": bb_result.global_lower_bound, "unique_oracle_calls": bb_result.unique_oracle_calls, "nodes_processed": bb_result.nodes_processed, "nodes_pruned": bb_result.nodes_budget_pruned + bb_result.nodes_capability_pruned + bb_result.nodes_bound_pruned + bb_result.nodes_epsilon_pruned, "runtime_seconds": time.perf_counter() - bb_started, "peak_memory_mb": peak_memory_mb, "termination_reason": bb_result.termination_reason}
-    enum_summary = {"instance_id": instance_id, "seed": seed, "L": L, "R": 2, "state_count": len(instance.states), "tier_cube_size": cube_size, "budget_feasible_tier_count": budget_count, "algorithm": "tier_enumeration", "target_gap_percent": 0.0, "achieved_gap_percent": 100.0 * float(best_enum["objective"] - best_enum["lower_bound"]) / max(1.0, abs(float(best_enum["objective"]))), "converged": enum_complete, "incumbent_objective": best_enum["objective"], "global_lower_bound": best_enum["lower_bound"], "unique_oracle_calls": len(enumeration_rows), "nodes_processed": len(enumeration_rows), "nodes_pruned": 0, "runtime_seconds": float(best_enum["runtime_seconds"]), "peak_memory_mb": peak_memory_mb, "termination_reason": "complete_cube" if enum_complete else "time_limit", "enumeration_complete": enum_complete, "best_y_json": best_enum["y_json"]}
-    compare = {"instance_id": instance_id, "seed": seed, "L": L, "R": 2, "state_count": len(instance.states), "tier_cube_size": cube_size, "budget_feasible_tier_count": budget_count, "enumeration_complete": enum_complete, "enumeration_objective": best_enum["objective"], "bnb_objective": bb_result.incumbent.objective, "bnb_lower_bound": bb_result.global_lower_bound, "bnb_not_worse_than_enumeration": bool(bb_result.incumbent.objective <= best_enum["objective"] + 1e-6), "bnb_bound_valid": bool(bb_result.global_lower_bound <= bb_result.incumbent.objective + 1e-7)}
+    bnb_row = {"instance_id": instance_id, "seed": seed, "L": L, "R": 2, "state_count": len(instance.states), "tier_cube_size": cube_size, "budget_feasible_tier_count": budget_count, "algorithm": "adaptive_monotone_bb", "target_gap_percent": args.relative_gap * 100.0, "achieved_gap_percent": bb_result.relative_gap_percent, "converged": bb_result.converged, "incumbent_objective": bb_result.incumbent.objective, "global_lower_bound": bb_result.global_lower_bound, "unique_oracle_calls": bb_result.unique_oracle_calls, "initial_corner_evaluations": bb_result.initial_corner_evaluations, "bnb_incumbent_expenditure": float(instance.retrofit_costs @ bb_result.incumbent.y), "bnb_budget": float(instance.budget_retrofit), "bnb_budget_slack": float(instance.budget_retrofit - instance.retrofit_costs @ bb_result.incumbent.y), "nodes_processed": bb_result.nodes_processed, "nodes_pruned": bb_result.nodes_budget_pruned + bb_result.nodes_capability_pruned + bb_result.nodes_bound_pruned + bb_result.nodes_epsilon_pruned, "runtime_seconds": time.perf_counter() - bb_started, "peak_memory_mb": peak_memory_mb, "termination_reason": bb_result.termination_reason}
+    enum_summary = {"instance_id": instance_id, "seed": seed, "L": L, "R": 2, "state_count": len(instance.states), "tier_cube_size": cube_size, "budget_feasible_tier_count": budget_count, "algorithm": "tier_enumeration", "target_gap_percent": 0.0, "achieved_gap_percent": 100.0 * float(best_enum["objective"] - best_enum["lower_bound"]) / max(1.0, abs(float(best_enum["objective"]))), "converged": enum_complete, "incumbent_objective": best_enum["objective"], "global_lower_bound": best_enum["lower_bound"], "unique_oracle_calls": len(enumeration_rows), "nodes_processed": len(enumeration_rows), "nodes_pruned": 0, "runtime_seconds": time.perf_counter() - started, "enumeration_runtime_seconds": time.perf_counter() - started, "peak_memory_mb": peak_memory_mb, "termination_reason": "complete_cube" if enum_complete else "time_limit", "enumeration_complete": enum_complete, "evaluated_budget_feasible_tier_count": budget_evaluated, "enumeration_failed_evaluations": failed_evaluations, "best_expenditure": best_enum["expenditure"], "best_budget": best_enum["budget"], "best_budget_slack": best_enum["budget_slack"], "best_y_json": best_enum["y_json"]}
+    compare = {"instance_id": instance_id, "seed": seed, "L": L, "R": 2, "state_count": len(instance.states), "tier_cube_size": cube_size, "budget_feasible_tier_count": budget_count, "enumeration_complete": enum_complete, "evaluated_budget_feasible_tier_count": budget_evaluated, "enumeration_failed_evaluations": failed_evaluations, "enumeration_objective": best_enum["objective"], "bnb_objective": bb_result.incumbent.objective, "bnb_lower_bound": bb_result.global_lower_bound, "bnb_incumbent_expenditure": float(instance.retrofit_costs @ bb_result.incumbent.y), "bnb_budget": float(instance.budget_retrofit), "bnb_budget_slack": float(instance.budget_retrofit - instance.retrofit_costs @ bb_result.incumbent.y), "bnb_not_worse_than_enumeration": bool(bb_result.incumbent.objective <= best_enum["objective"] + 1e-6), "bnb_bound_valid": bool(bb_result.global_lower_bound <= bb_result.incumbent.objective + 1e-7)}
     return [bnb_row, enum_summary], events, [compare]
 
 

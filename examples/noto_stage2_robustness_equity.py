@@ -124,41 +124,169 @@ def maximum_fixed_service(instance, z: Sequence[float], w: Sequence[float], y: S
     return result
 
 
+def evaluate_reoptimized_service_floor(instance, y: Sequence[float], service_floor: float):
+    candidate = replace(instance, minimum_zone_service_fraction=float(service_floor))
+    try:
+        return evaluate_fixed_y(
+            candidate,
+            np.asarray(y, dtype=float),
+            epsilon=1e-6,
+            max_iterations=500,
+        )
+    except RuntimeError as error:
+        message = str(error).lower()
+        if "infeasible" in message or "master lp failed" in message:
+            return None
+        raise
+
+
+def maximum_reoptimized_service(
+    instance,
+    y: Sequence[float],
+    objective_bound: float,
+    resolution: float,
+    cache: CheckpointStore | None = None,
+    key: str | None = None,
+) -> dict | None:
+    if cache is not None and key is not None and cache.exists(key):
+        payload = cache.load(key)
+        if payload.get("status") == "feasible":
+            return payload
+        if payload.get("status") == "inadmissible":
+            return None
+
+    y = np.asarray(y, dtype=float)
+    lower = 0.0
+    upper = 1.0
+    steps = 0
+    best_result = evaluate_reoptimized_service_floor(instance, y, lower)
+    if best_result is None or float(best_result.objective) > objective_bound + 1e-8:
+        payload = {
+            "status": "inadmissible",
+            "y": y.tolist(),
+            "objective_bound": float(objective_bound),
+            "lower": 0.0,
+            "upper": 0.0,
+            "steps": 0,
+        }
+        if cache is not None and key is not None:
+            cache.save(key, payload)
+        return None
+
+    while upper - lower > resolution:
+        midpoint = 0.5 * (lower + upper)
+        steps += 1
+        result = evaluate_reoptimized_service_floor(instance, y, midpoint)
+        if result is not None and float(result.objective) <= objective_bound + 1e-8:
+            lower = midpoint
+            best_result = result
+        else:
+            upper = midpoint
+
+    payload = {
+        "status": "feasible",
+        "y": y.tolist(),
+        "objective_bound": float(objective_bound),
+        "lower": lower,
+        "upper": upper,
+        "steps": steps,
+        "objective": float(best_result.objective),
+        "lower_bound": float(best_result.lower_bound),
+        "oracle_gap": float(best_result.objective - best_result.lower_bound),
+        "z": best_result.z.tolist(),
+        "w": best_result.w.tolist(),
+    }
+    if cache is not None and key is not None:
+        cache.save(key, payload)
+    return payload
+
+
 def stage2_frontier(args, base_output_dir: Path, output_dir: Path, cap: float, profile: str, rhos: tuple[float, ...], taus: tuple[float, ...]) -> list[dict]:
     rows = []
-    service_cache = CheckpointStore(output_dir / "service_checkpoints" / scenario_id(cap, profile))
+    service_cache = CheckpointStore(output_dir / "service_checkpoints_reoptimized_v2" / scenario_id(cap, profile))
     for rho in rhos:
         instance = build_instance(base_output_dir, rho, cap, profile)
         records = stage1_records(args, base_output_dir, output_dir, rho, cap, profile)
         records.sort(key=lambda row: (float(row["objective"]), tuple(row["y"])))
         benchmark = float(records[0]["objective"])
-        max_tau = max(taus)
-        admissible_pool = [record for record in records if float(record["objective"]) <= benchmark * (1.0 + max_tau) + 1e-5]
-        service_by_index: dict[int, tuple[float, float, int]] = {}
-        for position, record in enumerate(admissible_pool, start=1):
-            index = int(record.get("candidate_index", position))
-            service_by_index[index] = maximum_fixed_service(instance, record["z"], record["w"], record["y"], args.service_resolution, service_cache, f"rho{rho:.3f}_grid{index:04d}")
-            if position % 10 == 0 or position == len(admissible_pool):
-                write_status(output_dir / "status.json", status="running", block="equity_stage2", scenario_id=scenario_id(cap, profile), rho=rho, service_evaluated=position, service_total=len(admissible_pool))
         for tau in taus:
             bound = benchmark + 1e-5 if tau == 0.0 else benchmark * (1.0 + tau)
-            admissible = [record for record in records if float(record["objective"]) <= bound + 1e-8]
+            admissible = [
+                record
+                for record in records
+                if float(record["objective"]) <= bound + 1e-8
+            ]
             candidates = []
-            for record in admissible:
-                index = int(record.get("candidate_index", 0))
-                if index in service_by_index:
-                    candidates.append((service_by_index[index], record))
+            for position, record in enumerate(admissible, start=1):
+                index = int(record.get("candidate_index", position))
+                service_result = maximum_reoptimized_service(
+                    instance,
+                    record["y"],
+                    bound,
+                    args.service_resolution,
+                    service_cache,
+                    f"rho{rho:.3f}_tau{tau:.6f}_grid{index:04d}",
+                )
+                if service_result is not None:
+                    candidates.append((service_result, record))
+                if position % 10 == 0 or position == len(admissible):
+                    write_status(
+                        output_dir / "status.json",
+                        status="running",
+                        block="equity_stage2",
+                        scenario_id=scenario_id(cap, profile),
+                        rho=rho,
+                        tau=tau,
+                        service_evaluated=position,
+                        service_total=len(admissible),
+                    )
             if not candidates:
-                raise RuntimeError(f"No service-evaluable policies for {scenario_id(cap, profile)}, rho={rho}, tau={tau}.")
-            candidates.sort(key=lambda item: (-item[0][0], float(item[1]["objective"]), tuple(item[1]["y"])))
-            best_service, best_upper, steps = candidates[0][0]
-            selected = candidates[0][1]
-            ties = sum(abs(item[0][0] - best_service) <= args.service_resolution for item in candidates)
-            objective = float(selected["objective"])
-            rows.append({"scenario_id": scenario_id(cap, profile), "density_cap": cap, "response_profile": profile, "rho": rho, "tau": tau, "stage1_benchmark": benchmark, "objective_bound": bound, "stage2_service_lower": best_service, "stage2_service_upper": best_upper, "stage2_objective": objective, "realized_sacrifice": objective - benchmark, "realized_sacrifice_percent": 100.0 * (objective - benchmark) / max(1.0, abs(benchmark)), "selected_y_json": json_string(selected["y"]), "selected_z_json": json_string(selected["z"]), "selected_w_json": json_string(selected["w"]), "admissible_policy_count": len(admissible), "service_tie_count": ties, "bisection_steps": steps, "bisection_resolution": args.service_resolution, "maximum_oracle_gap": max(float(record.get("oracle_gap", 0.0)) for record in admissible)})
+                raise RuntimeError(
+                    f"No service-evaluable policies for {scenario_id(cap, profile)}, "
+                    f"rho={rho}, tau={tau}."
+                )
+            candidates.sort(
+                key=lambda item: (
+                    -float(item[0]["lower"]),
+                    float(item[0]["objective"]),
+                    tuple(item[1]["y"]),
+                )
+            )
+            selected_service, selected = candidates[0]
+            ties = sum(
+                float(item[0]["upper"]) >= float(selected_service["lower"]) - 1e-12
+                for item in candidates
+            )
+            objective = float(selected_service["objective"])
+            rows.append(
+                {
+                    "scenario_id": scenario_id(cap, profile),
+                    "density_cap": cap,
+                    "response_profile": profile,
+                    "rho": rho,
+                    "tau": tau,
+                    "stage1_benchmark": benchmark,
+                    "objective_bound": bound,
+                    "stage2_service_lower": float(selected_service["lower"]),
+                    "stage2_service_upper": float(selected_service["upper"]),
+                    "stage2_objective": objective,
+                    "stage2_objective_lower_bound": float(selected_service["lower_bound"]),
+                    "realized_sacrifice": objective - benchmark,
+                    "realized_sacrifice_percent": 100.0 * (objective - benchmark) / max(1.0, abs(benchmark)),
+                    "selected_y_json": json_string(selected["y"]),
+                    "selected_z_json": json_string(selected_service["z"]),
+                    "selected_w_json": json_string(selected_service["w"]),
+                    "admissible_policy_count": len(admissible),
+                    "service_evaluable_policy_count": len(candidates),
+                    "service_tie_count": ties,
+                    "bisection_steps": int(selected_service["steps"]),
+                    "bisection_resolution": args.service_resolution,
+                    "maximum_oracle_gap": float(selected_service["oracle_gap"]),
+                    "optimization_scope": "z,w reoptimized by evaluate_fixed_y at every service-floor bisection step",
+                }
+            )
             save_table(rows, output_dir / "tables" / "table_noto_stage2_working.csv", ["scenario_id", "rho", "tau"])
     return rows
-
 
 def fixed_plan_decomposition(args, base_output_dir: Path, output_dir: Path) -> list[dict]:
     rows = []

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from ejor_dad.monotone_bb import OracleEvaluation, classify_cover, run_monotone_box_bb
 
@@ -34,6 +35,7 @@ def test_fractional_knapsack_certificate_and_determinism():
     assert result.incumbent.objective <= 5.0 + 1e-6
     assert result.absolute_gap <= 1e-6
     assert len(calls) == result.unique_oracle_calls
+    assert result.initial_corner_evaluations == 1
     oracle2, calls2 = _linear_oracle(costs, values, 3.0)
     result2 = run_monotone_box_bb(
         initial_boxes=[(np.zeros(2), np.ones(2))],
@@ -104,6 +106,7 @@ def test_parent_upper_corner_is_cached_for_children():
     )
     assert result.oracle_cache_hits >= 1
     assert len(calls) == result.unique_oracle_calls
+    assert result.initial_corner_evaluations == 1
 
 
 
@@ -151,5 +154,62 @@ def test_small_dense_grid_is_contained_by_certificate():
     )
     dense = min(8.0 - float(values @ np.asarray(y)) for y in (np.array([0.0, 0.0]), np.array([0.0, 0.25]), np.array([0.0, 0.5]), np.array([0.0, 0.75]), np.array([0.0, 1.0]), np.array([0.25, 0.0]), np.array([0.5, 0.0]), np.array([0.75, 0.0]), np.array([1.0, 0.0])))
     assert result.global_lower_bound <= dense + 1e-8
-    assert result.incumbent.objective <= dense + 1e-8
+    assert float(costs @ result.incumbent.y) <= 1.0 + 1e-10
+    assert result.incumbent.objective >= dense - 1e-8
+def test_rejects_over_budget_supplied_incumbent():
+    incumbent = OracleEvaluation(
+        "feasible",
+        1.0,
+        1.0,
+        y=np.array([1.0, 1.0]),
+        z=np.zeros(1),
+        w=np.zeros(1),
+    )
+    with pytest.raises(ValueError, match="incumbent violates"):
+        run_monotone_box_bb(
+            initial_boxes=[(np.zeros(2), np.ones(2))],
+            costs=[1.0, 1.0],
+            budget=1.0,
+            oracle=lambda y: incumbent,
+            incumbent=incumbent,
+            rel_gap_target=0.0,
+        )
 
+
+def test_budget_feasible_incumbent_matches_small_enumeration():
+    costs = np.array([1.0, 2.0])
+    values = np.array([3.0, 1.0])
+    budget = 2.0
+
+    def oracle(y):
+        y = np.asarray(y, dtype=float)
+        objective = 10.0 - float(values @ y)
+        return OracleEvaluation("feasible", objective, objective, y=y, z=np.zeros(1), w=np.zeros(1))
+
+    incumbent = OracleEvaluation(
+        "feasible",
+        10.0,
+        10.0,
+        y=np.zeros(2),
+        z=np.zeros(1),
+        w=np.zeros(1),
+    )
+    result = run_monotone_box_bb(
+        initial_boxes=[(np.zeros(2), np.ones(2))],
+        costs=costs,
+        budget=budget,
+        oracle=oracle,
+        incumbent=incumbent,
+        rel_gap_target=1e-8,
+    )
+    grid = np.array(
+        [
+            [first, second]
+            for first in (0.0, 0.25, 0.5, 0.75, 1.0)
+            for second in (0.0, 0.25, 0.5, 0.75, 1.0)
+            if float(costs @ np.array([first, second])) <= budget + 1e-12
+        ]
+    )
+    enumeration_objective = min(10.0 - float(values @ y) for y in grid)
+    assert float(costs @ result.incumbent.y) <= budget + 1e-10
+    assert result.incumbent.objective <= enumeration_objective + 1e-8

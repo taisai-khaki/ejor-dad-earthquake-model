@@ -204,6 +204,7 @@ def main() -> None:
                     "infeasible_design_basis_state_count": infeasible_count,
                     "maximum_oracle_gap": maximum_gap,
                     "regret_divided_by_m4_policy_margin": road_regret / max(margin, 1e-12),
+                    "complete_plan_regret_divided_by_m4_policy_margin": full_regret / max(margin, 1e-12),
                     "regret_divided_by_oracle_tolerance": road_regret / max(1e-5, maximum_gap),
                     "regret_status": regret_status(road_regret, maximum_gap, margin, True),
                     "complete_regret_status": regret_status(full_regret, maximum_gap, margin, capability_feasible),
@@ -218,7 +219,7 @@ def main() -> None:
     for _, row in contrasts.iterrows():
         contrast_rows.extend([
             {"rho": row.rho, "contrast": f"{row.source_model}->M4", "transfer_type": "road_reoptimized", "regret": row.road_regret, "regret_percent": row.road_regret_percent, "regret_over_policy_margin": row.regret_divided_by_m4_policy_margin, "regret_over_oracle_gap": row.regret_divided_by_oracle_tolerance, "status": row.regret_status},
-            {"rho": row.rho, "contrast": f"{row.source_model}->M4", "transfer_type": "complete_plan", "regret": row.complete_plan_regret, "regret_percent": row.complete_plan_regret_percent, "regret_over_policy_margin": row.regret_divided_by_m4_policy_margin, "regret_over_oracle_gap": row.complete_plan_regret / max(1e-5, row.maximum_oracle_gap), "status": row.complete_regret_status},
+            {"rho": row.rho, "contrast": f"{row.source_model}->M4", "transfer_type": "complete_plan", "regret": row.complete_plan_regret, "regret_percent": row.complete_plan_regret_percent, "regret_over_policy_margin": row.complete_plan_regret_divided_by_m4_policy_margin, "regret_over_oracle_gap": row.complete_plan_regret / max(1e-5, row.maximum_oracle_gap), "status": row.complete_regret_status},
         ])
     save_table(contrast_rows, output_dir / "tables" / "table_noto_value_shared_dependence.csv", ["rho", "contrast", "transfer_type"])
     for rho in rhos:
