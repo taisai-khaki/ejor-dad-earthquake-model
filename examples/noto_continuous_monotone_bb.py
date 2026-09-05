@@ -336,8 +336,11 @@ def main() -> None:
     if args.resume and not args.force:
         if existing_milestones.exists():
             milestones = pd.read_csv(existing_milestones).to_dict(orient="records")
-        if existing_incumbents.exists() and existing_incumbents.stat().st_size > 0:
-            incumbents = pd.read_csv(existing_incumbents).to_dict(orient="records")
+        if existing_incumbents.exists():
+            try:
+                incumbents = pd.read_csv(existing_incumbents).to_dict(orient="records")
+            except pd.errors.EmptyDataError:
+                incumbents = []
     for rho in rhos:
         existing = output_dir / "radii" / f"rho_{rho:.3f}".replace('.', 'p') / "state.json"
         if args.resume and existing.exists() and not args.force:
