@@ -336,13 +336,13 @@ def main() -> None:
     if args.resume and not args.force:
         if existing_milestones.exists():
             milestones = pd.read_csv(existing_milestones).to_dict(orient="records")
-        if existing_incumbents.exists():
+        if existing_incumbents.exists() and existing_incumbents.stat().st_size > 0:
             incumbents = pd.read_csv(existing_incumbents).to_dict(orient="records")
     for rho in rhos:
         existing = output_dir / "radii" / f"rho_{rho:.3f}".replace('.', 'p') / "state.json"
         if args.resume and existing.exists() and not args.force:
             payload = json.loads(existing.read_text(encoding="utf-8"))
-            if payload.get("status") == "completed":
+            if payload.get("status") == "completed" and bool(payload.get("result", {}).get("converged", False)):
                 rows.append(payload["result"])
                 cover_rows.append(payload["cover"])
                 continue
