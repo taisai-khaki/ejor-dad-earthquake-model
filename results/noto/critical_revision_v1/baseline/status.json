@@ -1,0 +1,10 @@
+{
+  "block": "baseline_regression",
+  "candidate_count": 996,
+  "pid": 32292,
+  "required_design_basis_state_count": 18,
+  "required_state_count": 128,
+  "rows": 3,
+  "status": "passed",
+  "updated_at_epoch": 1787202746.81935
+}

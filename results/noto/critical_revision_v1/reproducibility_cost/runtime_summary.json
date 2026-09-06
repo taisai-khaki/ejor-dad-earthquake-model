@@ -1,0 +1,10 @@
+{
+  "formula": "C_r^Z=max(A_r/1000,1.0)",
+  "implemented_budget": 1.513774438384558,
+  "implemented_budget_fraction": 0.12000000000000001,
+  "implemented_total_cost": 12.614786986537982,
+  "incorrect_raw_only_fraction": 0.12501789481117043,
+  "raw_sum_without_floor": 12.10846207793687,
+  "runtime_seconds": 1.0208701000083238,
+  "status": "passed"
+}

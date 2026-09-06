@@ -1,0 +1,72 @@
+{
+  "experiment_version": "noto-selected-sensitivity-separated-capability-marginal-v1",
+  "settings": [
+    {
+      "setting": "design_S1",
+      "parameters": {
+        "design": "S1"
+      },
+      "rhos": [
+        0.25
+      ]
+    },
+    {
+      "setting": "facility_mild",
+      "parameters": {
+        "facility": "mild"
+      },
+      "rhos": [
+        0.0,
+        0.25
+      ]
+    },
+    {
+      "setting": "intensity_0.75",
+      "parameters": {
+        "intensity": 0.75
+      },
+      "rhos": [
+        0.25
+      ]
+    },
+    {
+      "setting": "residual_0.20",
+      "parameters": {
+        "residual": 0.2
+      },
+      "rhos": [
+        0.25
+      ]
+    },
+    {
+      "setting": "service_0.00",
+      "parameters": {
+        "service": 0.0
+      },
+      "rhos": [
+        0.25
+      ]
+    },
+    {
+      "setting": "weights_0.75",
+      "parameters": {
+        "weights": 0.75
+      },
+      "rhos": [
+        0.25
+      ]
+    }
+  ],
+  "grid": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "expected_grid_count": 996,
+  "checkpointing": "one atomic JSON per setting-radius-policy",
+  "ascending_radius_warm_start": true,
+  "workers": 4,
+  "started": 1785709037.183805
+}

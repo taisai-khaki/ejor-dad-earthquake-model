@@ -1,7 +1,7 @@
 {
-  "version": "noto-joint-sensitivity-v2",
+  "version": "noto-joint-sensitivity-separated-capability-marginal-v1",
   "base_output_dir": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4",
-  "base_run_design_sha256": "083a9e4c7ca1579248e74fd58b547c91ca027ee25acac13eb384542b7f58cda5",
+  "base_run_design_sha256": "e34cbbc1747a5a3f10a6f016772b32440d8c78b6a8c3f957ee7208613b13908e",
   "model_scope": "128-state correlated road-facility regime model with graded timely-access response",
   "road_grid": [
     0.0,
@@ -11,8 +11,28 @@
     1.0
   ],
   "budget_feasible_candidate_count": 996,
-  "density_cap_scenarios": [],
+  "density_cap_scenarios": [
+    {
+      "density_cap": 1.5,
+      "rho_values": [
+        0.075,
+        0.1,
+        0.125,
+        0.25
+      ]
+    },
+    {
+      "density_cap": 3.0,
+      "rho_values": [
+        0.075,
+        0.1,
+        0.125,
+        0.25
+      ]
+    }
+  ],
   "requested_blocks": [
+    "density_cap",
     "graded_response"
   ],
   "response_scenarios": [
@@ -111,5 +131,5 @@
   "fixed_y_max_iterations": 240,
   "checkpointing": "one atomic JSON checkpoint per scenario-radius-policy",
   "base_results": "Frozen kappa=2, base-response full-grid rows are reused for comparisons only.",
-  "specification_sha256": "b2022693c98074d1adb7eb1f7152f608ed8149fda0de6402e446b678a77b8287"
+  "specification_sha256": "0dc716d8f3dfbdd3b66417abe4864a62132b355a20f8a32102774ac7a948892f"
 }

@@ -1,0 +1,3 @@
+audit,maximum_reconstruction_error,shortest_path_tie_count,status,tie_note,formula,implemented_budget,implemented_budget_fraction,implemented_total_cost,incorrect_raw_only_fraction,raw_sum_without_floor
+path_incidence,0.0,0.0,passed,The audit records NetworkX's deterministic shortest path; no equal-weight alternatives were detected by this implementation.,,,,,,
+renovation_cost,,,passed,,"C_r^Z=max(A_r/1000,1.0)",1.513774438384558,0.12000000000000001,12.614786986537982,0.12501789481117043,12.10846207793687

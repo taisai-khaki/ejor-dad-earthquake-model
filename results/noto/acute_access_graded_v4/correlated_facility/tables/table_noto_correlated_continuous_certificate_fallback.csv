@@ -1,4 +1,0 @@
-rho,continuous_lower_bound,grid_upper_bound,absolute_gap,relative_gap_percent,total_cells,pruned_infeasible_cells,reused_exact_grid_upper_corners,unresolved_overbudget_cells_using_all_ones_bound,all_ones_universal_lower_bound,certificate_scope
-0.0,1066.325725494884,1074.3696827675965,8.043957272712532,0.7487140973664808,647,31,27,589,1066.325725494884,valid fallback monotone bound; unresolved overbudget cells use dominating all-ones road vector
-0.1,1143.6952779488674,1159.9644819241444,16.269203975276923,1.4025605291197911,647,31,27,589,1143.6952779488674,valid fallback monotone bound; unresolved overbudget cells use dominating all-ones road vector
-0.25,1198.3222976158477,1219.599634572313,21.277336956465433,1.7446165408148002,647,31,27,589,1198.3222976158477,valid fallback monotone bound; unresolved overbudget cells use dominating all-ones road vector

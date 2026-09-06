@@ -1,0 +1,17 @@
+{
+  "input_hashes": {
+    "run_design.json": "e34cbbc1747a5a3f10a6f016772b32440d8c78b6a8c3f957ee7208613b13908e"
+  },
+  "source_commit": "9147b43819f72b84cde1b121b0e2b8c07dab0cd9",
+  "system": {
+    "logical_cores": 8,
+    "memory_gb": null,
+    "numpy": "2.4.3",
+    "pandas": "2.3.3",
+    "physical_cores": null,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+    "scipy": "1.17.1"
+  }
+}
