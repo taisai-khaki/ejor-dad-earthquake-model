@@ -10,6 +10,16 @@ from typing import Any, TypeVar
 
 T = TypeVar("T")
 
+def _replace_with_retry(temp_path: Path, path: Path, attempts: int = 20) -> None:
+    for attempt in range(attempts):
+        try:
+            os.replace(temp_path, path)
+            return
+        except PermissionError:
+            if attempt + 1 >= attempts:
+                raise
+            time.sleep(0.25)
+
 
 @dataclass(frozen=True)
 class CheckpointStore:
@@ -48,7 +58,7 @@ def atomic_write_text(path: str | Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = path.with_suffix(path.suffix + f".tmp-{os.getpid()}")
     temp_path.write_text(text, encoding="utf-8")
-    os.replace(temp_path, path)
+    _replace_with_retry(temp_path, path)
 
 
 def atomic_write_dataframe(dataframe, path: str | Path, kind: str = "csv", **kwargs: Any) -> None:
@@ -61,4 +71,4 @@ def atomic_write_dataframe(dataframe, path: str | Path, kind: str = "csv", **kwa
         dataframe.to_latex(temp_path, index=False, **kwargs)
     else:
         raise ValueError(f"Unsupported dataframe output kind: {kind}")
-    os.replace(temp_path, path)
+    _replace_with_retry(temp_path, path)
