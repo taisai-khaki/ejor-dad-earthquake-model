@@ -1,0 +1,9 @@
+﻿{
+    "release_version":  "noto-corrected-v2",
+    "generated_at_utc":  "2026-08-04T12:48:22.5368689Z",
+    "code_revision":  "ab470a8806819939eccf2c32defad19be584be60",
+    "stage1_source":  "correlated_facility_separated_capability_marginal_v2",
+    "state_count":  128,
+    "candidate_policy_count":  996,
+    "legacy_independent_state_tables":  "excluded from this paper-ready release"
+}

@@ -1,9 +1,9 @@
 {
-  "completed_summary_rows": 4,
-  "expected_new_evaluations": 3984,
-  "log_path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\joint_response_sensitivity_v2\\logs\\joint_sensitivity_20260729_064250.log",
+  "completed_summary_rows": 12,
+  "expected_new_evaluations": 11952,
+  "log_path": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4\\joint_sensitivity_separated_capability_marginal_v1\\logs\\joint_sensitivity_20260803_093225.log",
   "message": "Density-cap and graded-response final joint-model sensitivity enumeration completed.",
-  "runtime_sec": 12515.819363117218,
+  "runtime_sec": 59117.91567206383,
   "status": "completed",
-  "updated_at_epoch": 1785341486.8492804
+  "updated_at_epoch": 1785830264.1974974
 }

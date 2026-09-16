@@ -1,0 +1,34 @@
+{
+  "status": "feasible",
+  "objective": 898.495223425899,
+  "lower_bound": 898.4952234258985,
+  "oracle_gap": 4.547473508864641e-13,
+  "y": [
+    0.0,
+    1.0,
+    0.5,
+    0.0,
+    0.5
+  ],
+  "z": [
+    0.0,
+    0.0,
+    0.38468508402373724,
+    0.0,
+    0.0
+  ],
+  "w": [
+    0.0,
+    0.0,
+    0.0,
+    536.3479743223976,
+    0.0,
+    96.98202567760241
+  ],
+  "candidate_index": 553,
+  "rho": 0.0,
+  "density_cap": 2.0,
+  "response_profile": "higher_timely_credit",
+  "checkpoint_key": "grid0553",
+  "updated_at_epoch": 1788006460.414132
+}

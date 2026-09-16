@@ -1,0 +1,12 @@
+{
+  "base_sign_ok": false,
+  "complementarity_supported": false,
+  "continuous_cover_unresolved": false,
+  "criterion": "DID positive at base transition radii, at least six of eight non-base comparisons per tested tolerance, and no unresolved continuous-policy certificate",
+  "one_factor_positive_counts": {
+    "0.001": 0,
+    "0.005": 1
+  },
+  "one_factor_sign_ok": false,
+  "service_resolution": 0.0001
+}

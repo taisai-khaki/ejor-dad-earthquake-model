@@ -1,7 +1,0 @@
-center_id,municipality_code,municipality_name_en,municipality_name_ja,latitude,longitude,reported_beds,operational_share,throughput_per_bed,existing_capacity,capacity_unit_cost,capacity_status
-center_17201,17201,Kanazawa,金沢市,36.629305,136.700692,6878.0,0.2,4.0,5502.400000000001,1.0,scenario-calibrated operational share; observed pre-event beds
-center_17202,17202,Nanao,七尾市,37.063366,136.832856,979.0,0.55,4.0,2153.8,1.0,scenario-calibrated operational share; observed pre-event beds
-center_17204,17204,Wajima,輪島市,37.390183,136.899315,171.0,0.35,4.0,239.4,1.0,scenario-calibrated operational share; observed pre-event beds
-center_17205,17205,Suzu,珠洲市,37.436925,137.260723,156.0,0.35,4.0,218.4,1.0,scenario-calibrated operational share; observed pre-event beds
-center_17461,17461,Anamizu,穴水町,37.24379,136.899219,100.0,0.35,4.0,140.0,1.0,scenario-calibrated operational share; observed pre-event beds
-center_17463,17463,Noto,能登町,37.30994,137.14758,136.0,0.35,4.0,190.4,1.0,scenario-calibrated operational share; observed pre-event beds

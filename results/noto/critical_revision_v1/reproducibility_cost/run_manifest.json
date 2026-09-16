@@ -1,0 +1,45 @@
+{
+  "authoritative_model": "noto-mechanism-separated-capability-marginal-v2",
+  "base_output_dir": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4",
+  "base_run_design_sha256": "e34cbbc1747a5a3f10a6f016772b32440d8c78b6a8c3f957ee7208613b13908e",
+  "expected_work": {
+    "budget_fraction": 0.12,
+    "zones": 5
+  },
+  "experiment": "noto_renovation_cost_audit",
+  "finished_at_epoch": 1787202916.30854,
+  "formula": "C_r^Z=max(A_r/1000,1.0)",
+  "implemented_budget": 1.513774438384558,
+  "implemented_budget_fraction": 0.12000000000000001,
+  "implemented_total_cost": 12.614786986537982,
+  "incorrect_raw_only_fraction": 0.12501789481117043,
+  "parameters": {
+    "base_output_dir": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\acute_access_graded_v4",
+    "output_dir": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\critical_revision_v1\\reproducibility_cost"
+  },
+  "raw_sum_without_floor": 12.10846207793687,
+  "release": "noto-corrected-v2",
+  "runtime_seconds": 1.0208701000083238,
+  "started_at_epoch": 1787202916.2479932,
+  "starting_commit": "9147b43819f72b84cde1b121b0e2b8c07dab0cd9",
+  "starting_worktree_dirty": true,
+  "status": "passed",
+  "system": {
+    "logical_cores": 8,
+    "memory_gb": null,
+    "numpy": "2.4.3",
+    "pandas": "2.3.3",
+    "physical_cores": null,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+    "scipy": "1.17.1"
+  },
+  "tolerances": {
+    "box_width_tolerance": 1e-08,
+    "budget_tolerance": 1e-10,
+    "fixed_y_epsilon": 1e-06,
+    "fixed_y_max_iterations": 500,
+    "probability_tolerance": 1e-10
+  }
+}

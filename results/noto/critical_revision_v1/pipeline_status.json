@@ -1,0 +1,7 @@
+{
+  "current_block": "integrated",
+  "status": "completed",
+  "returncode": 0,
+  "recovery": "direct integrated audit rebuild after classifier and table-flush fixes",
+  "updated_at_epoch": 1788110729
+}

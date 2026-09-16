@@ -1,0 +1,116 @@
+{
+  "blocks": [
+    {
+      "block": "ambiguity_calibration",
+      "checkpoint_count": 5,
+      "completed": null,
+      "path": "ambiguity_anchor\\status.json",
+      "rho": null,
+      "status": "blocked_missing_regime_weight_ensemble",
+      "total": null,
+      "updated_at_epoch": 1787205766.0476723
+    },
+    {
+      "block": "baseline_regression",
+      "checkpoint_count": 5,
+      "completed": 3,
+      "path": "baseline\\status.json",
+      "rho": null,
+      "status": "passed",
+      "total": null,
+      "updated_at_epoch": 1787202746.81935
+    },
+    {
+      "block": "budget_frontier",
+      "checkpoint_count": 2318,
+      "completed": 575,
+      "path": "budget_frontier\\status.json",
+      "rho": 0.025,
+      "status": "running",
+      "total": 3125,
+      "updated_at_epoch": 1787469236.6416178
+    },
+    {
+      "block": "continuous_bb",
+      "checkpoint_count": 2596,
+      "completed": 4,
+      "path": "continuous_bb\\status.json",
+      "rho": null,
+      "status": "completed",
+      "total": null,
+      "updated_at_epoch": 1787239030.0729494
+    },
+    {
+      "block": "mechanism_cross_evaluation",
+      "checkpoint_count": 4009,
+      "completed": 100,
+      "path": "mechanism_value\\status.json",
+      "rho": null,
+      "status": "completed",
+      "total": 100,
+      "updated_at_epoch": 1787282958.0209212
+    },
+    {
+      "block": "path_incidence_audit",
+      "checkpoint_count": 5,
+      "completed": 150,
+      "path": "reproducibility\\status.json",
+      "rho": null,
+      "status": "passed",
+      "total": null,
+      "updated_at_epoch": 1787202907.2704036
+    },
+    {
+      "block": "renovation_cost_audit",
+      "checkpoint_count": 5,
+      "completed": null,
+      "path": "reproducibility_cost\\status.json",
+      "rho": null,
+      "status": "passed",
+      "total": null,
+      "updated_at_epoch": 1787202916.3000233
+    },
+    {
+      "block": "continuous_bb",
+      "checkpoint_count": 647,
+      "completed": 647,
+      "path": "continuous_bb\\radii\\rho_0p000\\corner_checkpoints",
+      "rho": "rho_0p000",
+      "status": "checkpointing",
+      "total": 647,
+      "updated_at_epoch": 1787208340.4001281
+    },
+    {
+      "block": "continuous_bb",
+      "checkpoint_count": 647,
+      "completed": 647,
+      "path": "continuous_bb\\radii\\rho_0p100\\corner_checkpoints",
+      "rho": "rho_0p100",
+      "status": "checkpointing",
+      "total": 647,
+      "updated_at_epoch": 1787217138.7356818
+    },
+    {
+      "block": "continuous_bb",
+      "checkpoint_count": 647,
+      "completed": 647,
+      "path": "continuous_bb\\radii\\rho_0p125\\corner_checkpoints",
+      "rho": "rho_0p125",
+      "status": "checkpointing",
+      "total": 647,
+      "updated_at_epoch": 1787226888.8921745
+    },
+    {
+      "block": "continuous_bb",
+      "checkpoint_count": 647,
+      "completed": 647,
+      "path": "continuous_bb\\radii\\rho_0p250\\corner_checkpoints",
+      "rho": "rho_0p250",
+      "status": "checkpointing",
+      "total": 647,
+      "updated_at_epoch": 1787238910.445735
+    }
+  ],
+  "root": "C:\\Users\\L03128674\\projects\\ejor_dad_nepal\\data_work\\noto\\critical_revision_v1",
+  "updated_at_epoch": 1787469345.8990061
+}

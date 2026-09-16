@@ -1,7 +1,0 @@
-layer,status,source,url,local_path,sha256
-population_households,observed,"Ishikawa Prefecture Statistics, 2022 municipality population and households",https://toukei.pref.ishikawa.lg.jp/library/2022.html,data_work\noto\raw\ishikawa_statistics\R4_population_machine_readable.xlsx,fd962ffe14a85c6e26044575dbec730fa1f8f51f00d65dbf2efef9417d6d9c5c
-building_damage,observed,"Ishikawa Prefecture, Noto damage report No. 162, 2024-10-01",https://www.pref.ishikawa.lg.jp/saigai/documents/higaihou_162_1001_1400.pdf,data_work\noto\raw\mlit_building_damage\ishikawa_damage_report_20241001.pdf,951bfbccbbab81e4b303de04c21398bbce22b93fb3a46ac2a784017d5c428867
-road_disruption_and_travel_time,observed,MLIT Noto road restoration map daily GeoJSON and travel-time tables,https://www.mlit.go.jp/road/r6noto/index2.html,data_work\noto\raw\mlit_roads_extracted,
-hospital_beds,observed,MHLW FY2023 Hospital Function Report,https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00016.html,data_work\noto\raw\mhlw_health\r5_chubu_ward_table.xlsx,c21f448424973b1e471fe5f8bc5f63b0f1a22f875293d1c707ffa493cf0ab48b
-hospital_operational_share,scenario-calibrated,Calibrated from documented Noto hospital water outages and emergency intake constraints,https://kouseikyoku.mhlw.go.jp/tokaihokuriku/000391260.pdf,,
-retrofit_costs_and_budgets,scenario-calibrated,Route-length normalized costs and declared sector budget fractions,,data_work\noto\prepared\noto_corridors.csv,

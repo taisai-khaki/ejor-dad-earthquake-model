@@ -1,0 +1,19 @@
+{
+  "block": "integrated_audit",
+  "pid": 12568,
+  "status": "completed",
+  "summary": {
+    "ambiguity_status": "blocked_missing_regime_weight_ensemble",
+    "budget_status": "tradeoffs_emerge_under_nearby_budgets",
+    "continuous_rows": 9,
+    "continuous_status": "certified",
+    "cost_audit_status": "passed",
+    "dependence_rows": 16,
+    "dependence_status": "M2->M4:complete_plan:numerically_zero; M2->M4:road_reoptimized:numerically_zero; M3->M4:complete_plan:numerically_zero; M3->M4:road_reoptimized:numerically_zero; M2->M4:complete_plan:numerically_zero; M2->M4:road_reoptimized:numerically_zero; M3->M4:complete_plan:numerically_zero; M3->M4:road_reoptimized:numerically_zero; M2->M4:complete_plan:above_policy_margin; M2->M4:road_reoptimized:numerically_zero; M3->M4:complete_plan:above_policy_margin; M3->M4:road_reoptimized:numerically_zero; M2->M4:complete_plan:numerically_zero; M2->M4:road_reoptimized:numerically_zero; M3->M4:complete_plan:numerically_zero; M3->M4:road_reoptimized:numerically_zero",
+    "equity_status": "specification-dependent co-benefit or not supported",
+    "frontier_rows": 9,
+    "path_audit_status": "passed",
+    "policy_status": "unresolved"
+  },
+  "updated_at_epoch": 1788111033.0697927
+}

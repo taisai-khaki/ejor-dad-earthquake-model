@@ -1,0 +1,4 @@
+experiment,started_epoch,completed_epoch,wall_runtime_seconds,checkpoint_count,status
+mechanism_full_grid,1785708916.242888,1785708958.5478437,42.30495572090149,14940,completed
+selected_sensitivity_full_grid,1785709037.183805,1785713718.9928994,4681.809094429016,6972,completed
+stage2_joint_full_grid,1785713725.7312474,1785715514.910037,1789.178789615631,31,completed

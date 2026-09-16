@@ -1,0 +1,16 @@
+model,rho,corridor,y_level,worst_case_marginal
+M4,0.0,corr_kanazawa_nanao,0.25,0.10462500000000004
+M4,0.0,corr_nanao_anamizu,1.0,0.046500000000000014
+M4,0.0,corr_anamizu_wajima,1.0,0.05437499999999999
+M4,0.0,corr_anamizu_noto,0.0,0.3157142857142857
+M4,0.0,corr_anamizu_suzu,0.0,0.3758730158730158
+M4,0.1,corr_kanazawa_nanao,0.25,0.1323925002124012
+M4,0.1,corr_nanao_anamizu,1.0,0.06010974665785435
+M4,0.1,corr_anamizu_wajima,1.0,0.07309057648978712
+M4,0.1,corr_anamizu_noto,0.0,0.3752125156187065
+M4,0.1,corr_anamizu_suzu,0.0,0.44603599027611374
+M4,0.25,corr_kanazawa_nanao,0.0,0.18674067872783306
+M4,0.25,corr_nanao_anamizu,1.0,0.06819952512254902
+M4,0.25,corr_anamizu_wajima,1.0,0.08179572610294114
+M4,0.25,corr_anamizu_noto,0.0,0.46167940848214273
+M4,0.25,corr_anamizu_suzu,0.25,0.4165225307872761

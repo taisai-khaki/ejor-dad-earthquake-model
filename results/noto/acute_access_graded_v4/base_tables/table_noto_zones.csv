@@ -1,6 +1,0 @@
-municipality_code,municipality_name_ja,population,households,population_date,zone_id,municipality_name_en,full_destroyed_dwellings,collapse_fraction,at_risk_population,renovation_cost,damage_date,q_definition
-17202,七尾市,48391.0,20201.0,2022-10-01,zone_17202,Nanao,506,0.0250482649373793,1212.1105885847237,1.2121105885847234,2024-10-01,full_destroyed_dwellings / pre-event households
-17204,輪島市,23022.0,9655.0,2022-10-01,zone_17204,Wajima,2293,0.2374935266701191,5467.575970999482,5.467575970999482,2024-10-01,full_destroyed_dwellings / pre-event households
-17205,珠洲市,12197.0,5387.0,2022-10-01,zone_17205,Suzu,1738,0.3226285502134768,3935.100426953777,3.935100426953777,2024-10-01,full_destroyed_dwellings / pre-event households
-17461,穴水町,7580.0,3271.0,2022-10-01,zone_17461,Anamizu,395,0.1207581779272393,915.3469886884744,1.0,2024-10-01,full_destroyed_dwellings / pre-event households
-17463,能登町,14832.0,6309.0,2022-10-01,zone_17463,Noto,246,0.0389919163100332,578.3281027104136,1.0,2024-10-01,full_destroyed_dwellings / pre-event households

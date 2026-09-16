@@ -1,0 +1,12 @@
+{
+  "block": "renovation_cost_audit",
+  "formula": "C_r^Z=max(A_r/1000,1.0)",
+  "implemented_budget": 1.513774438384558,
+  "implemented_budget_fraction": 0.12000000000000001,
+  "implemented_total_cost": 12.614786986537982,
+  "incorrect_raw_only_fraction": 0.12501789481117043,
+  "pid": 19228,
+  "raw_sum_without_floor": 12.10846207793687,
+  "status": "passed",
+  "updated_at_epoch": 1787202916.3000233
+}

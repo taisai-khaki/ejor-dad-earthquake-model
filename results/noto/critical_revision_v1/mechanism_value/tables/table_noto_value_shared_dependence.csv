@@ -1,0 +1,17 @@
+rho,contrast,transfer_type,regret,regret_percent,regret_over_policy_margin,regret_over_oracle_gap,status
+0.0,M2->M4,complete_plan,0.0,0.0,0.0,0.0,numerically_zero
+0.0,M2->M4,road_reoptimized,0.0,0.0,0.0,0.0,numerically_zero
+0.0,M3->M4,complete_plan,0.0,0.0,0.0,0.0,numerically_zero
+0.0,M3->M4,road_reoptimized,0.0,0.0,0.0,0.0,numerically_zero
+0.1,M2->M4,complete_plan,0.0,0.0,0.0,0.0,numerically_zero
+0.1,M2->M4,road_reoptimized,0.0,0.0,0.0,0.0,numerically_zero
+0.1,M3->M4,complete_plan,0.0,0.0,0.0,0.0,numerically_zero
+0.1,M3->M4,road_reoptimized,0.0,0.0,0.0,0.0,numerically_zero
+0.125,M2->M4,complete_plan,0.06339708785412768,0.0053974525589577955,0.22737367544323206,6339.708785412767,above_policy_margin
+0.125,M2->M4,road_reoptimized,2.2737367544323206e-13,1.9357965293051053e-14,0.22737367544323206,2.2737367544323203e-08,numerically_zero
+0.125,M3->M4,complete_plan,0.06339708785276343,0.005397452558841647,0.22737367544323206,6339.7087852763425,above_policy_margin
+0.125,M3->M4,road_reoptimized,2.2737367544323206e-13,1.9357965293051053e-14,0.22737367544323206,2.2737367544323203e-08,numerically_zero
+0.25,M2->M4,complete_plan,0.0,0.0,0.0,0.0,numerically_zero
+0.25,M2->M4,road_reoptimized,0.0,0.0,0.0,0.0,numerically_zero
+0.25,M3->M4,complete_plan,4.547473508864641e-13,3.7189389926137464e-14,0.0,4.5474735088646405e-08,numerically_zero
+0.25,M3->M4,road_reoptimized,0.0,0.0,0.0,0.0,numerically_zero
