@@ -1,0 +1,15 @@
+{
+  "alns_seed": 2237,
+  "base_seed": 2026,
+  "alns_max_iterations": 40,
+  "alns_time_limit_seconds": 0,
+  "common_wall_clock_budget_seconds": 240.0,
+  "corrected_alns_rows": 720,
+  "corrected_alns_iterations": [
+    40.0
+  ],
+  "matched_rows_by_method": {
+    "nils": 720,
+    "nils_r": 720
+  }
+}

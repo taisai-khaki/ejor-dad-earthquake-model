@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import math
 import time
+from dataclasses import replace
 from datetime import datetime
 from pathlib import Path
 from typing import Iterable
@@ -283,8 +284,26 @@ def _force_feasible_solution(instance, solution, config: SearchConfig, method_na
     return solution
 
 
-def _run_one(instance, scenario: dict[str, object], method_name: str, config: SearchConfig):
+def _run_one(
+    instance,
+    scenario: dict[str, object],
+    method_name: str,
+    config: SearchConfig,
+    common_time_limit: float | None = None,
+):
     scenario_config = _scenario_config(config, scenario)
+    if common_time_limit is not None:
+        limit = float(common_time_limit)
+        if limit <= 0:
+            raise ValueError("common_time_limit must be positive")
+        experiment = dict(scenario_config.experiment or {})
+        if method_name == ALNS_METHOD:
+            experiment["alns_time_limit_seconds"] = limit
+        scenario_config = replace(
+            scenario_config,
+            heuristics=replace(scenario_config.heuristics, time_limit_seconds=limit),
+            experiment=experiment,
+        )
     start = time.time()
     solution = _run_method(instance, scenario_config, method_name)
     solution = _force_feasible_solution(instance, solution, scenario_config, method_name)
@@ -370,6 +389,7 @@ def run_pipeline(
     start_index: int = 0,
     end_index: int | None = None,
     methods: list[str] | None = None,
+    common_time_limit: float | None = None,
 ) -> pd.DataFrame:
     main_config = load_and_build_config(str(main_config_path))
     alns_config = _with_alns_settings(load_and_build_config(str(alns_config_path)))
@@ -468,7 +488,13 @@ def run_pipeline(
                 continue
             config = alns_config if method_name == ALNS_METHOD else main_config
             try:
-                solution, elapsed, feasible = _run_one(instance, scenario, method_name, config)
+                solution, elapsed, feasible = _run_one(
+                    instance,
+                    scenario,
+                    method_name,
+                    config,
+                    common_time_limit=common_time_limit,
+                )
                 priority_metrics = compute_priority_metrics(instance, solution) if feasible else {}
                 drone_customers = solution.served_by_drone() if feasible else set()
                 rich_metrics = _collect_row(instance, solution, scenario, method_name) if feasible else {}
@@ -625,6 +651,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--start-index", type=int, default=0)
     parser.add_argument("--end-index", type=int, default=None)
     parser.add_argument("--methods", nargs="+", choices=ALL_METHODS, default=None)
+    parser.add_argument(
+        "--common-time-limit",
+        type=float,
+        default=None,
+        help="Use the same positive wall-clock limit in seconds for every selected method and instance.",
+    )
     return parser.parse_args()
 
 
@@ -639,6 +671,7 @@ def main() -> None:
         start_index=args.start_index,
         end_index=args.end_index,
         methods=args.methods,
+        common_time_limit=args.common_time_limit,
     )
 
 

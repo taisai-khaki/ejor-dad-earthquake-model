@@ -298,6 +298,8 @@ def run_full_alns_comparison(
     source_output_dir: str | Path,
     output_dir: str | Path,
     limit: int | None = None,
+    start_index: int = 0,
+    end_index: int | None = None,
 ) -> pd.DataFrame:
     config = _with_alns_settings(config)
     source_dir = Path(source_output_dir)
@@ -318,6 +320,7 @@ def run_full_alns_comparison(
     )
     if limit is not None and limit > 0:
         meta = meta.head(int(limit)).copy()
+    meta = meta.iloc[int(start_index):int(end_index) if end_index is not None else None].reset_index(drop=True)
 
     partial_path = tables_dir / "alns_full_alns_runs_partial.csv"
     alns_rows = _load_existing_alns(partial_path)
@@ -377,6 +380,8 @@ def main(argv: List[str] | None = None) -> int:
     parser.add_argument("--source-output-dir", default="outputs/doptimal_full_beta010_tables5_14_rerun2_20260601_144538")
     parser.add_argument("--output-dir", default="outputs/alns_comparison_beta010_full720")
     parser.add_argument("--limit", type=int, default=None, help="Optional smoke-test cap on number of instances.")
+    parser.add_argument("--start-index", type=int, default=0)
+    parser.add_argument("--end-index", type=int, default=None)
     args = parser.parse_args(argv)
     config = load_and_build_config(args.config)
     run_full_alns_comparison(
@@ -384,6 +389,8 @@ def main(argv: List[str] | None = None) -> int:
         source_output_dir=args.source_output_dir,
         output_dir=args.output_dir,
         limit=args.limit,
+        start_index=args.start_index,
+        end_index=args.end_index,
     )
     return 0
 
